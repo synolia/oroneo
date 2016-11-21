@@ -1,0 +1,3 @@
+css:
+    'synoliaakeneoconnector':
+      - 'bundles/synoliaakeneoconnector/css/less/config.less'

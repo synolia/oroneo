@@ -1,0 +1,31 @@
+oro_menu_config:
+    items:
+        synolia_akeneo_tab:
+            label:           'Akeneo'
+            uri:             '#'
+            extras:
+                icon:        icon-briefcase
+                position:    9999999999
+
+        synolia_akeneo_import:
+            label:           'synolia.akeneo_connector.import_page.label'
+            route:           'synolia_AkeneoConnector_import'
+            extras:
+                position:    200
+                routes:      ['/^akeneo-connector/']
+                description: 'synolia.akeneo_connector.import_page.description'
+
+        synolia_akeneo_configuration:
+            label:           'synolia.akeneo_connector.configuration_page.label'
+            route:           'synolia_AkeneoConnector_configuration'
+            extras:
+                position:    300
+                description: 'synolia.akeneo_connector.configuration_page.description'
+
+    tree:
+        application_menu:
+            children:
+                synolia_akeneo_tab:
+                    children:
+                        synolia_akeneo_import: ~
+                        synolia_akeneo_configuration: ~

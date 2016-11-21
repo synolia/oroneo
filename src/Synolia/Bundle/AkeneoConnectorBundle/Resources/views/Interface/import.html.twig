@@ -1,0 +1,59 @@
+{% extends 'SynoliaAkeneoConnectorBundle::viewLayout.html.twig' %}
+
+{% set pageTitle = 'synolia.akeneo_connector.import_page.title'|trans %}
+
+{% block content_data %}
+    {% set import %}
+        {{ form_start(form) }}
+        <div class="control-group control-group-hidden">
+           {{ form_row(form.processorAlias) }}
+           {{ form_row(form.file) }}
+        </div>
+        <hr>
+           {{ form_row(form.validateBtn) }}
+        {{ form_end(form) }}
+    {% endset %}
+
+    {% set validation %}
+        {% if result is iterable and result is not empty %}
+            {% include 'OroImportExportBundle:ImportExport/widget:importValidate.html.twig' ignore missing with result %}
+            <a href="{{ path('synolia_AkeneoConnector_import_process', {'processorAlias': result.processorAlias}) }}"
+               type="button"
+               class="btn import-btn icons-holder-text no-hash pull-right">
+               <i class="icon-download-alt hide-text">{{ 'synolia.akeneo_connector.import.btn'|trans }}</i>{{ 'synolia.akeneo_connector.import.btn'|trans }}
+            </a>
+            <script type="text/javascript">
+                require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager',
+                            'oroui/js/messenger', 'oroui/js/mediator'],
+                    function(_, __, widgetManager, messenger, mediator) {
+                        $('.import-btn').click(function(){
+                            mediator.execute('showLoading');
+                        });
+                    });
+            </script>
+        {% endif %}
+    {% endset %}
+
+    {% set dataBlocks = [{
+        'title': 'synolia.akeneo_connector.import_page.title'|trans,
+        'class': 'active',
+        'subblocks': [
+            {
+                'title' : '',
+                'useSpan': false,
+                'data' : [import]
+            },
+            {
+                'title' : '',
+                'useSpan': false,
+                'data' : [validation]
+            },
+        ]
+    }] %}
+
+    {% set id = 'account-view' %}
+
+    {% set data = {'dataBlocks': dataBlocks} %}
+
+    {{ parent() }}
+{% endblock content_data %}

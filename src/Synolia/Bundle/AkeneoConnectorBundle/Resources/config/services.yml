@@ -1,0 +1,47 @@
+parameters:
+    synolia.import.subscriber.category.class:        Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\CategorySubscriber
+    synolia.import.subscriber.attribute.class:       Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\AttributeSubscriber
+    synolia.import.subscriber.product.class:         Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\ProductSubscriber
+    synolia.akeneo_connector.import.service.class:   Synolia\Bundle\AkeneoConnectorBundle\Service\ImportService
+    synolia.akeneo_connector.oro_field_select.class: Synolia\Bundle\AkeneoConnectorBundle\Service\OroFieldSelectService
+
+services:
+    synolia_akeneo_connector.category.repository:
+        class: Synolia\Bundle\AkeneoConnectorBundle\Repository\CategoryRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    synolia.import.subscriber.category:
+        class: '%synolia.import.subscriber.category.class%'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_dataaudit.listener.entity_listener'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    synolia.import.subscriber.attribute:
+        class: '%synolia.import.subscriber.attribute.class%'
+        arguments:
+            - '@oro_entity_extend.extend.entity_processor'
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    synolia.import.subscriber.product:
+        class: '%synolia.import.subscriber.product.class%'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_dataaudit.listener.entity_listener'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    synolia.akeneo_connector.import.service:
+        class: '%synolia.akeneo_connector.import.service.class%'
+        arguments:
+            - '@translator'
+
+    synolia.akeneo_connector.oro_field_select:
+        class: '%synolia.akeneo_connector.oro_field_select.class%'
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@oro_locale.helper.localization'

@@ -1,0 +1,65 @@
+synolia:
+    akeneo_connector:
+        label: Akeneo Connector
+        category.label: Category
+        attribute.label: Attribute
+        option.label: Option
+        product.label: Product
+        product_file.label: Product Files & Images
+        import.btn: IMPORT
+        import_page:
+            label: Import
+            title: Import Akeneo
+            description: Akeneo import description
+            processor.choice: Import Type
+            validation.btn: Check and validate file
+            error:
+                mapping: No mapping set in configuration panel. Define locale mapping first <a href="%url%">here.</a>
+        import:
+            product:
+                error:
+                    category_not_found: Category not found
+        configuration_page:
+            label: Configuration
+            global_configuration:
+                title: Global settings
+                settings: Global settings
+                localization.title: Locale settings
+                fields:
+                    delimiter: Delimiter
+                    enclosure: Enclosure
+                    localization_mapping: Locale Mapping
+            mapping:
+                title: Field mapping
+                settings: Field mapping
+                table:
+                    akeneofield.label: Akeneo Field
+                    orofield.label: Oro Field
+                    oroentityfield.label: Oro Entity Field
+                    required.label: Req.
+                    translatable.label: Trans.
+                    add_mapping.label: Add mapping
+                    akeneo_locale.label: Akeneo Locale
+                    localization.label: Localization
+                localization:
+                    default.label: Default
+            category:
+                title: Category
+                settings: Category Configuration
+                mapping: Category Mapping
+            attribute:
+                title: Attribute
+                settings: Attribute Configuration
+                mapping: Attribute Mapping
+            option:
+                title: Option
+                settings: Option Configuration
+                mapping: Option Mapping
+            product:
+                title: Product
+                settings: Product Configuration
+                mapping: Product Mapping
+                channel: Default Channel
+            description: Akeneo configuration page description
+
+orob2b.catalog.category.akeneo_category_code.label: Akeneo Code

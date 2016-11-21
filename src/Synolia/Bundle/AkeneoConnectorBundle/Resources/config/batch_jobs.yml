@@ -1,0 +1,47 @@
+connector:
+    name: oro_importexport
+    jobs:
+        synolia_akeneo_attribute_import_from_csv:
+            title: "Attribute Import from CSV"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_importexport.reader.csv
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    synolia.import.writer.attribute
+        synolia_akeneo_attribute_import_validation_from_csv:
+            title: "Attribute Import validation from CSV"
+            type: import_validation
+            steps:
+                import:
+                    title:     import_validation
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_importexport.reader.csv
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    synolia.import.writer.attribute
+        synolia_akeneo_product_file_import_from_zip:
+            title: "Product Files Import from ZIP"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.import.reader.zip
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity
+        synolia_akeneo_product_file_import_validation_from_zip:
+            title: "Product Files Import validation from ZIP"
+            type: import_validation
+            steps:
+                import:
+                    title:     import_validation
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.import.reader.zip
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity

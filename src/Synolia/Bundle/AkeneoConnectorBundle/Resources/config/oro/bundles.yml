@@ -1,0 +1,2 @@
+bundles:
+    - { name: Synolia\Bundle\AkeneoConnectorBundle\SynoliaAkeneoConnectorBundle, priority: 30 }

@@ -1,0 +1,16 @@
+{
+    "name": "synolia/Oroneo",
+    "description": "OroCommerce Akeneo connector",
+    "homepage": "https://github.com/synolia/oroneo",
+    "license": "OSL-3.0",
+    "authors": [{
+        "name": "Synolia",
+        "homepage": "http://www.synolia.com"
+    }],
+    "autoload": {
+        "psr-0": {
+            "Synolia\\Bundle": "src/"
+         }
+    },
+    "minimum-stability": "dev"
+}

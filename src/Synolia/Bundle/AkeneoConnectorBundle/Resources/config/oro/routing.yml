@@ -1,0 +1,4 @@
+synolia_AkeneoConnector_bundle:
+   resource:     "@SynoliaAkeneoConnectorBundle/Controller"
+   type:         annotation
+   prefix:       /akeneo-connector

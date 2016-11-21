@@ -1,0 +1,53 @@
+{% extends bap.layout %}
+{% import 'OroNavigationBundle:Include:contentTags.html.twig' as navigationMacro %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block content %}
+<div class="layout-content">
+    <div class="container-fluid page-title">
+        <div class="navigation clearfix navbar-extra navbar-extra-right">
+            <div class="row">
+                {% set actionButtons %}
+                <div class="pull-right">
+                    <div class="pull-right user-info-state">
+                        <div class="inline-decorate-container">
+                            <ul class="inline-decorate">
+                                {% block pageActions %}
+                                {% endblock pageActions %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endset %}
+                <div class="pull-left-extra">
+                {% block pageHeader %}
+                    <div class="customer-info well-small customer-simple">
+                        <div class="customer-content">
+                            <div class="top-row">
+                                {% block breadcrumbs %}
+                                    <div class="pull-left">
+                                        <div class="sub-title">Akeneo</div>
+                                        <span class="separator">/</span>
+                                        <h1 class="user-name">{{ pageTitle }}</h1>
+                                    </div>
+                                    {% block breadcrumbMessage %}{% endblock breadcrumbMessage %}
+                                {% endblock breadcrumbs %}
+                            </div>
+                        </div>
+                    </div>
+                {% endblock pageHeader %}
+                </div>
+                {%  if isMobileVersion() %}
+                    {{ actionButtons }}
+                {%  endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="layout-content scrollable-container form-container">
+        {% block content_data %}
+            {{ UI.scrollData(1, data) }}
+        {% endblock content_data %}
+    </div>
+</div>
+{% endblock content %}
