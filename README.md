@@ -18,12 +18,23 @@ PHP : **PHP 5.6+**
 
 ## How to install
 Oroneo's installation is rather simple ! You only need to use composer:
-```batch
+```cli
 composer require synolia/oroneo
+```
+ 
+And add those lines to the repositories array in `composer.json` :
+```json
+"repositories": [
+  {
+    "type": "vcs",
+    "url":  "https://github.com/synolia/oroneo.git"
+  }
+]
+
 ```
 ### Bundle installation in a working OroCommerce environment
 If you already have an OroCommerce application and you want to add this bundle, you need an extra step:
-```batch
+```cli
 php app/console oro:platform:update
 ```
 
@@ -43,7 +54,7 @@ The import process is available in the UI but also with the CLI.
 It is possible to load CSV files directly with the import form.
 The import process is devided in two steps : a file validation and the import itself.
 #### CLI import
-```batch
+```cli
 php app/console synolia:akeneo-pim:import ***type***
 ```
 Replace ***type*** by one of this values:
