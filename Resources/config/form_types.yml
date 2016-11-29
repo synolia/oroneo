@@ -1,13 +1,13 @@
 parameters:
-    synolia.akeneo.form.type.import.class:              Synolia\Bundle\AkeneoConnectorBundle\Form\Type\ImportType
-    synolia.akeneo.form.type.mapping.config.class:      Synolia\Bundle\AkeneoConnectorBundle\Form\Type\MappingConfigType
-    synolia.akeneo.form.config.mapping.category.class:  Synolia\Bundle\AkeneoConnectorBundle\Form\Type\CategoryMappingConfigType
-    synolia.akeneo.form.config.mapping.product.class:   Synolia\Bundle\AkeneoConnectorBundle\Form\Type\ProductMappingConfigType
-    synolia.akeneo.form.type.mapping.class:             Synolia\Bundle\AkeneoConnectorBundle\Form\Type\MappingType
-    synolia.akeneo.form.type.mapping.category.class:    Synolia\Bundle\AkeneoConnectorBundle\Form\Type\CategoryMappingType
-    synolia.akeneo.form.type.mapping.product.class:     Synolia\Bundle\AkeneoConnectorBundle\Form\Type\ProductMappingType
-    synolia.akeneo.form.type.localization.config.class: Synolia\Bundle\AkeneoConnectorBundle\Form\Type\LocalizationMappingConfigType
-    synolia.akeneo.form.type.localization.class:        Synolia\Bundle\AkeneoConnectorBundle\Form\Type\LocalizationMappingType
+    synolia.akeneo.form.type.import.class:              Synolia\Bundle\OroneoBundle\Form\Type\ImportType
+    synolia.akeneo.form.type.mapping.config.class:      Synolia\Bundle\OroneoBundle\Form\Type\MappingConfigType
+    synolia.akeneo.form.config.mapping.category.class:  Synolia\Bundle\OroneoBundle\Form\Type\CategoryMappingConfigType
+    synolia.akeneo.form.config.mapping.product.class:   Synolia\Bundle\OroneoBundle\Form\Type\ProductMappingConfigType
+    synolia.akeneo.form.type.mapping.class:             Synolia\Bundle\OroneoBundle\Form\Type\MappingType
+    synolia.akeneo.form.type.mapping.category.class:    Synolia\Bundle\OroneoBundle\Form\Type\CategoryMappingType
+    synolia.akeneo.form.type.mapping.product.class:     Synolia\Bundle\OroneoBundle\Form\Type\ProductMappingType
+    synolia.akeneo.form.type.localization.config.class: Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingConfigType
+    synolia.akeneo.form.type.localization.class:        Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingType
 
 services:
     synolia.akeneo.form.type.import:
@@ -20,48 +20,48 @@ services:
     synolia.akeneo.form.type.mapping.collection:
         class: %synolia.akeneo.form.type.mapping.config.class%
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_mapping_config }
+            - { name: form.type, alias: synolia_Oroneo_mapping_config }
 
     synolia.akeneo.form.type.mapping:
         class: %synolia.akeneo.form.type.mapping.class%
         arguments:
-            - '@synolia.akeneo_connector.oro_field_select'
+            - '@synolia.oroneo.oro_field_select'
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_mapping }
+            - { name: form.type, alias: synolia_Oroneo_mapping }
 
     synolia.akeneo.form.type.config.mapping.category:
         class: %synolia.akeneo.form.config.mapping.category.class%
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_category_mapping }
+            - { name: form.type, alias: synolia_Oroneo_category_mapping }
 
     synolia.akeneo.form.type.config.mapping.product:
         class: %synolia.akeneo.form.config.mapping.product.class%
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_product_mapping }
+            - { name: form.type, alias: synolia_Oroneo_product_mapping }
 
     synolia.akeneo.form.type.config.mapping.localization:
         class: %synolia.akeneo.form.type.localization.config.class%
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_localization_mapping }
+            - { name: form.type, alias: synolia_Oroneo_localization_mapping }
 
     # Types
     synolia.akeneo.form.type.mapping.category:
         class: %synolia.akeneo.form.type.mapping.category.class%
         arguments:
-            - '@synolia.akeneo_connector.oro_field_select'
+            - '@synolia.oroneo.oro_field_select'
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_category_mapping_type }
+            - { name: form.type, alias: synolia_Oroneo_category_mapping_type }
 
     synolia.akeneo.form.type.mapping.product:
         class: %synolia.akeneo.form.type.mapping.product.class%
         arguments:
-            - '@synolia.akeneo_connector.oro_field_select'
+            - '@synolia.oroneo.oro_field_select'
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_product_mapping_type }
+            - { name: form.type, alias: synolia_Oroneo_product_mapping_type }
 
     synolia.akeneo.form.type.mapping.localization:
         class: %synolia.akeneo.form.type.localization.class%
         arguments:
-            - '@synolia.akeneo_connector.oro_field_select'
+            - '@synolia.oroneo.oro_field_select'
         tags:
-            - { name: form.type, alias: synolia_akeneoconnector_localization_mapping_type }
+            - { name: form.type, alias: synolia_Oroneo_localization_mapping_type }

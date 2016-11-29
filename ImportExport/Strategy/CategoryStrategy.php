@@ -1,11 +1,11 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Strategy;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\LocaleBundle\ImportExport\Strategy\LocalizedFallbackValueAwareStrategy;
 use OroB2B\Bundle\CatalogBundle\Entity\Category;
-use Synolia\Bundle\AkeneoConnectorBundle\Repository\CategoryRepository;
+use Synolia\Bundle\OroneoBundle\Repository\CategoryRepository;
 
 /**
  * Class CategoryStrategy

@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,7 +36,7 @@ class ImportType extends BaseImportType
             'processorAlias',
             'choice',
             [
-                'label'    => 'synolia.akeneo_connector.import_page.processor.choice',
+                'label'    => 'synolia.oroneo.import_page.processor.choice',
                 'expanded' => false,
                 'multiple' => false,
                 'choices'  => $options['processorsChoices'],
@@ -62,7 +62,7 @@ class ImportType extends BaseImportType
             'validateBtn',
             'submit',
             [
-                'label' => 'synolia.akeneo_connector.import_page.validation.btn',
+                'label' => 'synolia.oroneo.import_page.validation.btn',
                 'attr' => [
                     'class' => 'btn btn-success main-group pull-right',
                 ],

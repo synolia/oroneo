@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Entity;
+namespace Synolia\Bundle\OroneoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\LocaleBundle\Entity\Localization;

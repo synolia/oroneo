@@ -1,17 +1,17 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 
 /**
  * Class MappingType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class MappingType extends AbstractType
 {
-    const NAME = 'synolia_akeneoconnector_mapping';
+    const NAME = 'synolia_Oroneo_mapping';
     const AKENEO_FIELD = 'akeneoField';
     const ORO_FIELD = 'oroField';
     const ORO_ENTITY_FIELD = 'oroEntityField';

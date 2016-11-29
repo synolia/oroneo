@@ -1,101 +1,101 @@
 oro_system_configuration:
     groups:
-        akeneo_connector:
-            title: 'synolia.akeneo_connector.label'
+        oroneo:
+            title: 'synolia.oroneo.label'
             icon: icon-exchange
-        akeneo_connector_global_config:
-            title: 'synolia.akeneo_connector.configuration_page.global_configuration.title'
-        akeneo_connector_mapping_config:
-            title: 'synolia.akeneo_connector.configuration_page.mapping.title'
-        akeneo_connector_global_config_settings:
-            title: 'synolia.akeneo_connector.configuration_page.global_configuration.settings'
-        akeneo_connector_global_config_localization:
-            title: 'synolia.akeneo_connector.configuration_page.global_configuration.localization.title'
-        akeneo_connector_mapping_settings:
-            title: 'synolia.akeneo_connector.configuration_page.mapping.settings'
-        akeneo_connector_config_category:
-            title: 'synolia.akeneo_connector.configuration_page.category.title'
-        akeneo_connector_config_attribute:
-            title: 'synolia.akeneo_connector.configuration_page.attribute.title'
-        akeneo_connector_config_option:
-            title: 'synolia.akeneo_connector.configuration_page.option.title'
-        akeneo_connector_config_product:
-            title: 'synolia.akeneo_connector.configuration_page.product.title'
-        akeneo_connector_config_category_settings:
-            title: 'synolia.akeneo_connector.configuration_page.category.settings'
-        akeneo_connector_config_attribute_settings:
-            title: 'synolia.akeneo_connector.configuration_page.attribute.settings'
-        akeneo_connector_config_option_settings:
-            title: 'synolia.akeneo_connector.configuration_page.option.settings'
-        akeneo_connector_config_product_settings:
-            title: 'synolia.akeneo_connector.configuration_page.product.settings'
+        oroneo_global_config:
+            title: 'synolia.oroneo.configuration_page.global_configuration.title'
+        oroneo_mapping_config:
+            title: 'synolia.oroneo.configuration_page.mapping.title'
+        oroneo_global_config_settings:
+            title: 'synolia.oroneo.configuration_page.global_configuration.settings'
+        oroneo_global_config_localization:
+            title: 'synolia.oroneo.configuration_page.global_configuration.localization.title'
+        oroneo_mapping_settings:
+            title: 'synolia.oroneo.configuration_page.mapping.settings'
+        oroneo_config_category:
+            title: 'synolia.oroneo.configuration_page.category.title'
+        oroneo_config_attribute:
+            title: 'synolia.oroneo.configuration_page.attribute.title'
+        oroneo_config_option:
+            title: 'synolia.oroneo.configuration_page.option.title'
+        oroneo_config_product:
+            title: 'synolia.oroneo.configuration_page.product.title'
+        oroneo_config_category_settings:
+            title: 'synolia.oroneo.configuration_page.category.settings'
+        oroneo_config_attribute_settings:
+            title: 'synolia.oroneo.configuration_page.attribute.settings'
+        oroneo_config_option_settings:
+            title: 'synolia.oroneo.configuration_page.option.settings'
+        oroneo_config_product_settings:
+            title: 'synolia.oroneo.configuration_page.product.settings'
 
     fields:
         # Global Configuration fields
-        synolia_akeneo_connector.delimiter:
+        synolia_oroneo.delimiter:
             data_type: string
             type: text
             options:
-                label: 'synolia.akeneo_connector.configuration_page.global_configuration.fields.delimiter'
-        synolia_akeneo_connector.enclosure:
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.delimiter'
+        synolia_oroneo.enclosure:
             data_type: string
             type: text
             options:
-                label: 'synolia.akeneo_connector.configuration_page.global_configuration.fields.enclosure'
-        synolia_akeneo_connector.localization_mapping:
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.enclosure'
+        synolia_oroneo.localization_mapping:
             data_type: array
-            type: synolia_akeneoconnector_localization_mapping
+            type: synolia_Oroneo_localization_mapping
             options:
-                label: 'synolia.akeneo_connector.configuration_page.global_configuration.fields.localization_mapping'
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.localization_mapping'
                 resettable: false
         # Category Mapping
-        synolia_akeneo_connector.category_mapping:
+        synolia_oroneo.category_mapping:
             data_type: array
-            type: synolia_akeneoconnector_category_mapping
+            type: synolia_Oroneo_category_mapping
             options:
-                label: 'synolia.akeneo_connector.configuration_page.category.mapping'
+                label: 'synolia.oroneo.configuration_page.category.mapping'
                 resettable: false
         # Product Mapping & channel
-        synolia_akeneo_connector.product_mapping:
+        synolia_oroneo.product_mapping:
             data_type: array
-            type: synolia_akeneoconnector_product_mapping
+            type: synolia_Oroneo_product_mapping
             options:
-                label: 'synolia.akeneo_connector.configuration_page.product.mapping'
+                label: 'synolia.oroneo.configuration_page.product.mapping'
                 resettable: false
-        synolia_akeneo_connector.product_channel:
+        synolia_oroneo.product_channel:
             data_type: string
             type: text
             options:
-                label: 'synolia.akeneo_connector.configuration_page.product.channel'
+                label: 'synolia.oroneo.configuration_page.product.channel'
 
     tree:
         system_configuration:
-            akeneo_connector:
+            oroneo:
                 children:
-                    akeneo_connector_global_config:
+                    oroneo_global_config:
                         children:
-                            akeneo_connector_global_config_settings:
+                            oroneo_global_config_settings:
                                 children:
-                                    akeneo_connector_global_config_settings:
+                                    oroneo_global_config_settings:
                                         children:
-                                            - synolia_akeneo_connector.delimiter
-                                            - synolia_akeneo_connector.enclosure
-                            akeneo_connector_global_config_localization:
+                                            - synolia_oroneo.delimiter
+                                            - synolia_oroneo.enclosure
+                            oroneo_global_config_localization:
                                 children:
-                                    akeneo_connector_global_config_localization:
+                                    oroneo_global_config_localization:
                                         children:
-                                            - synolia_akeneo_connector.localization_mapping
+                                            - synolia_oroneo.localization_mapping
 
-                    akeneo_connector_mapping_config:
+                    oroneo_mapping_config:
                         children:
-                            akeneo_connector_config_category:
+                            oroneo_config_category:
                                 children:
-                                    akeneo_connector_config_category_settings:
+                                    oroneo_config_category_settings:
                                         children:
-                                            - synolia_akeneo_connector.category_mapping
-                            akeneo_connector_config_product:
+                                            - synolia_oroneo.category_mapping
+                            oroneo_config_product:
                                 children:
-                                    akeneo_connector_config_product_settings:
+                                    oroneo_config_product_settings:
                                         children:
-                                            - synolia_akeneo_connector.product_channel
-                                            - synolia_akeneo_connector.product_mapping
+                                            - synolia_oroneo.product_channel
+                                            - synolia_oroneo.product_mapping

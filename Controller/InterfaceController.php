@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Controller;
+namespace Synolia\Bundle\OroneoBundle\Controller;
 
 use Oro\Bundle\ImportExportBundle\Form\Model\ImportData;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\ImportExportBundle\Handler\HttpImportHandler;
 use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
-use Synolia\Bundle\AkeneoConnectorBundle\Service\ImportService;
+use Synolia\Bundle\OroneoBundle\Service\ImportService;
 
 /**
  * Class InterfaceController
@@ -21,7 +21,7 @@ use Synolia\Bundle\AkeneoConnectorBundle\Service\ImportService;
 class InterfaceController extends Controller
 {
     /**
-     * @Route("/import", name="synolia_AkeneoConnector_import")
+     * @Route("/import", name="synolia_Oroneo_import")
      * @Template()
      *
      * @param Request $request
@@ -30,25 +30,25 @@ class InterfaceController extends Controller
      */
     public function importAction(Request $request)
     {
-        $processorsChoices = $this->container->get('synolia.akeneo_connector.import.service')->getProcessorsChoices();
+        $processorsChoices = $this->container->get('synolia.oroneo.import.service')->getProcessorsChoices();
 
         $form = $this->createForm('akeneo_import_form', null, ['processorsChoices' => $processorsChoices]);
         $validationResult = [];
 
         if ($request->isMethod('POST')) {
             $form->submit($request);
-            $localMapping = $this->container->get('oro_config.global')->get('synolia_akeneo_connector.localization_mapping');
+            $localMapping = $this->container->get('oro_config.global')->get('synolia_oroneo.localization_mapping');
             if (empty($localMapping)) {
                 $this->get('session')->getFlashBag()->add(
                     'error',
                     $this->get('translator')->trans(
-                        'synolia.akeneo_connector.import_page.error.mapping',
+                        'synolia.oroneo.import_page.error.mapping',
                         [
                             '%url%' => $this->generateUrl(
                                 'oro_config_configuration_system',
                                 [
-                                    'activeGroup' => 'akeneo_connector',
-                                    'activeSubGroup' => 'akeneo_connector_global_config_localization',
+                                    'activeGroup' => 'oroneo',
+                                    'activeSubGroup' => 'oroneo_global_config_localization',
                                 ]
                             ),
                         ]
@@ -87,8 +87,8 @@ class InterfaceController extends Controller
                     $inputFormat,
                     null,
                     [
-                        'delimiter' => $this->container->get('oro_config.global')->get('synolia_akeneo_connector.delimiter'),
-                        'enclosure' => $this->container->get('oro_config.global')->get('synolia_akeneo_connector.enclosure'),
+                        'delimiter' => $this->container->get('oro_config.global')->get('synolia_oroneo.delimiter'),
+                        'enclosure' => $this->container->get('oro_config.global')->get('synolia_oroneo.enclosure'),
                     ]
                 );
                 $validationResult['showStrategy'] = count($existingAliases) > 1;
@@ -103,7 +103,7 @@ class InterfaceController extends Controller
     }
 
     /**
-     * @Route("/import/process/{processorAlias}", name="synolia_AkeneoConnector_import_process")
+     * @Route("/import/process/{processorAlias}", name="synolia_Oroneo_import_process")
      * @AclAncestor("oro_importexport_export")
      *
      * @param string $processorAlias
@@ -147,8 +147,8 @@ class InterfaceController extends Controller
             $inputFormat,
             null,
             [
-                'delimiter' => $this->container->get('oro_config.global')->get('synolia_akeneo_connector.delimiter'),
-                'enclosure' => $this->container->get('oro_config.global')->get('synolia_akeneo_connector.enclosure'),
+                'delimiter' => $this->container->get('oro_config.global')->get('synolia_oroneo.delimiter'),
+                'enclosure' => $this->container->get('oro_config.global')->get('synolia_oroneo.enclosure'),
             ]
         );
 
@@ -162,11 +162,11 @@ class InterfaceController extends Controller
             $this->get('translator')->trans($result['message'])
         );
 
-        return $this->redirectToRoute('synolia_AkeneoConnector_import');
+        return $this->redirectToRoute('synolia_Oroneo_import');
     }
 
     /**
-     * @Route("/configuration", name="synolia_AkeneoConnector_configuration")
+     * @Route("/configuration", name="synolia_Oroneo_configuration")
      *
      * @return RedirectResponse
      */
@@ -175,8 +175,8 @@ class InterfaceController extends Controller
         return $this->redirectToRoute(
             'oro_config_configuration_system',
             [
-                'activeGroup' => 'akeneo_connector',
-                'activeSubGroup' => 'akeneo_connector_global_config_settings',
+                'activeGroup' => 'oroneo',
+                'activeSubGroup' => 'oroneo_global_config_settings',
             ]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Repository;
+namespace Synolia\Bundle\OroneoBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
 use OroB2B\Bundle\CatalogBundle\Entity\Category;

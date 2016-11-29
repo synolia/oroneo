@@ -1,2 +1,2 @@
 bundles:
-    - { name: Synolia\Bundle\AkeneoConnectorBundle\SynoliaAkeneoConnectorBundle, priority: 30 }
+    - { name: Synolia\Bundle\OroneoBundle\SynoliaOroneoBundle, priority: 30 }

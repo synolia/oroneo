@@ -1,17 +1,17 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class CategoryMappingConfigType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class CategoryMappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_akeneoconnector_category_mapping';
+    const NAME = 'synolia_Oroneo_category_mapping';
 
     /**
      * {@inheritdoc}

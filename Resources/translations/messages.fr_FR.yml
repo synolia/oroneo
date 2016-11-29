@@ -1,5 +1,5 @@
 synolia:
-    akeneo_connector:
+    oroneo:
         label: Akeneo Connector
         category.label: Category
         attribute.label: Attribute

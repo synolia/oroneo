@@ -1,12 +1,12 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Reader;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Reader;
 
 use Oro\Bundle\ImportExportBundle\Reader\CsvFileReader;
 
 /**
  * Class ZipFileReader
- * @package Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Reader
+ * @package Synolia\Bundle\OroneoBundle\ImportExport\Reader
  */
 class ZipFileReader extends CsvFileReader
 {

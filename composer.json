@@ -9,7 +9,7 @@
     }],
     "autoload": {
         "psr-4": {
-            "Synolia\\Bundle\\AkeneoConnectorBundle\\": ""
+            "Synolia\\Bundle\\OroneoBundle\\": ""
         }
     },
     "require": {

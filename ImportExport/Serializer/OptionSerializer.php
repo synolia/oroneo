@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Serializer;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
@@ -11,7 +11,7 @@ use OroB2B\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class OptionSerializer
- * @package Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Serializer
+ * @package Synolia\Bundle\OroneoBundle\ImportExport\Serializer
  */
 class OptionSerializer extends Serializer
 {

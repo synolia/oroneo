@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\DataConverter;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -8,7 +8,7 @@ use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
 
 /**
  * Class OptionDataConverter
- * @package Synolia\Bundle\AkeneoConnectorBundle\ImportExport\DataConverter
+ * @package Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
  */
 class OptionDataConverter extends AbstractTableDataConverter implements ContextAwareInterface
 {

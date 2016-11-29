@@ -1,13 +1,13 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Service;
+namespace Synolia\Bundle\OroneoBundle\Service;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 
 /**
  * Class OroFieldSelectService
- * @package Synolia\Bundle\AkeneoConnectorBundle\Service
+ * @package Synolia\Bundle\OroneoBundle\Service
  */
 class OroFieldSelectService
 {
@@ -58,7 +58,7 @@ class OroFieldSelectService
     {
         $localizations = $this->localizationHelper->getAll();
         $choices       = [
-            'default' => 'synolia.akeneo_connector.configuration_page.mapping.localization.default.label',
+            'default' => 'synolia.oroneo.configuration_page.mapping.localization.default.label',
         ];
 
         foreach ($localizations as $localization) {

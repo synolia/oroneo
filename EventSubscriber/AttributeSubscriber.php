@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber;
+namespace Synolia\Bundle\OroneoBundle\EventSubscriber;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -9,11 +9,11 @@ use OroB2B\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Synolia\Bundle\AkeneoConnectorBundle\Command\ImportCommand;
+use Synolia\Bundle\OroneoBundle\Command\ImportCommand;
 
 /**
  * Class AttributeSubscriber
- * @package Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber
+ * @package Synolia\Bundle\OroneoBundle\EventSubscriber
  */
 class AttributeSubscriber implements EventSubscriberInterface
 {

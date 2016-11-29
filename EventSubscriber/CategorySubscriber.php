@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber;
+namespace Synolia\Bundle\OroneoBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\DataAuditBundle\EventListener\EntityListener;
@@ -9,11 +9,11 @@ use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Synolia\Bundle\AkeneoConnectorBundle\Command\ImportCommand;
+use Synolia\Bundle\OroneoBundle\Command\ImportCommand;
 
 /**
  * Class CategoryListener
- * @package Synolia\Bundle\AkeneoConnectorBundle\EventListener
+ * @package Synolia\Bundle\OroneoBundle\EventListener
  */
 class CategorySubscriber implements EventSubscriberInterface
 {

@@ -1,6 +1,6 @@
-{% extends 'SynoliaAkeneoConnectorBundle::viewLayout.html.twig' %}
+{% extends 'SynoliaOroneoBundle::viewLayout.html.twig' %}
 
-{% set pageTitle = 'synolia.akeneo_connector.import_page.title'|trans %}
+{% set pageTitle = 'synolia.oroneo.import_page.title'|trans %}
 
 {% block content_data %}
     {% set import %}
@@ -17,10 +17,10 @@
     {% set validation %}
         {% if result is iterable and result is not empty %}
             {% include 'OroImportExportBundle:ImportExport/widget:importValidate.html.twig' ignore missing with result %}
-            <a href="{{ path('synolia_AkeneoConnector_import_process', {'processorAlias': result.processorAlias}) }}"
+            <a href="{{ path('synolia_Oroneo_import_process', {'processorAlias': result.processorAlias}) }}"
                type="button"
                class="btn import-btn icons-holder-text no-hash pull-right">
-               <i class="icon-download-alt hide-text">{{ 'synolia.akeneo_connector.import.btn'|trans }}</i>{{ 'synolia.akeneo_connector.import.btn'|trans }}
+               <i class="icon-download-alt hide-text">{{ 'synolia.oroneo.import.btn'|trans }}</i>{{ 'synolia.oroneo.import.btn'|trans }}
             </a>
             <script type="text/javascript">
                 require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager',
@@ -35,7 +35,7 @@
     {% endset %}
 
     {% set dataBlocks = [{
-        'title': 'synolia.akeneo_connector.import_page.title'|trans,
+        'title': 'synolia.oroneo.import_page.title'|trans,
         'class': 'active',
         'subblocks': [
             {

@@ -1,25 +1,17 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Migrations\Schema;
+namespace Synolia\Bundle\OroneoBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
 /**
- * Class SynoliaAkeneoConnectorBundleInstaller
+ * Class SynoliaOroneoBundle
  */
-class SynoliaAkeneoConnectorBundleInstaller implements Installation
+class SynoliaOroneoBundle implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getMigrationVersion()
-    {
-        return 'v1_0';
-    }
-
     /**
      * {@inheritdoc}
      */

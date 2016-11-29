@@ -1,12 +1,12 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\SystemConfig;
+namespace Synolia\Bundle\OroneoBundle\SystemConfig;
 
 use Oro\Bundle\LocaleBundle\Entity\Localization;
 
 /**
  * Class MappingLocalization
- * @package Synolia\Bundle\AkeneoConnectorBundle\SystemConfig
+ * @package Synolia\Bundle\OroneoBundle\SystemConfig
  */
 class MappingLocalization
 {

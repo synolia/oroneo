@@ -1,13 +1,13 @@
 parameters:
-    synolia.import.subscriber.category.class:        Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\CategorySubscriber
-    synolia.import.subscriber.attribute.class:       Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\AttributeSubscriber
-    synolia.import.subscriber.product.class:         Synolia\Bundle\AkeneoConnectorBundle\EventSubscriber\ProductSubscriber
-    synolia.akeneo_connector.import.service.class:   Synolia\Bundle\AkeneoConnectorBundle\Service\ImportService
-    synolia.akeneo_connector.oro_field_select.class: Synolia\Bundle\AkeneoConnectorBundle\Service\OroFieldSelectService
+    synolia.import.subscriber.category.class:        Synolia\Bundle\OroneoBundle\EventSubscriber\CategorySubscriber
+    synolia.import.subscriber.attribute.class:       Synolia\Bundle\OroneoBundle\EventSubscriber\AttributeSubscriber
+    synolia.import.subscriber.product.class:         Synolia\Bundle\OroneoBundle\EventSubscriber\ProductSubscriber
+    synolia.oroneo.import.service.class:   Synolia\Bundle\OroneoBundle\Service\ImportService
+    synolia.oroneo.oro_field_select.class: Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService
 
 services:
-    synolia_akeneo_connector.category.repository:
-        class: Synolia\Bundle\AkeneoConnectorBundle\Repository\CategoryRepository
+    synolia_oroneo.category.repository:
+        class: Synolia\Bundle\OroneoBundle\Repository\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -35,13 +35,13 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    synolia.akeneo_connector.import.service:
-        class: '%synolia.akeneo_connector.import.service.class%'
+    synolia.oroneo.import.service:
+        class: '%synolia.oroneo.import.service.class%'
         arguments:
             - '@translator'
 
-    synolia.akeneo_connector.oro_field_select:
-        class: '%synolia.akeneo_connector.oro_field_select.class%'
+    synolia.oroneo.oro_field_select:
+        class: '%synolia.oroneo.oro_field_select.class%'
         arguments:
             - '@oro_entity_config.config_manager'
             - '@oro_locale.helper.localization'

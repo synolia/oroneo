@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Command;
+namespace Synolia\Bundle\OroneoBundle\Command;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,7 +38,7 @@ class ImportCommand extends OroImportCommand
     {
         $oroConfig  = $this->getContainer()->get('oro_config.global');
         $importType = $input->getArgument(self::ARGUMENT_TYPE);
-        $config     = $oroConfig->get('synolia_akeneo_connector.jobs');
+        $config     = $oroConfig->get('synolia_oroneo.jobs');
 
         if (!isset($config[$importType])) {
             throw new \InvalidArgumentException('Import type '.$importType.' does not exist');

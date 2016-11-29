@@ -1,18 +1,18 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use OroB2B\Bundle\ProductBundle\Entity\Product;
-use Synolia\Bundle\AkeneoConnectorBundle\Service\OroFieldSelectService;
+use Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService;
 
 /**
  * Class ProductMappingType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class ProductMappingType extends MappingType
 {
-    const NAME = 'synolia_akeneoconnector_product_mapping_type';
+    const NAME = 'synolia_Oroneo_product_mapping_type';
 
     /**
      * @var OroFieldSelectService $oroFieldChoices

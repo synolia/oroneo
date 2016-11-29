@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Migrations\Data\ORM;
+namespace Synolia\Bundle\OroneoBundle\Migrations\Data\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -8,11 +8,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingLocalization;
+use Synolia\Bundle\OroneoBundle\SystemConfig\MappingLocalization;
 
 /**
  * Class SetDefaultLocalizationMappings
- * @package Synolia\Bundle\AkeneoConnectorBundle\Migrations\Data\ORM
+ * @package Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
  */
 class SetDefaultLocalizationMappings extends AbstractFixture implements ContainerAwareInterface
 {
@@ -38,7 +38,7 @@ class SetDefaultLocalizationMappings extends AbstractFixture implements Containe
     {
         $configManager = $this->container->get('oro_config.global');
         $configManager->set(
-            'synolia_akeneo_connector.localization_mapping',
+            'synolia_oroneo.localization_mapping',
             [
                 new MappingLocalization('en_US', 'default'),
             ]

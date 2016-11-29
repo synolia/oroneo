@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Strategy;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
@@ -118,7 +118,7 @@ class ProductStrategy extends Strategy
                 $this->context->incrementErrorEntriesCount();
                 $this->strategyHelper->addValidationErrors(
                     [
-                        $this->translator->trans('synolia.akeneo_connector.import.product.error.category_not_found'),
+                        $this->translator->trans('synolia.oroneo.import.product.error.category_not_found'),
                     ],
                     $this->context
                 );

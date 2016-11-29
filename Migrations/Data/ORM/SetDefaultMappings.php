@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Migrations\Data\ORM;
+namespace Synolia\Bundle\OroneoBundle\Migrations\Data\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -8,11 +8,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingConfig;
+use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
 
 /**
  * Class SetDefaultMappings
- * @package Synolia\Bundle\AkeneoConnectorBundle\Migrations\Data\ORM
+ * @package Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
  */
 class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterface
 {
@@ -38,7 +38,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
     {
         $configManager = $this->container->get('oro_config.global');
         $configManager->set(
-            'synolia_akeneo_connector.category_mapping',
+            'synolia_oroneo.category_mapping',
             [
                 new MappingConfig('code', 'akeneoCategoryCode', '', true, false),
                 new MappingConfig('label', 'titles', 'string', true, true),
@@ -46,7 +46,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             ]
         );
         $configManager->set(
-            'synolia_akeneo_connector.option_mapping',
+            'synolia_oroneo.option_mapping',
             [
                 new MappingConfig('code', 'id', '', true, false),
                 new MappingConfig('label-fr_FR', 'name', '', true, false),
@@ -55,7 +55,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             ]
         );
         $configManager->set(
-            'synolia_akeneo_connector.attribute_mapping',
+            'synolia_oroneo.attribute_mapping',
             [
                 new MappingConfig('code', 'fieldName', '', true, false),
                 new MappingConfig('type', 'type', '', true, false),
@@ -66,9 +66,9 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('max_file_size', 'attachment.maxsize', '', false, false),
             ]
         );
-        $configManager->set('synolia_akeneo_connector.product_channel', 'ecommerce');
+        $configManager->set('synolia_oroneo.product_channel', 'ecommerce');
         $configManager->set(
-            'synolia_akeneo_connector.product_mapping',
+            'synolia_oroneo.product_mapping',
             [
                 new MappingConfig('sku', 'sku', '', true, false),
                 new MappingConfig('name', 'names', 'string', true, true),

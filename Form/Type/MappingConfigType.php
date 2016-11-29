@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
@@ -10,11 +10,11 @@ use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 
 /**
  * Class MappingConfigType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class MappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_akeneoconnector_mapping_config';
+    const NAME = 'synolia_Oroneo_mapping_config';
 
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class MappingConfigType extends AbstractType
         $resolver->setDefaults([
             'type' => MappingType::NAME,
             'options' => [
-                'data_class' => 'Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingConfig',
+                'data_class' => 'Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig',
             ],
             'allow_add_after' => false,
             'show_form_when_empty' => true,

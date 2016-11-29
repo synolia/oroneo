@@ -1,17 +1,17 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\DataConverter;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 
 use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingConfig;
-use Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingLocalization;
+use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
+use Synolia\Bundle\OroneoBundle\SystemConfig\MappingLocalization;
 
 /**
  * Class DataConverterTrait
- * @package Synolia\Bundle\AkeneoConnectorBundle\ImportExport\DataConverter
+ * @package Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
  */
 trait DataConverterTrait
 {
@@ -137,7 +137,7 @@ trait DataConverterTrait
      */
     protected function getLocalizationMappings()
     {
-        return $this->globalConfigManager->get('synolia_akeneo_connector.localization_mapping');
+        return $this->globalConfigManager->get('synolia_oroneo.localization_mapping');
     }
 
     /**
@@ -164,7 +164,7 @@ trait DataConverterTrait
     protected function getFieldMappings()
     {
         if (!is_array($this->fields)) {
-            $this->fields = $this->globalConfigManager->get('synolia_akeneo_connector.'.$this->className.'_mapping');
+            $this->fields = $this->globalConfigManager->get('synolia_oroneo.'.$this->className.'_mapping');
         }
 
         return $this->fields;

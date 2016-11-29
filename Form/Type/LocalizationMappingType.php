@@ -1,18 +1,18 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Synolia\Bundle\AkeneoConnectorBundle\Service\OroFieldSelectService;
+use Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService;
 
 /**
  * Class LocalizationMappingType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class LocalizationMappingType extends AbstractType
 {
-    const NAME = 'synolia_akeneoconnector_localization_mapping_type';
+    const NAME = 'synolia_Oroneo_localization_mapping_type';
 
     /**
      * @var OroFieldSelectService $oroFieldChoices

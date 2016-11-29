@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -10,11 +10,11 @@ use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 
 /**
  * Class LocalizationMappingConfigType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class LocalizationMappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_akeneoconnector_localization_mapping';
+    const NAME = 'synolia_Oroneo_localization_mapping';
 
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class LocalizationMappingConfigType extends AbstractType
         $resolver->setDefaults([
             'type' => LocalizationMappingType::NAME,
             'options' => [
-                'data_class' => 'Synolia\Bundle\AkeneoConnectorBundle\SystemConfig\MappingLocalization',
+                'data_class' => 'Synolia\Bundle\OroneoBundle\SystemConfig\MappingLocalization',
             ],
             'allow_add_after' => false,
             'show_form_when_empty' => true,

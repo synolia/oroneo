@@ -1,12 +1,12 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Strategy;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
 /**
  * Class OptionStrategy
- * @package Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Strategy
+ * @package Synolia\Bundle\OroneoBundle\ImportExport\Strategy
  */
 class OptionStrategy extends ConfigurableAddOrReplaceStrategy
 {

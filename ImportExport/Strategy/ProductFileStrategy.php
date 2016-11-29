@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\Strategy;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;

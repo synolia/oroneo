@@ -53,9 +53,9 @@ It is possible to load CSV files directly with the import form.
 The import process is devided in two steps : a file validation and the import itself.
 #### CLI import
 ```cli
-php app/console synolia:akeneo-pim:import ***type***
+php app/console synolia:akeneo-pim:import type
 ```
-Replace ***type*** by one of this values:
+Replace **type** by one of this values:
 * category
 * attribute
 * option

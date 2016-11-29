@@ -1,2 +1,2 @@
 bundles:
-    - SynoliaAkeneoConnectorBundle:Form:fields.html.twig
+    - SynoliaOroneoBundle:Form:fields.html.twig

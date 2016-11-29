@@ -1,11 +1,11 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\DependencyInjection;
+namespace Synolia\Bundle\OroneoBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
-use Synolia\Bundle\AkeneoConnectorBundle\Service\ImportService;
+use Synolia\Bundle\OroneoBundle\Service\ImportService;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('synolia_akeneo_connector');
+        $rootNode = $treeBuilder->root('synolia_oroneo');
 
         SettingsBuilder::append(
             $rootNode,

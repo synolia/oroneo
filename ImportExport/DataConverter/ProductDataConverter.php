@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\ImportExport\DataConverter;
+namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
@@ -51,7 +51,7 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
     {
         $this->checkMissingFields($importedRecord, $this->context);
 
-        $channel = '-'.$this->globalConfigManager->get('synolia_akeneo_connector.product_channel');
+        $channel = '-'.$this->globalConfigManager->get('synolia_oroneo.product_channel');
         $channelLength = strlen($channel);
 
         foreach ($importedRecord as $key => $value) {

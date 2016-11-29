@@ -1,6 +1,6 @@
-{% block synolia_akeneoconnector_mapping_config_widget %}
+{% block synolia_Oroneo_mapping_config_widget %}
     {% if prototype is defined %}
-        {% set prototype_html = _self.synolia_akeneoconnector_mapping_config_prototype(form) %}
+        {% set prototype_html = _self.synolia_Oroneo_mapping_config_prototype(form) %}
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container' }) %}
     {% set id = id ~ '_collection' %}
@@ -11,18 +11,18 @@
                 <table class="grid table-hover table table-bordered">
                     <thead>
                     <tr>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.akeneofield.label'|trans }}</span></th>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.orofield.label'|trans }}</span></th>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.oroentityfield.label'|trans }}</span></th>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.required.label'|trans }}</span></th>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.translatable.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.akeneofield.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.orofield.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.oroentityfield.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.required.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.translatable.label'|trans }}</span></th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
                     {% if form.children|length %}
                         {% for child in form.children %}
-                            {{ _self.synolia_akeneoconnector_mapping_config_prototype(child) }}
+                            {{ _self.synolia_Oroneo_mapping_config_prototype(child) }}
                         {% endfor %}
                     {% elseif show_form_when_empty and prototype_html is defined %}
                         {{ prototype_html|replace({(prototype_name): '0'})|raw }}
@@ -30,12 +30,12 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
+            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
         </div>
     </div>
 {% endblock %}
 
-{% block synolia_akeneoconnector_mapping_widget %}
+{% block synolia_Oroneo_mapping_widget %}
     <td>{{ form_widget(form.akeneoField) }} {{ form_errors(form.akeneoField) }}</td>
     <td>{{ form_widget(form.oroField) }}{{ form_errors(form.oroField) }}</td>
     <td>{{ form_widget(form.oroEntityField) }}{{ form_errors(form.oroEntityField) }}</td>
@@ -43,14 +43,14 @@
     <td>{{ form_widget(form.translatable) }}{{ form_errors(form.translatable) }}</td>
 {% endblock %}
 
-{% block synolia_akeneoconnector_category_mapping_type_widget %}
-    {{ block('synolia_akeneoconnector_mapping_widget') }}
+{% block synolia_Oroneo_category_mapping_type_widget %}
+    {{ block('synolia_Oroneo_mapping_widget') }}
 {% endblock %}
-{% block synolia_akeneoconnector_product_mapping_type_widget %}
-    {{ block('synolia_akeneoconnector_mapping_widget') }}
+{% block synolia_Oroneo_product_mapping_type_widget %}
+    {{ block('synolia_Oroneo_mapping_widget') }}
 {% endblock %}
 
-{% macro synolia_akeneoconnector_mapping_config_prototype(widget) %}
+{% macro synolia_Oroneo_mapping_config_prototype(widget) %}
     {% if 'collection' in widget.vars.block_prefixes %}
         {% set form = widget.vars.prototype %}
         {% set name = widget.vars.full_name ~ '[' ~ widget.vars.prototype.vars.name ~ ']' %}
@@ -71,9 +71,9 @@
 
 {######################### Localization #########################}
 
-{% block synolia_akeneoconnector_localization_mapping_widget %}
+{% block synolia_Oroneo_localization_mapping_widget %}
     {% if prototype is defined %}
-        {% set prototype_html = _self.synolia_akeneoconnector_localization_mapping_prototype(form) %}
+        {% set prototype_html = _self.synolia_Oroneo_localization_mapping_prototype(form) %}
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container price-list-grid-form' }) %}
     {% set id = id ~ '_collection' %}
@@ -84,15 +84,15 @@
                 <table class="grid table-hover table table-bordered">
                     <thead>
                     <tr>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.akeneo_locale.label'|trans }}</span></th>
-                        <th><span>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.localization.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.akeneo_locale.label'|trans }}</span></th>
+                        <th><span>{{ 'synolia.oroneo.configuration_page.mapping.table.localization.label'|trans }}</span></th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody class="pricing-price-list-items" data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
                     {% if form.children|length %}
                         {% for child in form.children %}
-                            {{ _self.synolia_akeneoconnector_localization_mapping_prototype(child) }}
+                            {{ _self.synolia_Oroneo_localization_mapping_prototype(child) }}
                         {% endfor %}
                     {% elseif show_form_when_empty and prototype_html is defined %}
                         {{ prototype_html|replace({(prototype_name): '0'})|raw }}
@@ -100,17 +100,17 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.akeneo_connector.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
+            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
         </div>
     </div>
 {% endblock %}
 
-{% block synolia_akeneoconnector_localization_mapping_type_widget %}
+{% block synolia_Oroneo_localization_mapping_type_widget %}
     <td>{{ form_widget(form.akeneoLocalization) }} {{ form_errors(form.akeneoLocalization) }}</td>
     <td>{{ form_widget(form.oroLocalization) }}{{ form_errors(form.oroLocalization) }}</td>
 {% endblock %}
 
-{% macro synolia_akeneoconnector_localization_mapping_prototype(widget) %}
+{% macro synolia_Oroneo_localization_mapping_prototype(widget) %}
     {% if 'collection' in widget.vars.block_prefixes %}
         {% set form = widget.vars.prototype %}
         {% set name = widget.vars.full_name ~ '[' ~ widget.vars.prototype.vars.name ~ ']' %}

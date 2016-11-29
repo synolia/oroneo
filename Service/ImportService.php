@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Service;
+namespace Synolia\Bundle\OroneoBundle\Service;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -40,11 +40,11 @@ class ImportService
     public function getProcessorsChoices()
     {
         return [
-            self::CATEGORY_PROCESSOR     => $this->translator->trans('synolia.akeneo_connector.category.label'),
-            self::ATTRIBUTE_PROCESSOR    => $this->translator->trans('synolia.akeneo_connector.attribute.label'),
-            self::OPTION_PROCESSOR       => $this->translator->trans('synolia.akeneo_connector.option.label'),
-            self::PRODUCT_PROCESSOR      => $this->translator->trans('synolia.akeneo_connector.product.label'),
-            self::PRODUCT_FILE_PROCESSOR => $this->translator->trans('synolia.akeneo_connector.product_file.label'),
+            self::CATEGORY_PROCESSOR     => $this->translator->trans('synolia.oroneo.category.label'),
+            self::ATTRIBUTE_PROCESSOR    => $this->translator->trans('synolia.oroneo.attribute.label'),
+            self::OPTION_PROCESSOR       => $this->translator->trans('synolia.oroneo.option.label'),
+            self::PRODUCT_PROCESSOR      => $this->translator->trans('synolia.oroneo.product.label'),
+            self::PRODUCT_FILE_PROCESSOR => $this->translator->trans('synolia.oroneo.product_file.label'),
         ];
     }
 }

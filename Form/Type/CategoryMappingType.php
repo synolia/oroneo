@@ -1,18 +1,18 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\Form\Type;
+namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Synolia\Bundle\AkeneoConnectorBundle\Service\OroFieldSelectService;
+use Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService;
 use OroB2B\Bundle\CatalogBundle\Entity\Category;
 
 /**
  * Class CategoryMappingType
- * @package Synolia\Bundle\AkeneoConnectorBundle\Form\Type
+ * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
 class CategoryMappingType extends MappingType
 {
-    const NAME = 'synolia_akeneoconnector_category_mapping_type';
+    const NAME = 'synolia_Oroneo_category_mapping_type';
 
     /**
      * @var OroFieldSelectService $oroFieldChoices

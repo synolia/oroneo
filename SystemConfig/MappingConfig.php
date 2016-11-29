@@ -1,6 +1,6 @@
 <?php
 
-namespace Synolia\Bundle\AkeneoConnectorBundle\SystemConfig;
+namespace Synolia\Bundle\OroneoBundle\SystemConfig;
 
 /**
  * Class MappingConfig
