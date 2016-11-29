@@ -18,11 +18,7 @@ PHP : **PHP 5.6+**
 
 ## How to install
 Oroneo's installation is rather simple ! You only need to use composer:
-```cli
-composer require synolia/oroneo
-```
- 
-And add those lines to the repositories array in `composer.json` :
+Add those lines to the repositories array in `composer.json` :
 ```json
 "repositories": [
   {
@@ -30,14 +26,16 @@ And add those lines to the repositories array in `composer.json` :
     "url":  "https://github.com/synolia/oroneo.git"
   }
 ]
-
+```
+And execute this command
+```cli
+composer require synolia/oroneo
 ```
 ### Bundle installation in a working OroCommerce environment
 If you already have an OroCommerce application and you want to add this bundle, you need an extra step:
 ```cli
 php app/console oro:platform:update
 ```
-
 
 ## Configuration and usage
 ### Configuration
