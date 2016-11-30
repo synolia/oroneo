@@ -24,11 +24,21 @@ synolia:
             global_configuration:
                 title: Global settings
                 settings: Global settings
+                attribute.title: Attribute settings
                 localization.title: Locale settings
                 fields:
                     delimiter: Delimiter
                     enclosure: Enclosure
                     localization_mapping: Locale Mapping
+                    attribute_file_max_size:
+                        label: File size
+                        tooltip: Max allowed file size to upload in MB.
+                    attribute_image_width:
+                        label: Thumbnail width
+                        tooltip: Thumbnail width in pixels.
+                    attribute_image_height:
+                        label: Thumbnail height
+                        tooltip: Thumbnail height in pixels.
             mapping:
                 title: Field mapping
                 settings: Field mapping
@@ -61,5 +71,10 @@ synolia:
                 mapping: Product Mapping
                 channel: Default Channel
             description: Akeneo configuration page description
+        step:
+            schema_updater:
+                title: Schema updater
+                done: Schema update done
+                skipped: Schema update skipped
 
 orob2b.catalog.category.akeneo_category_code.label: Akeneo Code

@@ -9,6 +9,8 @@ oro_system_configuration:
             title: 'synolia.oroneo.configuration_page.mapping.title'
         oroneo_global_config_settings:
             title: 'synolia.oroneo.configuration_page.global_configuration.settings'
+        oroneo_attribute_settings:
+            title: 'synolia.oroneo.configuration_page.attribute.title'
         oroneo_global_config_localization:
             title: 'synolia.oroneo.configuration_page.global_configuration.localization.title'
         oroneo_mapping_settings:
@@ -42,6 +44,24 @@ oro_system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.global_configuration.fields.enclosure'
+        synolia_oroneo.attribute_file_max_size:
+            data_type: integer
+            type: integer
+            options:
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_file_max_size.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_file_max_size.tooltip'
+        synolia_oroneo.attribute_image_width:
+            data_type: integer
+            type: integer
+            options:
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_width.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_width.tooltip'
+        synolia_oroneo.attribute_image_height:
+            data_type: integer
+            type: integer
+            options:
+                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_height.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_height.tooltip'
         synolia_oroneo.localization_mapping:
             data_type: array
             type: synolia_Oroneo_localization_mapping
@@ -80,6 +100,11 @@ oro_system_configuration:
                                         children:
                                             - synolia_oroneo.delimiter
                                             - synolia_oroneo.enclosure
+                                    oroneo_attribute_settings:
+                                        children:
+                                            - synolia_oroneo.attribute_file_max_size
+                                            - synolia_oroneo.attribute_image_width
+                                            - synolia_oroneo.attribute_image_height
                             oroneo_global_config_localization:
                                 children:
                                     oroneo_global_config_localization:

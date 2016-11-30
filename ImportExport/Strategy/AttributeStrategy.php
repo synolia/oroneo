@@ -2,7 +2,8 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager as GlobalConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Strategy\EntityFieldImportStrategy;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
@@ -14,18 +15,29 @@ use OroB2B\Bundle\ProductBundle\Entity\Product;
  */
 class AttributeStrategy extends EntityFieldImportStrategy
 {
-    /** @var  ConfigManager $entityFieldManager */
+    /** @var EntityConfigManager $entityFieldManager */
     protected $entityFieldManager;
 
+    /** @var GlobalConfigManager $globalConfigManager */
+    protected $globalConfigManager;
+
     /**
-     * @param ConfigManager $entityFieldManager
+     * @param EntityConfigManager $entityFieldManager
      */
-    public function setEntityConfigManager(ConfigManager $entityFieldManager)
+    public function setEntityConfigManager(EntityConfigManager $entityFieldManager)
     {
         $this->entityFieldManager = $entityFieldManager;
     }
 
     /**
+     * @param GlobalConfigManager $globalConfigManager
+     */
+    public function setGlobalConfigManager(GlobalConfigManager $globalConfigManager)
+    {
+        $this->globalConfigManager = $globalConfigManager;
+    }
+
+     /**
      * {@inheritdoc}
      */
     public function beforeProcessEntity($entity)
@@ -116,16 +128,15 @@ class AttributeStrategy extends EntityFieldImportStrategy
         /** @var FieldConfigModel $entity */
         if ($entity != null) {
             if ($entity->getType() == 'image' || $entity->getType() == 'file') {
-                //@TODO : add default values in parameters
                 $attachments = $entity->toArray('attachment');
 
                 if (!isset($attachments['maxsize'])) {
-                    $attachments['maxsize'] = 1024;
+                    $attachments['maxsize'] = $this->globalConfigManager->get('synolia_oroneo.attribute_file_max_size');
                 }
 
                 if ($entity->getType() == 'image') {
-                    $attachments['width']  = 50;
-                    $attachments['height'] = 50;
+                    $attachments['width']  = $this->globalConfigManager->get('synolia_oroneo.attribute_image_width');
+                    $attachments['height'] = $this->globalConfigManager->get('synolia_oroneo.attribute_image_height');
                 }
 
                 $entity->fromArray('attachment', $attachments, []);

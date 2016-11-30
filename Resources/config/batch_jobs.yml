@@ -12,6 +12,11 @@ connector:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
                         writer:    synolia.import.writer.attribute
+                update_schema:
+                    title:     synolia.import.step.schema_update.title
+                    class:     '%synolia.import.step.schema_update.class%'
+                    services:
+                        updater: synolia.import.step_element.schema_updater
         synolia_akeneo_attribute_import_validation_from_csv:
             title: "Attribute Import validation from CSV"
             type: import_validation

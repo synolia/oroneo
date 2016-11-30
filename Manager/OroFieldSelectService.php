@@ -1,15 +1,15 @@
 <?php
 
-namespace Synolia\Bundle\OroneoBundle\Service;
+namespace Synolia\Bundle\OroneoBundle\Manager;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 
 /**
- * Class OroFieldSelectService
- * @package Synolia\Bundle\OroneoBundle\Service
+ * Class OroFieldSelectManager
+ * @package Synolia\Bundle\OroneoBundle\Manager
  */
-class OroFieldSelectService
+class OroFieldSelectManager
 {
     /** @var ConfigManager $configManager */
     protected $configManager;

@@ -1,9 +1,8 @@
 parameters:
-    synolia.import.subscriber.category.class:        Synolia\Bundle\OroneoBundle\EventSubscriber\CategorySubscriber
-    synolia.import.subscriber.attribute.class:       Synolia\Bundle\OroneoBundle\EventSubscriber\AttributeSubscriber
-    synolia.import.subscriber.product.class:         Synolia\Bundle\OroneoBundle\EventSubscriber\ProductSubscriber
-    synolia.oroneo.import.service.class:   Synolia\Bundle\OroneoBundle\Service\ImportService
-    synolia.oroneo.oro_field_select.class: Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService
+    synolia.import.subscriber.category.class: Synolia\Bundle\OroneoBundle\EventSubscriber\CategorySubscriber
+    synolia.import.subscriber.product.class:  Synolia\Bundle\OroneoBundle\EventSubscriber\ProductSubscriber
+    synolia.oroneo.import.manager.class:      Synolia\Bundle\OroneoBundle\Manager\ImportManager
+    synolia.oroneo.oro_field_select.class:    Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager
 
 services:
     synolia_oroneo.category.repository:
@@ -19,14 +18,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    synolia.import.subscriber.attribute:
-        class: '%synolia.import.subscriber.attribute.class%'
-        arguments:
-            - '@oro_entity_extend.extend.entity_processor'
-            - '@oro_entity_config.config_manager'
-        tags:
-            - { name: kernel.event_subscriber }
-
     synolia.import.subscriber.product:
         class: '%synolia.import.subscriber.product.class%'
         arguments:
@@ -35,10 +26,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    synolia.oroneo.import.service:
-        class: '%synolia.oroneo.import.service.class%'
+    synolia.oroneo.import.manager:
+        class: '%synolia.oroneo.import.manager.class%'
         arguments:
             - '@translator'
+            - '@oro_importexport.handler.import.http'
+            - '@oro_importexport.processor.registry'
+            - '@oro_config.global'
+            - '@oro_entity_extend.extend.entity_processor'
 
     synolia.oroneo.oro_field_select:
         class: '%synolia.oroneo.oro_field_select.class%'

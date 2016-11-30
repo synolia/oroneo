@@ -5,7 +5,6 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
@@ -40,9 +39,6 @@ class ProductStrategy extends Strategy
 
     /** @var CategoryRepository */
     protected $categoryRepo;
-
-    /** @var FieldConfigModel[][] */
-    protected $fields;
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;

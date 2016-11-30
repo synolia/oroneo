@@ -64,6 +64,11 @@ Replace **type** by one of this values:
 
 CSV & ZIP files should be stored in the folder `app/Resources/imports/`
 
+It is also possible to import them all with the same command but without any argument specified:
+```cli
+php app/console synolia:akeneo-pim:import
+```
+
 ## About Synolia
 
 Founded in 2004, **[Synolia](http://www.synolia.com)** is a French e-commerce & CRM company based in Lyon and Paris. With more than 650 projects in both B2B and B2C, Synolia is specialized in designing and delivering the best customer experience.
