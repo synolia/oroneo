@@ -1,5 +1,6 @@
 synolia:
     oroneo:
+        title: Akeneo
         label: Akeneo Connector
         category.label: Category
         attribute.label: Attribute
@@ -77,4 +78,4 @@ synolia:
                 done: Schema update done
                 skipped: Schema update skipped
 
-orob2b.catalog.category.akeneo_category_code.label: Akeneo Code
+oro.catalog.category.akeneo_category_code.label: Akeneo Code

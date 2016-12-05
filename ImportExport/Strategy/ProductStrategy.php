@@ -9,16 +9,14 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository;
-use OroB2B\Bundle\CatalogBundle\Entity\Category;
-use OroB2B\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
-use OroB2B\Bundle\ProductBundle\Entity\Product;
-use OroB2B\Bundle\ProductBundle\Entity\ProductUnit;
-use OroB2B\Bundle\ProductBundle\Entity\ProductUnitPrecision;
-use OroB2B\Bundle\ProductBundle\Entity\Repository\ProductUnitRepository;
+use Oro\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
+use Oro\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\ProductBundle\Entity\ProductUnitPrecision;
+use Oro\Bundle\ProductBundle\Entity\Repository\ProductUnitRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Common\Util\ClassUtils;
-use \OroB2B\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy as Strategy;
+use \Oro\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy as Strategy;
 
 /**
  * Class ProductStrategy
@@ -67,8 +65,8 @@ class ProductStrategy extends Strategy
         $this->entityManager    = $entityManager;
 
         $this->businessUnitRepo = $entityManager->getRepository('OroOrganizationBundle:BusinessUnit');
-        $this->productUnitRepo  = $entityManager->getRepository('OroB2BProductBundle:ProductUnit');
-        $this->categoryRepo     = $entityManager->getRepository('OroB2BCatalogBundle:Category');
+        $this->productUnitRepo  = $entityManager->getRepository('OroProductBundle:ProductUnit');
+        $this->categoryRepo     = $entityManager->getRepository('OroCatalogBundle:Category');
     }
 
     /**

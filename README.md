@@ -10,7 +10,7 @@ Oroneo reads standard CSV files from the Akeneo exports in order to import data 
 * **Media** (Images, PDF files...)
 
 ## Requirements
-ATM **Oroneo** is designed to work only on **OroCommerce beta-3** and based on generated CSV files from **Akeneo 1.3+**
+ATM **Oroneo** is designed to work on **OroCommerce beta-5** and based on generated CSV files from **Akeneo 1.3+**
 
 PHP : **PHP 5.6+**
 

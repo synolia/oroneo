@@ -4,7 +4,7 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\Writer;
 
 use Oro\Bundle\EntityConfigBundle\ImportExport\Writer\EntityFieldWriter;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use OroB2B\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class AttributeWriter

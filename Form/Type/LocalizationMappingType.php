@@ -4,7 +4,7 @@ namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService;
+use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
 
 /**
  * Class LocalizationMappingType
@@ -15,16 +15,16 @@ class LocalizationMappingType extends AbstractType
     const NAME = 'synolia_Oroneo_localization_mapping_type';
 
     /**
-     * @var OroFieldSelectService $oroFieldChoices
+     * @var OroFieldSelectManager $oroFieldChoices
      */
     protected $oroFieldChoices;
 
     /**
      * MappingType constructor.
      *
-     * @param OroFieldSelectService $oroFieldChoices
+     * @param OroFieldSelectManager $oroFieldChoices
      */
-    public function __construct(OroFieldSelectService $oroFieldChoices)
+    public function __construct(OroFieldSelectManager $oroFieldChoices)
     {
         $this->oroFieldChoices = $oroFieldChoices;
     }

@@ -65,7 +65,7 @@ services:
 
     synolia.import.data_converter.product:
         class: '%synolia.import.data_converter.product.class%'
-        parent: orob2b_product.importexport.data_converter.product
+        parent: oro_product.importexport.data_converter.product
         calls:
             - [setConfigManager, ['@oro_entity_config.config_manager']]
             - [setManagerRegistry, ['@doctrine']]
@@ -92,7 +92,7 @@ services:
 
     synolia.import.strategy.product:
         class: '%synolia.import.strategy.product.class%'
-        parent: orob2b_product.importexport.strategy.product
+        parent: oro_product.importexport.strategy.product
         calls:
             - [setConfigManager, ['@oro_entity_config.config_manager']]
             - [setEntityManager, ['@doctrine.orm.entity_manager']]
@@ -109,8 +109,8 @@ services:
             - [setDataConverter, ['@synolia.import.data_converter.category']]
             - [setStrategy, ['@synolia.import.strategy.category']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%orob2b_catalog.entity.category.class%', alias: synolia.import.processor.category}
-            - { name: oro_importexport.processor, type: import_validation, entity: '%orob2b_catalog.entity.category.class%', alias: synolia.import.processor.category }
+            - { name: oro_importexport.processor, type: import, entity: '%oro_catalog.entity.category.class%', alias: synolia.import.processor.category}
+            - { name: oro_importexport.processor, type: import_validation, entity: '%oro_catalog.entity.category.class%', alias: synolia.import.processor.category }
 
     synolia.import.processor.attribute:
         parent: oro_entity_config.importexport.processor.import.entity_field
@@ -132,22 +132,22 @@ services:
             - { name: oro_importexport.processor, type: import_validation, entity: '%oro.abstract_enum_value%', alias: synolia.import.processor.option }
 
     synolia.import.processor.product:
-        parent: orob2b_product.importexport.processor.import.product
+        parent: oro_product.importexport.processor.import.product
         calls:
             - [setDataConverter, ['@synolia.import.data_converter.product']]
             - [setStrategy, ['@synolia.import.strategy.product']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%orob2b_product.entity.product.class%', alias: synolia.import.processor.product }
-            - { name: oro_importexport.processor, type: import_validation, entity: '%orob2b_product.entity.product.class%', alias: synolia.import.processor.product }
+            - { name: oro_importexport.processor, type: import, entity: '%oro_product.entity.product.class%', alias: synolia.import.processor.product }
+            - { name: oro_importexport.processor, type: import_validation, entity: '%oro_product.entity.product.class%', alias: synolia.import.processor.product }
 
     synolia.import.processor.product_file:
-        parent: orob2b_product.importexport.processor.import.product
+        parent: oro_product.importexport.processor.import.product
         calls:
             - [setDataConverter, ['@synolia.import.data_converter.product']]
             - [setStrategy, ['@synolia.import.strategy.product_file']]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: '%orob2b_product.entity.product.class%', alias: synolia.import.processor.product_file }
-            - { name: oro_importexport.processor, type: import_validation, entity: '%orob2b_product.entity.product.class%', alias: synolia.import.processor.product_file }
+            - { name: oro_importexport.processor, type: import, entity: '%oro_product.entity.product.class%', alias: synolia.import.processor.product_file }
+            - { name: oro_importexport.processor, type: import_validation, entity: '%oro_product.entity.product.class%', alias: synolia.import.processor.product_file }
 
     # Writer
     synolia.import.writer.attribute:

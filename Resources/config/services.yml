@@ -8,23 +8,7 @@ services:
     synolia_oroneo.category.repository:
         class: Synolia\Bundle\OroneoBundle\Repository\CategoryRepository
         arguments:
-            - '@doctrine.orm.entity_manager'
-
-    synolia.import.subscriber.category:
-        class: '%synolia.import.subscriber.category.class%'
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_dataaudit.listener.entity_listener'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    synolia.import.subscriber.product:
-        class: '%synolia.import.subscriber.product.class%'
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_dataaudit.listener.entity_listener'
-        tags:
-            - { name: kernel.event_subscriber }
+            - '@oro_entity.doctrine_helper'
 
     synolia.oroneo.import.manager:
         class: '%synolia.oroneo.import.manager.class%'

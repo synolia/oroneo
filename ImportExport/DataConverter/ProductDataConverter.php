@@ -9,8 +9,8 @@ use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use OroB2B\Bundle\ProductBundle\Entity\Product;
-use \OroB2B\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter as DataConverter;
+use Oro\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter as DataConverter;
 
 /**
  * Class ProductDataConverter

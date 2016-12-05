@@ -2,25 +2,25 @@
 
 namespace Synolia\Bundle\OroneoBundle\Repository;
 
-use Doctrine\ORM\EntityManager;
-use OroB2B\Bundle\CatalogBundle\Entity\Category;
+use Oro\Bundle\CatalogBundle\Entity\Category;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 /**
  * Class CategoryRepository
  */
 class CategoryRepository
 {
-    /** @var EntityManager */
-    protected $entityManager;
+    /** @var DoctrineHelper $doctrineHelper */
+    protected $doctrineHelper;
 
     /**
      * ContactService constructor.
      *
-     * @param EntityManager $manager
+     * @param DoctrineHelper $doctrineHelper
      */
-    public function __construct(EntityManager $manager)
+    public function __construct(DoctrineHelper $doctrineHelper)
     {
-        $this->entityManager = $manager;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -29,9 +29,9 @@ class CategoryRepository
      */
     public function getParentCategoryByAkeneoCategoryCode($akeneoCategoryCode)
     {
-        $query = $this->entityManager->createQueryBuilder();
+        $categoryRepository = $this->doctrineHelper->getEntityRepository('OroCatalogBundle:Category');
+        $query = $categoryRepository->createQueryBuilder('c');
         $query->select('c')
-            ->from('OroB2BCatalogBundle:Category', 'c')
             ->where('c.akeneoCategoryCode = :akeneoCategoryCode')
             ->setParameter('akeneoCategoryCode', $akeneoCategoryCode)
         ;

@@ -4,7 +4,7 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\LocaleBundle\ImportExport\Strategy\LocalizedFallbackValueAwareStrategy;
-use OroB2B\Bundle\CatalogBundle\Entity\Category;
+use Oro\Bundle\CatalogBundle\Entity\Category;
 use Synolia\Bundle\OroneoBundle\Repository\CategoryRepository;
 
 /**
@@ -12,7 +12,7 @@ use Synolia\Bundle\OroneoBundle\Repository\CategoryRepository;
  * @todo Check is we need to set an owner (see to inject Oro\Bundle\SecurityBundle\SecurityFacade).
  * @todo do not forget to add the eventDispatcher when everything is stable.
  *
- * @see Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy->importExistingEntity()
+ * @see \Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy->importExistingEntity()
  */
 class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
 {

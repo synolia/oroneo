@@ -4,7 +4,7 @@
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container' }) %}
     {% set id = id ~ '_collection' %}
-    <div class="pricing-price-list" data-page-component-module="orob2bpricing/js/app/components/price-lists-errors-handler">
+    <div class="pricing-price-list" data-page-component-module="oropricing/js/app/components/price-lists-errors-handler">
         <div class="row-oro">
             {% set prototype_name = form.vars.prototype_name %}
             <div {{ block('widget_container_attributes') }}>
@@ -77,7 +77,7 @@
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container price-list-grid-form' }) %}
     {% set id = id ~ '_collection' %}
-    <div class="pricing-price-list" data-page-component-module="orob2bpricing/js/app/components/price-lists-errors-handler">
+    <div class="pricing-price-list" data-page-component-module="oropricing/js/app/components/price-lists-errors-handler">
         <div class="row-oro">
             {% set prototype_name = form.vars.prototype_name %}
             <div {{ block('widget_container_attributes') }}>

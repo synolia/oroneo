@@ -4,7 +4,7 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
-use OroB2B\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\File\File as ComponentFile;
 
 /**

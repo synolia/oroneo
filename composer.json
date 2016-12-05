@@ -13,8 +13,7 @@
         }
     },
     "require": {
-        "oro/commerce": "1.0.0-beta.3",
-        "oro/platform-serialised-fields": "1.5.0-beta.3"
+        "oro/commerce": "1.0.0-beta.5"
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.11",
@@ -34,7 +33,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

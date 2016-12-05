@@ -8,7 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Strategy\EntityFieldImportStrategy;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use OroB2B\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class AttributeStrategy

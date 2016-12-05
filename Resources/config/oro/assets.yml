@@ -1,0 +1,4 @@
+assets:
+    css:
+        'synoliaoroneo':
+            - 'bundles/synoliaoroneo/css/less/config.less'

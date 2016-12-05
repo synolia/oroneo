@@ -110,7 +110,7 @@ class ImportController extends Controller
      *
      * @todo Find a way to remove this action and create a direct link to the configuration page in the navigation menu. ATM can't find a way to create such link with params in it.
      *
-     * @Route("/configuration", name="synolia_Oroneo_configuration")
+     * @Route("/configuration", name="synolia_oroneo_configuration")
      *
      * @return RedirectResponse
      */

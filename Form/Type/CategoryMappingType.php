@@ -3,8 +3,8 @@
 namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Synolia\Bundle\OroneoBundle\Service\OroFieldSelectService;
-use OroB2B\Bundle\CatalogBundle\Entity\Category;
+use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
+use Oro\Bundle\CatalogBundle\Entity\Category;
 
 /**
  * Class CategoryMappingType
@@ -15,16 +15,16 @@ class CategoryMappingType extends MappingType
     const NAME = 'synolia_Oroneo_category_mapping_type';
 
     /**
-     * @var OroFieldSelectService $oroFieldChoices
+     * @var OroFieldSelectManager $oroFieldChoices
      */
     protected $oroFieldChoices;
 
     /**
      * MappingType constructor.
      *
-     * @param OroFieldSelectService $oroFieldChoices
+     * @param OroFieldSelectManager $oroFieldChoices
      */
-    public function __construct(OroFieldSelectService $oroFieldChoices)
+    public function __construct(OroFieldSelectManager $oroFieldChoices)
     {
         $this->oroFieldChoices = $oroFieldChoices;
     }

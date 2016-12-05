@@ -1,0 +1,31 @@
+navigation:
+    menu_config:
+        items:
+            oroneo_tab:
+                label:           'synolia.oroneo.title'
+                uri:             '#'
+                extras:
+                    position:    9999
+            import_menu:
+                label:           'synolia.oroneo.import_page.label'
+                route:           'synolia_oroneo_import'
+                extras:
+                    position:    10
+                    routes:      ['/^oroneo/']
+            configuration_menu:
+                label:           'synolia.oroneo.configuration_page.label'
+                route:           'synolia_oroneo_configuration'
+                extras:
+                    position:    20
+                    routes:      ['/^oroneo/']
+        tree:
+            application_menu:
+                children:
+                    oroneo_tab:
+                        children:
+                            import_menu: ~
+                            configuration_menu: ~
+
+    titles:
+        synolia_oroneo_import:        'synolia.oroneo.import_page.title'
+        synolia_oroneo_configuration: 'synolia.oroneo.configuration_page.label'
