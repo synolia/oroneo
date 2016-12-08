@@ -1,6 +1,6 @@
-{% block synolia_Oroneo_mapping_config_widget %}
+{% block synolia_oroneo_mapping_config_widget %}
     {% if prototype is defined %}
-        {% set prototype_html = _self.synolia_Oroneo_mapping_config_prototype(form) %}
+        {% set prototype_html = _self.synolia_oroneo_mapping_config_prototype(form) %}
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container' }) %}
     {% set id = id ~ '_collection' %}
@@ -22,7 +22,7 @@
                     <tbody data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
                     {% if form.children|length %}
                         {% for child in form.children %}
-                            {{ _self.synolia_Oroneo_mapping_config_prototype(child) }}
+                            {{ _self.synolia_oroneo_mapping_config_prototype(child) }}
                         {% endfor %}
                     {% elseif show_form_when_empty and prototype_html is defined %}
                         {{ prototype_html|replace({(prototype_name): '0'})|raw }}
@@ -35,7 +35,7 @@
     </div>
 {% endblock %}
 
-{% block synolia_Oroneo_mapping_widget %}
+{% block synolia_oroneo_mapping_widget %}
     <td>{{ form_widget(form.akeneoField) }} {{ form_errors(form.akeneoField) }}</td>
     <td>{{ form_widget(form.oroField) }}{{ form_errors(form.oroField) }}</td>
     <td>{{ form_widget(form.oroEntityField) }}{{ form_errors(form.oroEntityField) }}</td>
@@ -43,14 +43,17 @@
     <td>{{ form_widget(form.translatable) }}{{ form_errors(form.translatable) }}</td>
 {% endblock %}
 
-{% block synolia_Oroneo_category_mapping_type_widget %}
-    {{ block('synolia_Oroneo_mapping_widget') }}
+{% block synolia_oroneo_category_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
 {% endblock %}
-{% block synolia_Oroneo_product_mapping_type_widget %}
-    {{ block('synolia_Oroneo_mapping_widget') }}
+{% block synolia_oroneo_master_category_type_widget %}
+    {{ form_widget(form.masterCategory) }}{{ form_errors(form.masterCategory) }}
+{% endblock %}
+{% block synolia_oroneo_product_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
 {% endblock %}
 
-{% macro synolia_Oroneo_mapping_config_prototype(widget) %}
+{% macro synolia_oroneo_mapping_config_prototype(widget) %}
     {% if 'collection' in widget.vars.block_prefixes %}
         {% set form = widget.vars.prototype %}
         {% set name = widget.vars.full_name ~ '[' ~ widget.vars.prototype.vars.name ~ ']' %}
@@ -71,9 +74,9 @@
 
 {######################### Localization #########################}
 
-{% block synolia_Oroneo_localization_mapping_widget %}
+{% block synolia_oroneo_localization_mapping_widget %}
     {% if prototype is defined %}
-        {% set prototype_html = _self.synolia_Oroneo_localization_mapping_prototype(form) %}
+        {% set prototype_html = _self.synolia_oroneo_localization_mapping_prototype(form) %}
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container price-list-grid-form' }) %}
     {% set id = id ~ '_collection' %}
@@ -92,7 +95,7 @@
                     <tbody class="pricing-price-list-items" data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
                     {% if form.children|length %}
                         {% for child in form.children %}
-                            {{ _self.synolia_Oroneo_localization_mapping_prototype(child) }}
+                            {{ _self.synolia_oroneo_localization_mapping_prototype(child) }}
                         {% endfor %}
                     {% elseif show_form_when_empty and prototype_html is defined %}
                         {{ prototype_html|replace({(prototype_name): '0'})|raw }}
@@ -105,12 +108,12 @@
     </div>
 {% endblock %}
 
-{% block synolia_Oroneo_localization_mapping_type_widget %}
+{% block synolia_oroneo_localization_mapping_type_widget %}
     <td>{{ form_widget(form.akeneoLocalization) }} {{ form_errors(form.akeneoLocalization) }}</td>
     <td>{{ form_widget(form.oroLocalization) }}{{ form_errors(form.oroLocalization) }}</td>
 {% endblock %}
 
-{% macro synolia_Oroneo_localization_mapping_prototype(widget) %}
+{% macro synolia_oroneo_localization_mapping_prototype(widget) %}
     {% if 'collection' in widget.vars.block_prefixes %}
         {% set form = widget.vars.prototype %}
         {% set name = widget.vars.full_name ~ '[' ~ widget.vars.prototype.vars.name ~ ']' %}

@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ProductMappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_Oroneo_product_mapping';
+    const NAME = 'synolia_oroneo_product_mapping';
 
     /**
      * {@inheritdoc}

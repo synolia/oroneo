@@ -5,6 +5,7 @@ namespace Synolia\Bundle\OroneoBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
 use Oro\Bundle\CatalogBundle\Entity\Category;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class CategoryMappingType
@@ -12,7 +13,7 @@ use Oro\Bundle\CatalogBundle\Entity\Category;
  */
 class CategoryMappingType extends MappingType
 {
-    const NAME = 'synolia_Oroneo_category_mapping_type';
+    const NAME = 'synolia_oroneo_category_mapping_type';
 
     /**
      * @var OroFieldSelectManager $oroFieldChoices
@@ -47,7 +48,7 @@ class CategoryMappingType extends MappingType
 
         $builder->add(
             MappingType::ORO_FIELD,
-            'choice',
+            ChoiceType::class,
             [
                 'choices' => $this->oroFieldChoices->getChoices(Category::class),
             ]

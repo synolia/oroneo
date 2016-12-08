@@ -14,7 +14,7 @@ use Oro\Bundle\FormBundle\Form\Type\CollectionType;
  */
 class MappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_Oroneo_mapping_config';
+    const NAME = 'synolia_oroneo_mapping_config';
 
     /**
      * {@inheritdoc}

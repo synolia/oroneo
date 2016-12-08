@@ -6,7 +6,8 @@ use Oro\Bundle\CatalogBundle\Entity\Category;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 /**
- * Class CategoryRepository
+ * Class CategoryRepository.
+ * Repository with useful function to basically retrieve parentCategories and such.
  */
 class CategoryRepository
 {
@@ -24,6 +25,8 @@ class CategoryRepository
     }
 
     /**
+     * Retrieve Category by custom AkeneoCategoryCode.
+     *
      * @param string $akeneoCategoryCode
      * @return null|Category
      */
@@ -37,5 +40,17 @@ class CategoryRepository
         ;
 
         return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Retrieve Category by its ID.
+     *
+     * @param integer $categoryId
+     *
+     * @return Category
+     */
+    public function getCategoryById($categoryId)
+    {
+        return $this->doctrineHelper->getEntityRepositoryForClass('OroCatalogBundle:Category')->findOneById($categoryId);
     }
 }

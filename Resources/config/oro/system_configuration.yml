@@ -64,21 +64,27 @@ system_configuration:
                 tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_height.tooltip'
         synolia_oroneo.localization_mapping:
             data_type: array
-            type: synolia_Oroneo_localization_mapping
+            type: synolia_oroneo_localization_mapping
             options:
                 label: 'synolia.oroneo.configuration_page.global_configuration.fields.localization_mapping'
                 resettable: false
-        # Category Mapping
+        # Category Mapping & root category
         synolia_oroneo.category_mapping:
             data_type: array
-            type: synolia_Oroneo_category_mapping
+            type: synolia_oroneo_category_mapping
             options:
                 label: 'synolia.oroneo.configuration_page.category.mapping'
                 resettable: false
+        synolia_oroneo.master_category:
+            data_type: array
+            type: synolia_oroneo_master_category_type
+            options:
+                label: 'synolia.oroneo.configuration_page.category.master_category.label'
+                tooltip: 'synolia.oroneo.configuration_page.category.master_category.tooltip'
         # Product Mapping & channel
         synolia_oroneo.product_mapping:
             data_type: array
-            type: synolia_Oroneo_product_mapping
+            type: synolia_oroneo_product_mapping
             options:
                 label: 'synolia.oroneo.configuration_page.product.mapping'
                 resettable: false
@@ -117,6 +123,7 @@ system_configuration:
                                 children:
                                     oroneo_config_category_settings:
                                         children:
+                                            - synolia_oroneo.master_category
                                             - synolia_oroneo.category_mapping
                             oroneo_config_product:
                                 children:

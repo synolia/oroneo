@@ -6,6 +6,9 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Oro\Bundle\ImportExportBundle\Form\Type\ImportType as BaseImportType;
 
 /**
@@ -34,7 +37,7 @@ class ImportType extends BaseImportType
     {
         $builder->add(
             'processorAlias',
-            'choice',
+            ChoiceType::class,
             [
                 'label'    => 'synolia.oroneo.import_page.processor.choice',
                 'expanded' => false,
@@ -45,7 +48,7 @@ class ImportType extends BaseImportType
 
         $builder->add(
             'file',
-            'file',
+            FileType::class,
             [
                 'constraints' => [
                     new File(
@@ -60,7 +63,7 @@ class ImportType extends BaseImportType
 
         $builder->add(
             'validateBtn',
-            'submit',
+            SubmitType::class,
             [
                 'label' => 'synolia.oroneo.import_page.validation.btn',
                 'attr' => [

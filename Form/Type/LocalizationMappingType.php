@@ -5,6 +5,8 @@ namespace Synolia\Bundle\OroneoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Class LocalizationMappingType
@@ -12,7 +14,7 @@ use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
  */
 class LocalizationMappingType extends AbstractType
 {
-    const NAME = 'synolia_Oroneo_localization_mapping_type';
+    const NAME = 'synolia_oroneo_localization_mapping_type';
 
     /**
      * @var OroFieldSelectManager $oroFieldChoices
@@ -38,14 +40,14 @@ class LocalizationMappingType extends AbstractType
         $builder
             ->add(
                 'akeneoLocalization',
-                'text',
+                TextType::class,
                 [
                     'empty_data' => null,
                 ]
             )
             ->add(
                 'oroLocalization',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => $this->oroFieldChoices->getLocalizationChoices(),
                 ]

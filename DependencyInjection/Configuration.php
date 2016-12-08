@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                 'enclosure'               => ['value' => '"'],
                 'localization_mapping'    => ['type' => 'array', 'value' => []],
                 'category_mapping'        => ['type' => 'array', 'value' => []],
+                'master_category'         => ['type' => 'array', 'value' => ['masterCategory' => 1]],
                 'attribute_mapping'       => ['type' => 'array', 'value' => []],
                 'option_mapping'          => ['type' => 'array', 'value' => []],
                 'product_channel'         => ['value' => 'ecommerce'],

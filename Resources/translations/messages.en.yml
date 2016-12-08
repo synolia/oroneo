@@ -58,6 +58,9 @@ synolia:
                 title: Category
                 settings: Category Configuration
                 mapping: Category Mapping
+                master_category:
+                    label: Master Category
+                    tooltip: Imported categories will be under the Category selected here.
             attribute:
                 title: Attribute
                 settings: Attribute Configuration

@@ -2,19 +2,17 @@
 
 namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Oro\Bundle\ProductBundle\Entity\Product;
 use Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * Class ProductMappingType
+ * Class MasterCategoryType
  * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
-class ProductMappingType extends MappingType
+class MasterCategoryType extends AbstractType
 {
-    const NAME = 'synolia_oroneo_product_mapping_type';
-
     /**
      * @var OroFieldSelectManager $oroFieldChoices
      */
@@ -31,27 +29,25 @@ class ProductMappingType extends MappingType
     }
 
     /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(
+            'masterCategory',
+            ChoiceType::class,
+            [
+                'choices' => $this->oroFieldChoices->getCategoriesChoices(),
+            ]
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return static::NAME;
-    }
-
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        parent::buildForm($builder, $options);
-
-        $builder->add(
-            MappingType::ORO_FIELD,
-            ChoiceType::class,
-            [
-                'choices' => $this->oroFieldChoices->getChoices(Product::class),
-            ]
-        );
+        return 'synolia_oroneo_master_category_type';
     }
 }

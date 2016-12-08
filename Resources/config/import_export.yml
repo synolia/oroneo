@@ -78,6 +78,7 @@ services:
         parent: oro_locale.importexport.strategy.localized_fallback_value_aware
         calls:
             - [setCategoryRepository, ['@synolia_oroneo.category.repository']]
+            - [setGlobalConfigManager, ['@oro_config.global']]
 
     synolia.import.strategy.attribute:
         class: '%synolia.import.strategy.attribute.class%'
@@ -95,7 +96,6 @@ services:
         parent: oro_product.importexport.strategy.product
         calls:
             - [setConfigManager, ['@oro_entity_config.config_manager']]
-            - [setEntityManager, ['@doctrine.orm.entity_manager']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
 
     synolia.import.strategy.product_file:

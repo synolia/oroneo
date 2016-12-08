@@ -45,6 +45,9 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('parent', 'parentCategory', 'akeneoCategoryCode', true, false),
             ]
         );
+
+        $configManager->set('synolia_oroneo.master_category', ['masterCategory' => 1]);
+
         $configManager->set(
             'synolia_oroneo.option_mapping',
             [

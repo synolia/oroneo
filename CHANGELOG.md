@@ -1,3 +1,12 @@
+# 0.2.1 (2016-12-07) 
+**Implemented enhancements:**
+- Categories import under a "master category" defined in the Category Configuration panel
+- Category Configuration panel : added the possibility to choose the default parent category.
+
+**Fix:**
+- Removed unecessary injections
+- Fix beta5 upgrade : getAll() function replaced with getLocalizations()
+
 # 0.2.0 (2016-12-05) 
 **Upgrade to support OroCommerce-beta5 version** 
 

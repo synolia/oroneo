@@ -27,7 +27,10 @@ Add those lines to the repositories array in `composer.json` :
   }
 ]
 ```
-And execute this command
+And add this line in the `require` array:
+```json
+"synolia/oroneo": "dev-master"
+```
 ```cli
 composer require synolia/oroneo
 ```

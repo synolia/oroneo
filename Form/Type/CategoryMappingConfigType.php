@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CategoryMappingConfigType extends AbstractType
 {
-    const NAME = 'synolia_Oroneo_category_mapping';
+    const NAME = 'synolia_oroneo_category_mapping';
 
     /**
      * {@inheritdoc}

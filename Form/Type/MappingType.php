@@ -4,6 +4,8 @@ namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * Class MappingType
@@ -11,7 +13,7 @@ use Symfony\Component\Form\AbstractType;
  */
 class MappingType extends AbstractType
 {
-    const NAME = 'synolia_Oroneo_mapping';
+    const NAME = 'synolia_oroneo_mapping';
     const AKENEO_FIELD = 'akeneoField';
     const ORO_FIELD = 'oroField';
     const ORO_ENTITY_FIELD = 'oroEntityField';
@@ -27,7 +29,7 @@ class MappingType extends AbstractType
         $builder
             ->add(
                 self::AKENEO_FIELD,
-                'text',
+                TextType::class,
                 [
                     'empty_data' => null,
                     'required' => true,
@@ -35,18 +37,18 @@ class MappingType extends AbstractType
             )
             ->add(
                 self::ORO_ENTITY_FIELD,
-                'text'
+                TextType::class
             )
             ->add(
                 self::REQUIRED,
-                'checkbox',
+                CheckboxType::class,
                 [
                     'required' => false,
                 ]
             )
             ->add(
                 self::TRANSLATABLE,
-                'checkbox',
+                CheckboxType::class,
                 [
                     'required' => false,
                 ]

@@ -3,7 +3,6 @@
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
@@ -26,9 +25,6 @@ class ProductStrategy extends Strategy
     /** @var ConfigManager */
     protected $configManager;
 
-    /** @var EntityManager */
-    protected $entityManager;
-
     /** @var BusinessUnitRepository */
     protected $businessUnitRepo;
 
@@ -47,6 +43,10 @@ class ProductStrategy extends Strategy
     public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
+
+        $this->businessUnitRepo = $doctrineHelper->getEntityRepositoryForClass('OroOrganizationBundle:BusinessUnit');
+        $this->productUnitRepo  = $doctrineHelper->getEntityRepositoryForClass('OroProductBundle:ProductUnit');
+        $this->categoryRepo     = $doctrineHelper->getEntityRepositoryForClass('OroCatalogBundle:Category');
     }
 
     /**
@@ -55,18 +55,6 @@ class ProductStrategy extends Strategy
     public function setConfigManager(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
-    }
-
-    /**
-     * @param EntityManager $entityManager
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager    = $entityManager;
-
-        $this->businessUnitRepo = $entityManager->getRepository('OroOrganizationBundle:BusinessUnit');
-        $this->productUnitRepo  = $entityManager->getRepository('OroProductBundle:ProductUnit');
-        $this->categoryRepo     = $entityManager->getRepository('OroCatalogBundle:Category');
     }
 
     /**
@@ -121,8 +109,7 @@ class ProductStrategy extends Strategy
             }
 
             $category->addProduct($entity);
-
-            $this->entityManager->persist($category);
+            $this->doctrineHelper->getEntityManagerForClass(get_class($category))->persist($category);
         }
 
         $metadata  = $this->doctrineHelper->getEntityMetadata($this->localizedFallbackValueClass);

@@ -6,6 +6,7 @@ use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\LocaleBundle\ImportExport\Strategy\LocalizedFallbackValueAwareStrategy;
 use Oro\Bundle\CatalogBundle\Entity\Category;
 use Synolia\Bundle\OroneoBundle\Repository\CategoryRepository;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 /**
  * Class CategoryStrategy
@@ -16,10 +17,11 @@ use Synolia\Bundle\OroneoBundle\Repository\CategoryRepository;
  */
 class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
 {
-    /**
-     * @var CategoryRepository
-     */
+    /** @var CategoryRepository $categoryRepository*/
     protected $categoryRepository;
+
+    /** @var ConfigManager $globalConfigManager*/
+    protected $globalConfigManager;
 
     /**
      * @param CategoryRepository $categoryRepository
@@ -30,9 +32,15 @@ class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
     }
 
     /**
+     * @param ConfigManager $globalConfigManager
+     */
+    public function setGlobalConfigManager(ConfigManager $globalConfigManager)
+    {
+        $this->globalConfigManager = $globalConfigManager;
+    }
+
+    /**
      * Check parent category and assign if it exists.
-     *
-     * @todo Rework has to be done on the itemData array and use good locales dynamically.
      *
      * @param Category $entity
      * @return Category
@@ -41,26 +49,24 @@ class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
     {
         $itemData = $this->context->getValue('itemData');
 
+        $parentCategoryId = $this->globalConfigManager->get('synolia_oroneo.master_category');
+        $parentCategory = $this->categoryRepository->getCategoryById(current($parentCategoryId));
+
         if (isset($itemData['parentCategory'])) {
             // Check parent category in context.
             $parentCategory = $this->context->getValue($itemData['parentCategory']['akeneoCategoryCode']);
-            if (!$parentCategory) {
-                // Check parent category in database. See if it is really necessary here or if it is properly donne in updateRelation().
-                $parentCategory = $this->categoryRepository->getParentCategoryByAkeneoCategoryCode($itemData['parentCategory']['akeneoCategoryCode']);
-            }
-
-            if ($parentCategory) {
-                $entity->setParentCategory($parentCategory);
-            }
         }
+        if (!$parentCategory && isset($itemData['parentCategory'])) {
+            // Check parent category in database. See if it is really necessary here or if it is properly done in updateRelation().
+            $parentCategory = $this->categoryRepository->getParentCategoryByAkeneoCategoryCode($itemData['parentCategory']['akeneoCategoryCode']);
+        }
+        $entity->setParentCategory($parentCategory);
 
         return parent::beforeProcessEntity($entity);
     }
 
     /**
      * Write in the related database table to keep tracking imports.
-     *
-     * @todo Find a better way to store temporary entities to be able to link them between each others.
      *
      * @param Category $entity
      * @return Category

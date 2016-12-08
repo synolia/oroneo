@@ -1,4 +1,4 @@
-synolia_Oroneo_bundle:
+synolia_oroneo_bundle:
    resource:     "@SynoliaOroneoBundle/Controller"
    type:         annotation
    prefix:       /oroneo
