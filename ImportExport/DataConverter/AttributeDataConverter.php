@@ -16,7 +16,10 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
 {
     use DataConverterTrait;
 
-    /** @var ConfigManager $entityConfigManager*/
+    /** @var string[] */
+    protected $attributeMapping;
+
+    /** @var ConfigManager */
     protected $entityConfigManager;
 
     /** @var null|EntityConfigModel */
@@ -26,22 +29,24 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
     protected $context;
 
     /**
+     * AttributeDataConverter constructor.
+     *
+     * @param ConfigManager $entityConfigManager
+     * @param string[] $attributeMapping
+     */
+    public function __construct(ConfigManager $entityConfigManager, array $attributeMapping)
+    {
+        $this->entityConfigManager = $entityConfigManager;
+        $this->productConfigModel  = $entityConfigManager->getConfigEntityModel(Product::class);
+        $this->attributeMapping = $attributeMapping;
+    }
+
+    /**
      * @param ContextInterface $context
      */
     public function setImportExportContext(ContextInterface $context)
     {
         $this->context = $context;
-    }
-
-    /**
-     * AttributeDataConverter constructor.
-     *
-     * @param ConfigManager $entityConfigManager
-     */
-    public function __construct(ConfigManager $entityConfigManager)
-    {
-        $this->entityConfigManager = $entityConfigManager;
-        $this->productConfigModel  = $entityConfigManager->getConfigEntityModel(Product::class);
     }
 
     /**
@@ -56,10 +61,9 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
 
         // Manage Akeneo field type. It is always under the form 'pim_catalog_TYPE'.
         if (isset($importedRecord['type'])) {
-            $type = explode('_', $importedRecord['type']);
             $akeneoTypes = $this->getAkeneoDataTypes();
-            if (array_key_exists(end($type), $akeneoTypes)) {
-                $importedRecord['type'] = $akeneoTypes[end($type)];
+            if (array_key_exists($importedRecord['type'], $akeneoTypes)) {
+                $importedRecord['type'] = $akeneoTypes[$importedRecord['type']];
             }
         }
 
@@ -100,18 +104,6 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     protected function getAkeneoDataTypes()
     {
-        return [
-            'identifier'       => 'string',
-            'text'             => 'string',
-            'textarea'         => 'text',
-            'metric'           => 'decimal',
-            'boolean'          => 'boolean',
-            'simpleselect'     => 'enum',
-            'number'           => 'decimal',
-            'multiselect'      => 'multiEnum',
-            'date'             => 'date',
-            'image'            => 'image',
-            'file'             => 'file',
-        ];
+        return $this->attributeMapping;
     }
 }

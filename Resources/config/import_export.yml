@@ -51,6 +51,7 @@ services:
         parent: oro_entity_config.importexport.data_converter.entity_field
         arguments:
             - '@oro_entity_config.config_manager'
+            - '%synolia.akeneo.attribute_types_mapping%'
         calls:
             - [setManagerRegistry, ['@doctrine']]
             - [setClassName, ['attribute']]
