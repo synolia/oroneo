@@ -44,6 +44,11 @@ class AttributeWriter extends EntityFieldWriter
      */
     protected function setExtendData($className, $fieldName, $state)
     {
+        $provider = $this->configManager->getProvider('entity');
+        if ($provider->hasConfig($className, $fieldName)) {
+            return;
+        }
+
         $provider = $this->configManager->getProvider('extend');
         if (!$provider) {
             return;
