@@ -7,6 +7,7 @@ use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\DataConverter\EntityFieldDataConverter;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Exception\RuntimeException;
 use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
@@ -79,7 +80,14 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     protected function getHeaderConversionRules()
     {
-        $localeCode = $this->getDefaultLocalization()->getAkeneoLocalization();
+        $defaultLocalization = $this->getDefaultLocalization();
+        if ($defaultLocalization === null) {
+            throw new RuntimeException(
+                'There is no default localization set up.'
+            );
+        }
+
+        $localeCode = $defaultLocalization->getAkeneoLocalization();
 
         return [
             'code'                   => 'fieldName',
