@@ -15,15 +15,15 @@ use Oro\Bundle\EntityExtendBundle\Extend\EntityProcessor;
  */
 class ImportManager
 {
-    const CATEGORY_PROCESSOR          = 'synolia.import.processor.category';
-    const ATTRIBUTE_PROCESSOR         = 'synolia.import.processor.attribute';
-    const OPTION_PROCESSOR            = 'synolia.import.processor.option';
-    const PRODUCT_PROCESSOR           = 'synolia.import.processor.product';
-    const PRODUCT_FILE_PROCESSOR      = 'synolia.import.processor.product_file';
-    const ATTRIBUTE_VALIDATION_JOB    = 'synolia_akeneo_attribute_import_validation_from_csv';
-    const ATTRIBUTE_JOB               = 'synolia_akeneo_attribute_import_from_csv';
-    const PRODUCT_FILE_VALIDATION_JOB = 'synolia_akeneo_product_file_import_validation_from_zip';
-    const PRODUCT_FILE_JOB            = 'synolia_akeneo_product_file_import_from_zip';
+    const CATEGORY_PROCESSOR          = 'synolia.oroneo.import.processor.category';
+    const ATTRIBUTE_PROCESSOR         = 'synolia.oroneo.import.processor.attribute';
+    const OPTION_PROCESSOR            = 'synolia.oroneo.import.processor.option';
+    const PRODUCT_PROCESSOR           = 'synolia.oroneo.import.processor.product';
+    const PRODUCT_FILE_PROCESSOR      = 'synolia.oroneo.import.processor.product_file';
+    const ATTRIBUTE_VALIDATION_JOB    = 'synolia_oroneo_attribute_import_validation_from_csv';
+    const ATTRIBUTE_JOB               = 'synolia_oroneo_attribute_import_from_csv';
+    const PRODUCT_FILE_VALIDATION_JOB = 'synolia_oroneo_product_file_import_validation_from_zip';
+    const PRODUCT_FILE_JOB            = 'synolia_oroneo_product_file_import_from_zip';
     const VALIDATION_IMPORT_TYPE      = 'validation';
     const EXECUTION_IMPORT_TYPE       = 'import';
     const CSV_FORMAT                  = 'csv';

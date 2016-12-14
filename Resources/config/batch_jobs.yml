@@ -1,7 +1,7 @@
 connector:
     name: oro_importexport
     jobs:
-        synolia_akeneo_attribute_import_from_csv:
+        synolia_oroneo_attribute_import_from_csv:
             title: "Attribute Import from CSV"
             type: import
             steps:
@@ -11,13 +11,13 @@ connector:
                     services:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
-                        writer:    synolia.import.writer.attribute
+                        writer:    synolia.oroneo.import.writer.attribute
                 update_schema:
-                    title:     synolia.import.step.schema_update.title
-                    class:     '%synolia.import.step.schema_update.class%'
+                    title:     synolia.oroneo.import.step.schema_update.title
+                    class:     '%synolia.oroneo.import.step.schema_update.class%'
                     services:
-                        updater: synolia.import.step_element.schema_updater
-        synolia_akeneo_attribute_import_validation_from_csv:
+                        updater: synolia.oroneo.import.step_element.schema_updater
+        synolia_oroneo_attribute_import_validation_from_csv:
             title: "Attribute Import validation from CSV"
             type: import_validation
             steps:
@@ -27,8 +27,8 @@ connector:
                     services:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
-                        writer:    synolia.import.writer.attribute
-        synolia_akeneo_product_file_import_from_zip:
+                        writer:    synolia.oroneo.import.writer.attribute
+        synolia_oroneo_product_file_import_from_zip:
             title: "Product Files Import from ZIP"
             type: import
             steps:
@@ -36,10 +36,10 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    synolia.import.reader.zip
+                        reader:    synolia.oroneo.import.reader.zip
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_importexport.writer.entity
-        synolia_akeneo_product_file_import_validation_from_zip:
+        synolia_oroneo_product_file_import_validation_from_zip:
             title: "Product Files Import validation from ZIP"
             type: import_validation
             steps:
@@ -47,6 +47,6 @@ connector:
                     title:     import_validation
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    synolia.import.reader.zip
+                        reader:    synolia.oroneo.import.reader.zip
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_importexport.writer.entity

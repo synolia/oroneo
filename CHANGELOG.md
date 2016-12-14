@@ -1,3 +1,12 @@
+# 0.2.2 (2016-12-14) 
+**Fix:**
+- PR [#3](https://github.com/synolia/oroneo/pull/3) : Fixed a fatal error when the default localization isn't set up.
+- PR [#7](https://github.com/synolia/oroneo/pull/7) : Fix [#6](https://github.com/synolia/oroneo/issues/6) the system attributes config were erased by the import system.
+- PR [#8](https://github.com/synolia/oroneo/pull/8) : Refactored attribute types list to a container parameter.
+- PR [#10](https://github.com/synolia/oroneo/pull/10) : Precision about EnhancedConnector bundle.
+- Rewrite ZipFileReader to make it more simple.
+- Some renames to fit with the bundle's name `oroneo`.
+
 # 0.2.1 (2016-12-07) 
 **Implemented enhancements:**
 - Categories import under a "master category" defined in the Category Configuration panel

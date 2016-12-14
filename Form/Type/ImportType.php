@@ -78,7 +78,7 @@ class ImportType extends BaseImportType
      */
     public function getName()
     {
-        return 'akeneo_import_form';
+        return 'synolia_oroneo_import_form';
     }
 
     /**

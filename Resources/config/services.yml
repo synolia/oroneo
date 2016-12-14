@@ -1,8 +1,6 @@
 parameters:
-    synolia.import.subscriber.category.class: Synolia\Bundle\OroneoBundle\EventSubscriber\CategorySubscriber
-    synolia.import.subscriber.product.class:  Synolia\Bundle\OroneoBundle\EventSubscriber\ProductSubscriber
-    synolia.oroneo.import.manager.class:      Synolia\Bundle\OroneoBundle\Manager\ImportManager
-    synolia.oroneo.oro_field_select.class:    Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager
+    synolia.oroneo.import.manager.class:   Synolia\Bundle\OroneoBundle\Manager\ImportManager
+    synolia.oroneo.oro_field_select.class: Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager
 
 services:
     synolia_oroneo.category.repository:

@@ -15,42 +15,22 @@ class ZipFileReader extends CsvFileReader
      */
     protected function getFile()
     {
-        $file = $this->file;
-        $fileInfo = $this->fileInfo;
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
 
-        if ($fileInfo->getExtension() == 'zip') {
-            $zipPath = substr($fileInfo->getRealPath(), 0, -4);
-            $isExtracted = $this->unzip($fileInfo->getPathName(), $zipPath);
+        if ($finfo->file($this->fileInfo->getPathname()) == 'application/zip') {
+            $zipPath     = substr($this->fileInfo->getRealPath(), 0, -4);
+            $isExtracted = $this->unzip($this->fileInfo->getPathName(), $zipPath);
+
             if (!$isExtracted) {
-                throw new \RuntimeException(sprintf('Archive %s can\'t be extracted', $fileInfo->getFilename()));
+                throw new \RuntimeException(sprintf('Archive %s can\'t be extracted', $this->fileInfo->getFilename()));
             }
-            $file = new \SplFileObject($zipPath.'/product.csv');
-            $fileInfo = new \SplFileInfo($zipPath.'/product.csv');
-        } elseif ($fileInfo->getExtension() == 'csv' && !$file instanceof \SplFileObject) {
-            $file = new \SplFileObject($fileInfo->getRealPath().'/product.csv');
-            $fileInfo = new \SplFileInfo($fileInfo->getRealPath().'/product.csv');
-        } else {
-            return parent::getFile();
+
+            $this->fileInfo = new \SplFileInfo($zipPath.'/product.csv');
+        } elseif ($this->fileInfo->getExtension() == 'csv' && !$this->file instanceof \SplFileObject) {
+            $this->fileInfo = new \SplFileInfo($this->fileInfo->getRealPath().'/product.csv');
         }
 
-        $file->setFlags(
-            \SplFileObject::READ_CSV |
-            \SplFileObject::READ_AHEAD |
-            \SplFileObject::DROP_NEW_LINE
-        );
-        $file->setCsvControl(
-            $this->delimiter,
-            $this->enclosure,
-            $this->escape
-        );
-        if ($this->firstLineIsHeader && !$this->header) {
-            $this->header = $file->fgetcsv();
-        }
-
-        $this->file = $file;
-        $this->fileInfo = $fileInfo;
-
-        return $this->file;
+        return parent::getFile();
     }
 
     /**

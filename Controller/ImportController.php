@@ -32,7 +32,7 @@ class ImportController extends Controller
         $validationResult = [];
         $processorsChoices = $this->container->get('synolia.oroneo.import.manager')->getProcessorsChoices();
 
-        $form = $this->createForm('akeneo_import_form', null, ['processorsChoices' => $processorsChoices]);
+        $form = $this->createForm('synolia_oroneo_import_form', null, ['processorsChoices' => $processorsChoices]);
 
         if ($request->isMethod('POST')) {
             $form->submit($request);

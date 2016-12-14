@@ -1,13 +1,13 @@
 parameters:
-  synolia.akeneo.attribute_types_mapping:
-    pim_catalog_identifier: string
-    pim_catalog_text: string
-    pim_catalog_textarea: text
-    pim_catalog_metric: decimal
-    pim_catalog_boolean: boolean
-    pim_catalog_simpleselect: enum
-    pim_catalog_number: decimal
-    pim_catalog_multiselect: multiEnum
-    pim_catalog_date: date
-    pim_catalog_image: image
-    pim_catalog_file: file
+    synolia.oroneo.attribute_types_mapping:
+        pim_catalog_identifier: string
+        pim_catalog_text: string
+        pim_catalog_textarea: text
+        pim_catalog_metric: decimal
+        pim_catalog_boolean: boolean
+        pim_catalog_simpleselect: enum
+        pim_catalog_number: decimal
+        pim_catalog_multiselect: multiEnum
+        pim_catalog_date: date
+        pim_catalog_image: image
+        pim_catalog_file: file
