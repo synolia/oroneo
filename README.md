@@ -14,7 +14,7 @@ ATM **Oroneo** is designed to work on **OroCommerce beta-5** and based on genera
 
 PHP : **PHP 5.6+**
 
-**Synolia** recommends to work with the **[Akeneo Enhanced Connector Bundle](https://github.com/akeneo-labs/EnhancedConnectorBundle)** in order to be more efficient in your interfaces. This bundle allows you to go further to select the right data to export.
+If you're working with Akeneo PIM < 1.6, **Synolia** recommends to work with the **[Akeneo Enhanced Connector Bundle](https://github.com/akeneo-labs/EnhancedConnectorBundle)** in order to be more efficient in your interfaces. This bundle allows you to go further to select the right data to export.
 
 ## How to install
 Oroneo's installation is rather simple ! You only need to use composer:
