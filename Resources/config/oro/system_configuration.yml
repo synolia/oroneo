@@ -93,11 +93,6 @@ system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.product.channel'
-        synolia_oroneo.option_locale:
-            data_type: string
-            type: text
-            options:
-                label: 'synolia.oroneo.configuration_page.option.admin_locale'
 
     tree:
         system_configuration:
@@ -121,7 +116,6 @@ system_configuration:
                                     oroneo_global_config_localization:
                                         children:
                                             - synolia_oroneo.localization_mapping
-                                            - synolia_oroneo.option_locale
 
                     oroneo_mapping_config:
                         children:

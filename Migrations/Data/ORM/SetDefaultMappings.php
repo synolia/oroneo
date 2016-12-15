@@ -48,7 +48,6 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
 
         $configManager->set('synolia_oroneo.master_category', ['masterCategory' => 1]);
         $configManager->set('synolia_oroneo.product_channel', 'ecommerce');
-        $configManager->set('synolia_oroneo.option_locale', 'fr_FR');
 
         $configManager->set(
             'synolia_oroneo.product_mapping',
