@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                 'attribute_mapping'       => ['type' => 'array', 'value' => []],
                 'option_mapping'          => ['type' => 'array', 'value' => []],
                 'product_channel'         => ['value' => 'ecommerce'],
+                'option_locale'           => ['value' => 'en_US'],
                 'product_mapping'         => ['type' => 'array', 'value' => []],
                 'attribute_file_max_size' => ['value' => 1024],
                 'attribute_image_width'   => ['value' => 50],

@@ -45,6 +45,7 @@ class AttributeStrategy extends EntityFieldImportStrategy
         /** @var FieldConfigModel $entity */
         if ($this->context->getValue('itemData')['localizable']) {
             $target = $entity->getType() == 'string' ? 'string' : 'text';
+            //var_dump(['CREATE' => $entity->getFieldName()]);
 
             $entity->fromArray(
                 'extend',

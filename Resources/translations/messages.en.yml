@@ -69,6 +69,7 @@ synolia:
                 title: Option
                 settings: Option Configuration
                 mapping: Option Mapping
+                admin_locale: Locale for admin options
             product:
                 title: Product
                 settings: Product Configuration
