@@ -5,6 +5,7 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\ImportExportBundle\Exception\RuntimeException;
 
 /**
  * Class OptionDataConverter
@@ -43,7 +44,21 @@ class OptionDataConverter extends AbstractTableDataConverter implements ContextA
      */
     protected function getHeaderConversionRules()
     {
-        return $this->getMappings();
+        $defaultLocalization = $this->getDefaultLocalization();
+        if ($defaultLocalization === null) {
+            throw new RuntimeException(
+                'There is no default localization set up.'
+            );
+        }
+
+        $localeCode = $defaultLocalization->getAkeneoLocalization();
+
+        return [
+            'code'               => 'id',
+            'label-'.$localeCode => 'name',
+            'sort_order'         => 'priority',
+            'attribute'          => 'attribute',
+        ];
     }
 
     /**
