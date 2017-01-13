@@ -71,6 +71,9 @@ It is also possible to import them all with the same command but without any arg
 ```cli
 php app/console synolia:akeneo-pim:import
 ```
+#### FTP & SFTP import
+Connect directly to an FTP or SFTP server to import CSV files.
+Specify the connection credentials in the config panel and choose to run the import without checking the "Manual import" checkbox.
 
 ## About Synolia
 
