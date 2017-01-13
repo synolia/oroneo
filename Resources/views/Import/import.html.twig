@@ -7,7 +7,10 @@
         {{ form_start(form) }}
         <div class="control-group control-group-hidden">
            {{ form_row(form.processorAlias) }}
-           {{ form_row(form.file) }}
+           {{ form_row(form.isManualImport) }}
+           <div class="oroneo_file_upload hide" data-page-component-module="synoliaoroneo/js/import-view">
+               {{ form_row(form.file) }}
+           </div>
         </div>
         <hr>
            {{ form_row(form.validateBtn) }}
@@ -15,7 +18,7 @@
     {% endset %}
 
     {% set validation %}
-        {% if result is iterable and result is not empty %}
+        {% if result is iterable and result is not empty and success == true %}
             {% include 'OroImportExportBundle:ImportExport/widget:importValidate.html.twig' ignore missing with result %}
             <a href="{{ path('synolia_oroneo_import_process', {'processorAlias': result.processorAlias}) }}"
                type="button"

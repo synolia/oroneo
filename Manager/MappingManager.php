@@ -1,44 +1,33 @@
 <?php
 
-namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
+namespace Synolia\Bundle\OroneoBundle\Manager;
 
 use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Exception\RuntimeException;
 use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
 use Synolia\Bundle\OroneoBundle\SystemConfig\MappingLocalization;
 
 /**
- * Class DataConverterTrait
- * @package Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * Class MappingManager
+ * @package Synolia\Bundle\OroneoBundle\Manager
  */
-trait DataConverterTrait
+class MappingManager
 {
-    /** @var  ManagerRegistry */
-    protected $managerRegistry;
+    const ORONEO_FIELD = 'oroneo';
 
-    /** @var  string */
+    /** @var string */
     protected $className;
 
-    /** @var  ConfigManager */
-    protected $globalConfigManager;
+    /** @var ConfigManager */
+    protected $configManager;
 
-    /** @var  MappingConfig[] */
+    /** @var MappingConfig[] */
     protected $fields = null;
 
-    /** @var bool */
-    protected $firstRun = true;
-
+    /** @var array */
     protected $missingFields = [];
-
-    /**
-     * @param ManagerRegistry $managerRegistry
-     */
-    public function setManagerRegistry(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
-    }
 
     /**
      * @param string $className
@@ -49,19 +38,19 @@ trait DataConverterTrait
     }
 
     /**
-     * @param ConfigManager $globalConfigManager
+     * @param ConfigManager $configManager
      */
-    public function setGlobalConfigManager(ConfigManager $globalConfigManager)
+    public function setConfigManager(ConfigManager $configManager)
     {
-        $this->globalConfigManager = $globalConfigManager;
+        $this->configManager = $configManager;
     }
 
     /**
-     * @param array  $fields
+     * @param array $fields
      *
      * @return array
      */
-    protected function getMissingFields($fields)
+    public function getMissingFields($fields)
     {
         $fieldMappings       = $this->getFieldMappings();
         $defaultLocalization = $this->getDefaultLocalization();
@@ -89,11 +78,10 @@ trait DataConverterTrait
      *
      * @throws InvalidItemException
      */
-    protected function checkMissingFields($fields, ContextInterface $context)
+    public function checkMissingFields($fields, ContextInterface $context)
     {
-        if ($this->firstRun) {
+        if (!is_array($this->missingFields)) {
             $this->missingFields = $this->getMissingFields($fields);
-            $this->firstRun = false;
             if (!empty($this->missingFields)) {
                 $context->addError('Missing required columns: '.implode(', ', $this->missingFields));
             }
@@ -109,7 +97,7 @@ trait DataConverterTrait
      * @return array
      * @throws \Exception
      */
-    protected function getMappings()
+    public function getMappings()
     {
         $fieldMappings        = $this->getFieldMappings();
         $localizationMappings = $this->getLocalizationMappings();
@@ -117,7 +105,9 @@ trait DataConverterTrait
         $mappings = [];
         /** @var MappingConfig[] $fieldMappings */
         foreach ($fieldMappings as $fieldMapping) {
-            if ($fieldMapping->isTranslatable()) {
+            if (empty($fieldMapping->getOroField()) || $fieldMapping->getOroField() == self::ORONEO_FIELD) {
+                $mappings[$fieldMapping->getAkeneoField()] = $fieldMapping->getOroEntityField();
+            } elseif ($fieldMapping->isTranslatable()) {
                 foreach ($localizationMappings as $localizationMapping) {
                     $mappings[$fieldMapping->getAkeneoField().'-'.$localizationMapping->getAkeneoLocalization()] =
                         $fieldMapping->getOroField().':'.$localizationMapping->getOroLocalization().':'.$fieldMapping->getOroEntityField();
@@ -135,15 +125,15 @@ trait DataConverterTrait
     /**
      * @return MappingLocalization[]
      */
-    protected function getLocalizationMappings()
+    public function getLocalizationMappings()
     {
-        return $this->globalConfigManager->get('synolia_oroneo.localization_mapping');
+        return $this->configManager->get('synolia_oroneo.localization_mapping');
     }
 
     /**
      * @return MappingLocalization|null
      */
-    protected function getDefaultLocalization()
+    public function getDefaultLocalization()
     {
         $mappings = $this->getLocalizationMappings();
         $result   = null;
@@ -154,6 +144,12 @@ trait DataConverterTrait
             }
         }
 
+        if ($result === null) {
+            throw new RuntimeException(
+                'There is no default localization set up.'
+            );
+        }
+
         return $result;
     }
 
@@ -161,10 +157,10 @@ trait DataConverterTrait
      * @return MappingConfig[]
      * @throws \Exception
      */
-    protected function getFieldMappings()
+    public function getFieldMappings()
     {
         if (!is_array($this->fields)) {
-            $this->fields = $this->globalConfigManager->get('synolia_oroneo.'.$this->className.'_mapping');
+            $this->fields = $this->configManager->get('synolia_oroneo.'.$this->className.'_mapping');
         }
 
         return $this->fields;

@@ -41,6 +41,29 @@ class ProductFileStrategy extends ProductStrategy
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * All non file fields are excluded during this import
+     */
+    protected function isFieldExcluded($entityName, $fieldName, $itemData = null)
+    {
+        if ($entityName == Product::class) {
+            $fileFields = array_merge($this->getProductFieldsByType('image'), $this->getProductFieldsByType('file'));
+
+            foreach ($fileFields as $fileField) {
+                /** @var FieldConfigModel $fileField */
+                if ($fileField->getFieldName() == $fieldName) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return parent::isFieldExcluded($entityName, $fieldName, $itemData);
+    }
+
+    /**
      * @param Product $entity
      */
     protected function setProductFiles($entity)

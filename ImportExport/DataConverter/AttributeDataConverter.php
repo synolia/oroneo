@@ -9,15 +9,19 @@ use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Exception\RuntimeException;
 use Oro\Bundle\ProductBundle\Entity\Product;
+use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class AttributeDataConverter
  */
 class AttributeDataConverter extends EntityFieldDataConverter implements ContextAwareInterface
 {
-    use DataConverterTrait;
-
-    /** @var string[] */
+    /**
+     * Mapping between Akeneo field type and Oro types.
+     * Keys are Akeneo field types, values are Oro's.
+     *
+     * @var string[]
+     */
     protected $attributeMapping;
 
     /** @var ConfigManager */
@@ -26,6 +30,9 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
     /** @var null|EntityConfigModel */
     protected $productConfigModel;
 
+    /** @var MappingManager */
+    protected $mappingManager;
+
     /** @var ContextInterface */
     protected $context;
 
@@ -33,13 +40,21 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      * AttributeDataConverter constructor.
      *
      * @param ConfigManager $entityConfigManager
-     * @param string[] $attributeMapping
+     * @param string[]      $attributeMapping
      */
     public function __construct(ConfigManager $entityConfigManager, array $attributeMapping)
     {
         $this->entityConfigManager = $entityConfigManager;
         $this->productConfigModel  = $entityConfigManager->getConfigEntityModel(Product::class);
-        $this->attributeMapping = $attributeMapping;
+        $this->attributeMapping    = $attributeMapping;
+    }
+
+    /**
+     * @param MappingManager $mappingManager
+     */
+    public function setMappingManager(MappingManager $mappingManager)
+    {
+        $this->mappingManager = $mappingManager;
     }
 
     /**
@@ -55,16 +70,15 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        $this->checkMissingFields($importedRecord, $this->context);
+        $this->mappingManager->checkMissingFields($importedRecord, $this->context);
 
         // Define ProductEntity's ID from 'oro_entity_config' table.
         $importedRecord['entity:id'] = $this->productConfigModel->getId();
 
         // Manage Akeneo field type. It is always under the form 'pim_catalog_TYPE'.
         if (isset($importedRecord['type'])) {
-            $akeneoTypes = $this->getAkeneoDataTypes();
-            if (array_key_exists($importedRecord['type'], $akeneoTypes)) {
-                $importedRecord['type'] = $akeneoTypes[$importedRecord['type']];
+            if (array_key_exists($importedRecord['type'], $this->attributeMapping)) {
+                $importedRecord['type'] = $this->attributeMapping[$importedRecord['type']];
             }
         }
 
@@ -84,34 +98,6 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     protected function getHeaderConversionRules()
     {
-        $defaultLocalization = $this->getDefaultLocalization();
-        if ($defaultLocalization === null) {
-            throw new RuntimeException(
-                'There is no default localization set up.'
-            );
-        }
-
-        $localeCode = $defaultLocalization->getAkeneoLocalization();
-
-        return [
-            'code'                   => 'fieldName',
-            'type'                   => 'type',
-            'label-'.$localeCode     => 'entity.label',
-            'useable_as_grid_filter' => 'datagrid.show_filter',
-            'sort_order'             => 'view.priority',
-            'max_characters'         => 'extend.length',
-            'max_file_size'          => 'attachment.maxsize',
-        ];
-    }
-
-    /**
-     * Mapping between Akeneo field type and Oro types.
-     * Keys are Akeneo field types, values are Oro's.
-     *
-     * @return array
-     */
-    protected function getAkeneoDataTypes()
-    {
-        return $this->attributeMapping;
+        return $this->mappingManager->getMappings();
     }
 }

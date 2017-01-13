@@ -31,6 +31,10 @@ system_configuration:
             title: 'synolia.oroneo.configuration_page.option.settings'
         oroneo_config_product_settings:
             title: 'synolia.oroneo.configuration_page.product.settings'
+        oroneo_config_distant:
+            title: 'synolia.oroneo.configuration_page.distant.title'
+        oroneo_config_distant_filepath:
+            title: 'synolia.oroneo.configuration_page.distant.filepath.title'
 
     fields:
         # Global Configuration fields
@@ -93,6 +97,74 @@ system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.product.channel'
+                resettable: false
+        synolia_oroneo.attribute_mapping:
+            data_type: array
+            type: synolia_oroneo_attribute_mapping
+            options:
+                label: 'synolia.oroneo.configuration_page.attribute.mapping'
+                resettable: false
+        synolia_oroneo.option_mapping:
+            data_type: array
+            type: synolia_oroneo_option_mapping
+            options:
+                label: 'synolia.oroneo.configuration_page.option.mapping'
+                resettable: false
+        synolia_oroneo.distant_host:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.host.label'
+        synolia_oroneo.distant_connection_type:
+            data_type: string
+            type: choice
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.connection_type.label'
+                constraints:
+                    - NotBlank: ~
+                choices:
+                    FTP: 'synolia.oroneo.configuration_page.distant.connection_type.ftp'
+                    SFTP: 'synolia.oroneo.configuration_page.distant.connection_type.sftp'
+        synolia_oroneo.distant_username:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.username.label'
+        synolia_oroneo.distant_password:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.password.label'
+        synolia_oroneo.distant_port:
+            data_type: integer
+            type: integer
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.port.label'
+        synolia_oroneo.distant_filepath_category:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.category.label'
+        synolia_oroneo.distant_filepath_attribute:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.attribute.label'
+        synolia_oroneo.distant_filepath_option:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.option.label'
+        synolia_oroneo.distant_filepath_product:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.product.label'
+        synolia_oroneo.distant_filepath_product-file:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.product-file.label'
 
     tree:
         system_configuration:
@@ -116,7 +188,22 @@ system_configuration:
                                     oroneo_global_config_localization:
                                         children:
                                             - synolia_oroneo.localization_mapping
-
+                            oroneo_config_distant:
+                                children:
+                                    oroneo_config_distant:
+                                        children:
+                                            - synolia_oroneo.distant_connection_type
+                                            - synolia_oroneo.distant_host
+                                            - synolia_oroneo.distant_username
+                                            - synolia_oroneo.distant_password
+                                            - synolia_oroneo.distant_port
+                                    oroneo_config_distant_filepath:
+                                        children:
+                                            - synolia_oroneo.distant_filepath_category
+                                            - synolia_oroneo.distant_filepath_attribute
+                                            - synolia_oroneo.distant_filepath_option
+                                            - synolia_oroneo.distant_filepath_product
+                                            - synolia_oroneo.distant_filepath_product-file
                     oroneo_mapping_config:
                         children:
                             oroneo_config_category:
@@ -125,6 +212,16 @@ system_configuration:
                                         children:
                                             - synolia_oroneo.master_category
                                             - synolia_oroneo.category_mapping
+                            oroneo_config_attribute:
+                                children:
+                                    oroneo_config_attribute_settings:
+                                        children:
+                                            - synolia_oroneo.attribute_mapping
+                            oroneo_config_option:
+                                children:
+                                    oroneo_config_option_settings:
+                                        children:
+                                            - synolia_oroneo.option_mapping
                             oroneo_config_product:
                                 children:
                                     oroneo_config_product_settings:

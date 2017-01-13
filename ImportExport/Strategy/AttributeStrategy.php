@@ -9,6 +9,8 @@ use Oro\Bundle\EntityConfigBundle\ImportExport\Strategy\EntityFieldImportStrateg
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\ProductBundle\Entity\Product;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class AttributeStrategy
@@ -20,6 +22,15 @@ class AttributeStrategy extends EntityFieldImportStrategy
 
     /** @var GlobalConfigManager $globalConfigManager */
     protected $globalConfigManager;
+
+    /** @var ValidatorInterface $validator */
+    protected $validator;
+
+    /** @var MappingManager */
+    protected $productMappingManager;
+
+    /** @var array */
+    protected $productMappings = null;
 
     /**
      * @param EntityConfigManager $entityFieldManager
@@ -35,6 +46,22 @@ class AttributeStrategy extends EntityFieldImportStrategy
     public function setGlobalConfigManager(GlobalConfigManager $globalConfigManager)
     {
         $this->globalConfigManager = $globalConfigManager;
+    }
+
+    /**
+     * @param ValidatorInterface $validator
+     */
+    public function setValidator(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
+     * @param MappingManager $productMappingManager
+     */
+    public function setProductMappingManager(MappingManager $productMappingManager)
+    {
+        $this->productMappingManager = $productMappingManager;
     }
 
      /**
@@ -89,12 +116,15 @@ class AttributeStrategy extends EntityFieldImportStrategy
      */
     protected function processEntity(FieldConfigModel $entity)
     {
-        $supportedTypes = $this->fieldTypeProvider->getSupportedFieldTypes();
+        $supportedTypes     = $this->fieldTypeProvider->getSupportedFieldTypes();
         $supportedRelations = $this->fieldTypeProvider->getSupportedRelationTypes();
+        $productMappings    = $this->getProductMappings();
 
         if ((string) $entity->getFieldName() === '') {
             $this->addErrors($this->translator->trans('oro.entity_config.import.message.invalid_field_name'));
 
+            return null;
+        } elseif (in_array($entity->getFieldName(), $productMappings)) {
             return null;
         }
 
@@ -113,6 +143,16 @@ class AttributeStrategy extends EntityFieldImportStrategy
                 return null;
             }
             if ($this->isSystemField($existingEntity)) {
+                return null;
+            }
+        } else {
+            $violations = $this->validator->validate($entity);
+
+            if ($violations->count() != 0) {
+                foreach ($violations as $violation) {
+                    $this->addErrors($violation->getMessage());
+                }
+
                 return null;
             }
         }
@@ -162,5 +202,21 @@ class AttributeStrategy extends EntityFieldImportStrategy
         $entity->setUpdated($now);
 
         return parent::process($entity);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getProductMappings()
+    {
+        if ($this->productMappings === null) {
+            $mappings = $this->productMappingManager->getFieldMappings();
+
+            foreach ($mappings as $mapping) {
+                $this->productMappings[] = $mapping->getAkeneoField();
+            }
+        }
+
+        return $this->productMappings;
     }
 }

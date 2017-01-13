@@ -30,6 +30,7 @@ class ImportController extends Controller
     public function importAction(Request $request)
     {
         $validationResult = [];
+        $success = false;
         $processorsChoices = $this->container->get('synolia.oroneo.import.manager')->getProcessorsChoices();
 
         $form = $this->createForm('synolia_oroneo_import_form', null, ['processorsChoices' => $processorsChoices]);
@@ -37,6 +38,7 @@ class ImportController extends Controller
         if ($request->isMethod('POST')) {
             $form->submit($request);
             $localMapping = $this->container->get('oro_config.global')->get('synolia_oroneo.localization_mapping');
+            $importJob = $request->get('importValidateJob', JobExecutor::JOB_VALIDATE_IMPORT_FROM_CSV);
             if (empty($localMapping)) {
                 $this->get('session')->getFlashBag()->add(
                     'error',
@@ -53,16 +55,38 @@ class ImportController extends Controller
                         ]
                     )
                 );
-            } elseif ($form->isValid()) {
-                $importJob      = $request->get('importValidateJob', JobExecutor::JOB_VALIDATE_IMPORT_FROM_CSV);
+            } elseif ($form->get('isManualImport')->getData() === false) {
+                $validationResult = $this->container->get('synolia.oroneo.import.manager')->distantImportValidation($form->getData(), $importJob);
+                if (empty($validationResult)) {
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        $this->get('translator')->trans(
+                            'synolia.oroneo.import_page.error.distant.missing_config',
+                            [
+                                '%url%' => $this->generateUrl(
+                                    'oro_config_configuration_system',
+                                    [
+                                        'activeGroup' => 'oroneo',
+                                        'activeSubGroup' => 'oroneo_config_distant',
+                                    ]
+                                ),
+                            ]
+                        )
+                    );
+                } else {
+                    $success = true;
+                }
+            } elseif ($form->get('isManualImport')->getData() === true && $form->isValid()) {
                 $validationResult = $this->container->get('synolia.oroneo.import.manager')->importValidation($form->getData(), $importJob);
-                $validationResult['importJob'] = $request->get('importJob');
+                $success = true;
             }
+            $validationResult['importJob'] = $request->get('importJob');
         }
 
         return [
-            'form'   => $form->createView(),
-            'result' => $validationResult,
+            'form'    => $form->createView(),
+            'result'  => $validationResult,
+            'success' => $success,
         ];
     }
 

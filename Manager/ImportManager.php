@@ -2,11 +2,14 @@
 
 namespace Synolia\Bundle\OroneoBundle\Manager;
 
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\ImportExportBundle\Handler\HttpImportHandler;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Translation\TranslatorInterface;
 use Oro\Bundle\ImportExportBundle\Form\Model\ImportData;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityExtendBundle\Extend\EntityProcessor;
 
 /**
@@ -28,20 +31,16 @@ class ImportManager
     const EXECUTION_IMPORT_TYPE       = 'import';
     const CSV_FORMAT                  = 'csv';
     const ZIP_FORMAT                  = 'zip';
+    const SFTP_CONNECTION             = 'SFTP';
+    const FTP_CONNECTION              = 'FTP';
 
-    /**
-     * @var TranslatorInterface $translator
-     */
+    /** @var TranslatorInterface $translator */
     protected $translator;
 
-    /**
-     * @var HttpImportHandler $importHandler
-     */
+    /** @var HttpImportHandler $importHandler */
     protected $importHandler;
 
-    /**
-     * @var ProcessorRegistry $processorRegistry
-     */
+    /** @var ProcessorRegistry $processorRegistry */
     protected $processorRegistry;
 
     /** @var ConfigManager $configManager */
@@ -50,27 +49,39 @@ class ImportManager
     /** @var EntityProcessor $entityProcessor */
     protected $entityProcessor;
 
+    /** @var EntityConfigManager $entityConfigManager */
+    protected $entityConfigManager;
+
+    /** @var  DistantConnectionManager $connectionManager*/
+    protected $connectionManager;
+
     /**
      * ImportManager constructor.
      *
-     * @param TranslatorInterface $translator
-     * @param HttpImportHandler   $importHandler
-     * @param ProcessorRegistry   $processorRegistry
-     * @param ConfigManager       $configManager
-     * @param EntityProcessor     $entityProcessor
+     * @param TranslatorInterface      $translator
+     * @param HttpImportHandler        $importHandler
+     * @param ProcessorRegistry        $processorRegistry
+     * @param ConfigManager            $configManager
+     * @param EntityProcessor          $entityProcessor
+     * @param EntityConfigManager      $entityConfigManager
+     * @param DistantConnectionManager $connectionManager
      */
     public function __construct(
         TranslatorInterface $translator,
         HttpImportHandler $importHandler,
         ProcessorRegistry $processorRegistry,
         ConfigManager $configManager,
-        EntityProcessor $entityProcessor
+        EntityProcessor $entityProcessor,
+        EntityConfigManager $entityConfigManager,
+        DistantConnectionManager $connectionManager
     ) {
-        $this->translator        = $translator;
-        $this->importHandler     = $importHandler;
-        $this->processorRegistry = $processorRegistry;
-        $this->configManager     = $configManager;
-        $this->entityProcessor   = $entityProcessor;
+        $this->translator          = $translator;
+        $this->importHandler       = $importHandler;
+        $this->processorRegistry   = $processorRegistry;
+        $this->configManager       = $configManager;
+        $this->entityProcessor     = $entityProcessor;
+        $this->entityConfigManager = $entityConfigManager;
+        $this->connectionManager   = $connectionManager;
     }
 
     /**
@@ -118,6 +129,67 @@ class ImportManager
     }
 
     /**
+     * Retrieve file from distant server and use it to run the import job.
+     *
+     * @param ImportData $data    Data from the front form.
+     * @param string     $jobName Validation job's name from the controller request.
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function distantImportValidation(ImportData $data, $jobName)
+    {
+        // Retrieve user's config values.
+        $connectionInfo = [
+            'username'       => $this->configManager->get('synolia_oroneo.distant_username'),
+            'password'       => $this->configManager->get('synolia_oroneo.distant_password'),
+            'host'           => $this->configManager->get('synolia_oroneo.distant_host'),
+            'port'           => $this->configManager->get('synolia_oroneo.distant_port'),
+            'connectionType' => $this->configManager->get('synolia_oroneo.distant_connection_type'),
+            'filename'       => $this->getDistantFilenameByImportType($data->getProcessorAlias()),
+        ];
+
+        // If missing at least one param then return an empty array to trigger an error.
+        if (count($connectionInfo) != count(array_diff($connectionInfo, ['']))) {
+            return [];
+        }
+
+        // Depending on the connection type.
+        $file = null;
+        switch ($connectionInfo['connectionType']) {
+            case self::FTP_CONNECTION:
+                $file = $this->connectionManager->ftpImport(
+                    $connectionInfo['username'],
+                    $connectionInfo['password'],
+                    $connectionInfo['host'],
+                    $connectionInfo['port'],
+                    $connectionInfo['filename']
+                );
+                break;
+            case self::SFTP_CONNECTION:
+                $file = $this->connectionManager->sftpImport(
+                    $connectionInfo['username'],
+                    $connectionInfo['password'],
+                    $connectionInfo['host'],
+                    $connectionInfo['port'],
+                    $connectionInfo['filename']
+                );
+                break;
+            default:
+                return [];
+        }
+
+        if (null === $file) {
+            return [];
+        }
+
+        // Setting a File instead of an UploadedFile to avoid upload validation error.
+        $data->setFile($file);
+
+        return $this->importValidation($data, $jobName);
+    }
+
+    /**
      * Execution of the import itself.
      *
      * @param string $processorAlias
@@ -135,7 +207,12 @@ class ImportManager
 
         // Update schema if Attribute import
         if ($processorAlias == self::ATTRIBUTE_PROCESSOR) {
-            $this->entityProcessor->updateDatabase(true, true);
+            $product = $this->entityConfigManager->getConfigEntityModel(Product::class);
+            $config  = $product->toArray('extend');
+
+            if ($config['state'] == ExtendScope::STATE_UPDATE) {
+                $this->entityProcessor->updateDatabase(true, true);
+            }
         }
 
         return $result;
@@ -194,7 +271,6 @@ class ImportManager
         return self::CSV_FORMAT;
     }
 
-
     /**
      * Execute the import process depending on the import type.
      *
@@ -229,5 +305,28 @@ class ImportManager
             null,
             $options
         );
+    }
+
+    /**
+     * @param string $importType
+     *
+     * @return string|null
+     */
+    protected function getDistantFilenameByImportType($importType)
+    {
+        switch ($importType) {
+            case ImportManager::CATEGORY_PROCESSOR:
+                return $this->configManager->get('synolia_oroneo.distant_filepath_category');
+            case ImportManager::ATTRIBUTE_PROCESSOR:
+                return $this->configManager->get('synolia_oroneo.distant_filepath_attribute');
+            case ImportManager::OPTION_PROCESSOR:
+                return $this->configManager->get('synolia_oroneo.distant_filepath_option');
+            case ImportManager::PRODUCT_PROCESSOR:
+                return $this->configManager->get('synolia_oroneo.distant_filepath_product');
+            case ImportManager::PRODUCT_FILE_PROCESSOR:
+                return $this->configManager->get('synolia_oroneo.distant_filepath_product-file');
+            default:
+                return null;
+        }
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,24 +17,12 @@ use Oro\Bundle\ImportExportBundle\Form\Type\ImportType as BaseImportType;
 class ImportType extends BaseImportType
 {
     /**
-     * @var ProcessorRegistry
-     */
-    protected $processorRegistry;
-
-    /**
-     * @param ProcessorRegistry $processorRegistry
-     */
-    public function __construct(ProcessorRegistry $processorRegistry)
-    {
-        $this->processorRegistry = $processorRegistry;
-    }
-
-    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->remove('file');
         $builder->add(
             'processorAlias',
             ChoiceType::class,
@@ -47,9 +35,20 @@ class ImportType extends BaseImportType
         );
 
         $builder->add(
+            'isManualImport',
+            CheckboxType::class,
+            [
+                'label'    => 'synolia.oroneo.import_page.import_type.checkbox',
+                'required' => false,
+                'mapped'   => false,
+            ]
+        );
+
+        $builder->add(
             'file',
             FileType::class,
             [
+                'required'    => false,
                 'constraints' => [
                     new File(
                         [

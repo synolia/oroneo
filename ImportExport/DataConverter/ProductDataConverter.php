@@ -2,6 +2,7 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager as GlobalConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -11,22 +12,43 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter as DataConverter;
+use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class ProductDataConverter
  */
 class ProductDataConverter extends DataConverter implements ContextAwareInterface
 {
-    use DataConverterTrait;
-
     /** @var ConfigManager  */
     protected $configManager;
 
     /** @var  FieldConfigModel[] */
     protected $multiSelectFields = [];
 
+    /** @var MappingManager */
+    protected $mappingManager;
+
+    /** @var GlobalConfigManager */
+    protected $globalConfigManager;
+
     /** @var ContextInterface */
     protected $context;
+
+    /**
+     * @param MappingManager $mappingManager
+     */
+    public function setMappingManager(MappingManager $mappingManager)
+    {
+        $this->mappingManager = $mappingManager;
+    }
+
+    /**
+     * @param GlobalConfigManager $globalConfigManager
+     */
+    public function setGlobalConfigManager(GlobalConfigManager $globalConfigManager)
+    {
+        $this->globalConfigManager = $globalConfigManager;
+    }
 
     /**
      * @param ContextInterface $context
@@ -49,9 +71,9 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        $this->checkMissingFields($importedRecord, $this->context);
+        $this->mappingManager->checkMissingFields($importedRecord, $this->context);
 
-        $channel = '-'.$this->globalConfigManager->get('synolia_oroneo.product_channel');
+        $channel       = '-'.$this->globalConfigManager->get('synolia_oroneo.product_channel');
         $channelLength = strlen($channel);
 
         foreach ($importedRecord as $key => $value) {
@@ -87,8 +109,8 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
         $provider = $this->configManager->getProvider('extend');
         $fields   = $product->getFields();
 
-        $mappings = $this->getMappings();
-        $locales = $this->getLocalizationMappings();
+        $mappings = $this->mappingManager->getMappings();
+        $locales  = $this->mappingManager->getLocalizationMappings();
 
         foreach ($fields as $field) {
             $mappingName = $field->getFieldName();
@@ -98,7 +120,7 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
                 continue;
             }
 
-            if ($field->getType() == RelationType::ONE_TO_MANY) {
+            if ($field->getType() == RelationType::MANY_TO_MANY) {
                 if ($config->get('target_entity') == LocalizedFallbackValue::class) {
                     $targetColumn = $config->has('target_column') ? $config->get('target_column') : 'string';
 

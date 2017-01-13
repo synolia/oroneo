@@ -27,7 +27,7 @@ connector:
                     services:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
-                        writer:    synolia.oroneo.import.writer.attribute
+                        writer:    oro_importexport.writer.doctrine_clear
         synolia_oroneo_product_file_import_from_zip:
             title: "Product Files Import from ZIP"
             type: import

@@ -1,6 +1,11 @@
 parameters:
+    synolia.oroneo.mapping.manager.class:  Synolia\Bundle\OroneoBundle\Manager\MappingManager
     synolia.oroneo.import.manager.class:   Synolia\Bundle\OroneoBundle\Manager\ImportManager
     synolia.oroneo.oro_field_select.class: Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager
+    synolia.oroneo.distant_connection.manager.class: Synolia\Bundle\OroneoBundle\Manager\DistantConnectionManager
+    synolia.oroneo.helper.ftp.class:                 Synolia\Bundle\OroneoBundle\Helper\FtpHelper
+    synolia.oroneo.helper.sftp.class:                Synolia\Bundle\OroneoBundle\Helper\SftpHelper
+
 
 services:
     synolia_oroneo.category.repository:
@@ -16,6 +21,8 @@ services:
             - '@oro_importexport.processor.registry'
             - '@oro_config.global'
             - '@oro_entity_extend.extend.entity_processor'
+            - '@oro_entity_config.config_manager'
+            - '@synolia.oroneo.distant_connection.manager'
 
     synolia.oroneo.oro_field_select:
         class: '%synolia.oroneo.oro_field_select.class%'
@@ -23,3 +30,41 @@ services:
             - '@oro_entity_config.config_manager'
             - '@oro_locale.helper.localization'
             - '@oro_catalog.repository.category'
+            - '@doctrine'
+
+    synolia.oroneo.mapping.manager.category:
+        class: '%synolia.oroneo.mapping.manager.class%'
+        calls:
+            - [setConfigManager, ['@oro_config.global']]
+            - [setClassName, ['category']]
+
+    synolia.oroneo.mapping.manager.attribute:
+        class: '%synolia.oroneo.mapping.manager.class%'
+        calls:
+            - [setConfigManager, ['@oro_config.global']]
+            - [setClassName, ['attribute']]
+
+    synolia.oroneo.mapping.manager.option:
+        class: '%synolia.oroneo.mapping.manager.class%'
+        calls:
+            - [setConfigManager, ['@oro_config.global']]
+            - [setClassName, ['option']]
+
+    synolia.oroneo.mapping.manager.product:
+        class: '%synolia.oroneo.mapping.manager.class%'
+        calls:
+            - [setConfigManager, ['@oro_config.global']]
+            - [setClassName, ['product']]
+
+    synolia.oroneo.distant_connection.manager:
+        class: '%synolia.oroneo.distant_connection.manager.class%'
+        arguments:
+            - '@synolia.oroneo.helper.ftp'
+            - '@synolia.oroneo.helper.sftp'
+
+    # Helpers.
+    synolia.oroneo.helper.ftp:
+        class: '%synolia.oroneo.helper.ftp.class%'
+
+    synolia.oroneo.helper.sftp:
+        class: '%synolia.oroneo.helper.sftp.class%'

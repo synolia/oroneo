@@ -52,6 +52,12 @@
 {% block synolia_oroneo_product_mapping_type_widget %}
     {{ block('synolia_oroneo_mapping_widget') }}
 {% endblock %}
+{% block synolia_oroneo_attribute_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
+{% endblock %}
+{% block synolia_oroneo_option_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
+{% endblock %}
 
 {% macro synolia_oroneo_mapping_config_prototype(widget) %}
     {% if 'collection' in widget.vars.block_prefixes %}

@@ -5,16 +5,26 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\DataConverter;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\LocaleBundle\ImportExport\DataConverter\LocalizedFallbackValueAwareDataConverter;
+use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class CategoryDataConverter
  */
 class CategoryDataConverter extends LocalizedFallbackValueAwareDataConverter implements ContextAwareInterface
 {
-    use DataConverterTrait;
+    /** @var MappingManager */
+    protected $mappingManager;
 
     /** @var ContextInterface */
     protected $context;
+
+    /**
+     * @param MappingManager $mappingManager
+     */
+    public function setMappingManager(MappingManager $mappingManager)
+    {
+        $this->mappingManager = $mappingManager;
+    }
 
     /**
      * @param ContextInterface $context
@@ -32,7 +42,7 @@ class CategoryDataConverter extends LocalizedFallbackValueAwareDataConverter imp
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        $this->checkMissingFields($importedRecord, $this->context);
+        $this->mappingManager->checkMissingFields($importedRecord, $this->context);
 
         return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
@@ -42,6 +52,6 @@ class CategoryDataConverter extends LocalizedFallbackValueAwareDataConverter imp
      */
     protected function getHeaderConversionRules()
     {
-        return $this->getMappings();
+        return $this->mappingManager->getMappings();
     }
 }

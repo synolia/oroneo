@@ -1,0 +1,3 @@
+config:
+    paths:
+        'synoliaoroneo/js/import-view': 'bundles/synoliaoroneo/js/import-view.js'

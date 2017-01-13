@@ -6,12 +6,32 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ProductMappingConfigType
+ * Class MappingConfigTypeCollection
  * @package Synolia\Bundle\OroneoBundle\Form\Type
  */
-class ProductMappingConfigType extends AbstractType
+class MappingConfigTypeCollection extends AbstractType
 {
-    const NAME = 'synolia_oroneo_product_mapping';
+    /** @var string $name */
+    protected $name;
+
+    /** @var string $type */
+    protected $type;
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * {@inheritdoc}
@@ -19,7 +39,7 @@ class ProductMappingConfigType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'type' => ProductMappingType::NAME,
+            'type' => $this->type,
         ]);
     }
 
@@ -28,7 +48,7 @@ class ProductMappingConfigType extends AbstractType
      */
     public function getName()
     {
-        return static::NAME;
+        return $this->name;
     }
 
     /**

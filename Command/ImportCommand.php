@@ -2,7 +2,9 @@
 
 namespace Synolia\Bundle\OroneoBundle\Command;
 
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
+use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -10,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\ImportExportBundle\Command\ImportCommand as OroImportCommand;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+use Synolia\Bundle\OroneoBundle\Manager\ImportManager;
 
 /**
  * Class ImportOptionCommand
@@ -122,9 +125,33 @@ class ImportCommand extends OroImportCommand
             $this->renderResult($importInfo, $output);
         }
 
+        if ($importConfig['processor'] == ImportManager::ATTRIBUTE_PROCESSOR) {
+            $this->updateDatabase($output);
+        }
+
         $output->writeln('<info>'.$importInfo['message'].'</info>');
 
         return self::STATUS_SUCCESS;
+    }
+
+    /**
+     * Updates the database to add newly created attributes
+     *
+     * @param OutputInterface $output
+     */
+    protected function updateDatabase(OutputInterface $output)
+    {
+        $entityFieldManager = $this->getContainer()->get('oro_entity_config.config_manager');
+
+        $product = $entityFieldManager->getConfigEntityModel(Product::class);
+        $config  = $product->toArray('extend');
+
+        if ($config['state'] == ExtendScope::STATE_UPDATE) {
+            $output->writeln('<info>Updating schema</info>');
+            $entityProcessor = $this->getContainer()->get('oro_entity_extend.extend.entity_processor');
+            $entityProcessor->updateDatabase(true, true);
+            $output->writeln('<info>Schema updated</info>');
+        }
     }
 
     /**

@@ -14,8 +14,10 @@ synolia:
             description: Akeneo import description
             processor.choice: Import Type
             validation.btn: Check and validate file
+            import_type.checkbox: Manual import
             error:
                 mapping: No mapping set in configuration panel. Define locale mapping first <a href="%url%">here.</a>
+                distant.missing_config: Import error. Something's wrong with the connection. Check it <a href="%url%">here.</a>.
         import:
             product:
                 error:
@@ -75,6 +77,24 @@ synolia:
                 mapping: Product Mapping
                 channel: Default Channel
             description: Akeneo configuration page description
+            distant:
+                title: Remote Settings
+                host.label: Host
+                username.label: Username
+                password.label: Password
+                port.label: Port
+                connection_type:
+                    label: Connection Type
+                    ftp: FTP
+                    sftp: SFTP
+                filepath:
+                    title: Filepath definition
+                    category.label: Category filepath
+                    attribute.label: Attribute filepath
+                    option.label: Option filepath
+                    product.label: Product filepath
+                    product-file.label: Product-file filepath
+
         step:
             schema_updater:
                 title: Schema updater

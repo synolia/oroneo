@@ -22,19 +22,19 @@ class MappingConfigType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'type' => MappingType::NAME,
-            'options' => [
+            'type'                 => MappingType::NAME,
+            'options'              => [
                 'data_class' => 'Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig',
             ],
-            'allow_add_after' => false,
+            'allow_add_after'      => false,
             'show_form_when_empty' => true,
-            'allow_add' => true,
-            'mapped' => true,
-            'label' => false,
-            'error_bubbling' => false,
-            'handle_primary' => false,
-            'required' => false,
-            'render_as_widget' => false,
+            'allow_add'            => true,
+            'mapped'               => true,
+            'label'                => false,
+            'error_bubbling'       => false,
+            'handle_primary'       => false,
+            'required'             => false,
+            'render_as_widget'     => false,
         ]);
     }
 

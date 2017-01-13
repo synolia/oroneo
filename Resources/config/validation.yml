@@ -1,0 +1,6 @@
+Oro\Bundle\ImportExportBundle\Form\Model\ImportData:
+    properties:
+        file:
+            - File: ~
+        processorAlias:
+            - NotBlank: ~

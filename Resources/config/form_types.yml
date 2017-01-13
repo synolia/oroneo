@@ -1,16 +1,31 @@
 parameters:
-    synolia.oroneo.form.type.import.class:                  Synolia\Bundle\OroneoBundle\Form\Type\ImportType
-    synolia.oroneo.form.type.mapping.config.class:          Synolia\Bundle\OroneoBundle\Form\Type\MappingConfigType
-    synolia.oroneo.form.config.mapping.category.class:      Synolia\Bundle\OroneoBundle\Form\Type\CategoryMappingConfigType
-    synolia.oroneo.form.config.mapping.product.class:       Synolia\Bundle\OroneoBundle\Form\Type\ProductMappingConfigType
-    synolia.oroneo.form.type.mapping.class:                 Synolia\Bundle\OroneoBundle\Form\Type\MappingType
-    synolia.oroneo.form.type.mapping.category.class:        Synolia\Bundle\OroneoBundle\Form\Type\CategoryMappingType
-    synolia.oroneo.form.type.mapping.product.class:         Synolia\Bundle\OroneoBundle\Form\Type\ProductMappingType
-    synolia.oroneo.form.type.localization.config.class:     Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingConfigType
-    synolia.oroneo.form.type.localization.class:            Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingType
-    synolia.oroneo.form.type.mapping.master_category.class: Synolia\Bundle\OroneoBundle\Form\Type\MasterCategoryType
+    synolia.oroneo.form.type.import.class:                    Synolia\Bundle\OroneoBundle\Form\Type\ImportType
+    synolia.oroneo.form.type.mapping.config.class:            Synolia\Bundle\OroneoBundle\Form\Type\MappingConfigType
+    synolia.oroneo.form.type.mapping.config.collection.class: Synolia\Bundle\OroneoBundle\Form\Type\MappingConfigTypeCollection
+    synolia.oroneo.form.type.mapping.class:                   Synolia\Bundle\OroneoBundle\Form\Type\MappingType
+    synolia.oroneo.form.type.localization.config.class:       Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingConfigType
+    synolia.oroneo.form.type.localization.class:              Synolia\Bundle\OroneoBundle\Form\Type\LocalizationMappingType
+    synolia.oroneo.form.type.mapping.master_category.class:   Synolia\Bundle\OroneoBundle\Form\Type\MasterCategoryType
+
+    oro.category.class:                                       Oro\Bundle\CatalogBundle\Entity\Category
+    oro.field_config_model.class:                             Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel
+    oro.abstract_enum_value.class:                            Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue
+    oro.product.class:                                        Oro\Bundle\ProductBundle\Entity\Product
+
+    synolia.oroneo.form.category_mapping.name:                'synolia_oroneo_category_mapping'
+    synolia.oroneo.form.attribute_mapping.name:               'synolia_oroneo_attribute_mapping'
+    synolia.oroneo.form.option_mapping.name:                  'synolia_oroneo_option_mapping'
+    synolia.oroneo.form.product_mapping.name:                 'synolia_oroneo_product_mapping'
+    synolia.oroneo.form.localization_mapping.name:            'synolia_oroneo_localization_mapping'
+
+    synolia.oroneo.form.category_mapping.type:                '%synolia.oroneo.form.category_mapping.name%_type'
+    synolia.oroneo.form.attribute_mapping.type:               '%synolia.oroneo.form.attribute_mapping.name%_type'
+    synolia.oroneo.form.option_mapping.type:                  '%synolia.oroneo.form.option_mapping.name%_type'
+    synolia.oroneo.form.product_mapping.type:                 '%synolia.oroneo.form.product_mapping.name%_type'
+    synolia.oroneo.form.localization_mapping.type:            '%synolia.oroneo.form.localization_mapping.name%_type'
 
 services:
+    # UI import form
     synolia.oroneo.form.type.import:
         class: '%synolia.oroneo.form.type.import.class%'
         arguments: ['@oro_importexport.processor.registry']
@@ -18,10 +33,15 @@ services:
             - { name: form.type, alias: synolia_oroneo_import_form }
 
     # Mapping
-    synolia.oroneo.form.type.mapping.collection:
+    synolia.oroneo.form.type.mapping.config:
         class: '%synolia.oroneo.form.type.mapping.config.class%'
         tags:
             - { name: form.type, alias: synolia_oroneo_mapping_config }
+
+    synolia.oroneo.form.type.mapping.collection:
+        class: '%synolia.oroneo.form.type.mapping.config.collection.class%'
+        tags:
+            - { name: form.type, alias: synolia_oroneo_mapping_config_collection }
 
     synolia.oroneo.form.type.mapping:
         class: '%synolia.oroneo.form.type.mapping.class%'
@@ -31,14 +51,36 @@ services:
             - { name: form.type, alias: synolia_oroneo_mapping }
 
     synolia.oroneo.form.type.config.mapping.category:
-        class: '%synolia.oroneo.form.config.mapping.category.class%'
+        parent: synolia.oroneo.form.type.mapping.collection
+        calls:
+            - [setName, ['%synolia.oroneo.form.category_mapping.name%']]
+            - [setType, ['%synolia.oroneo.form.category_mapping.type%']]
         tags:
             - { name: form.type, alias: synolia_oroneo_category_mapping }
 
     synolia.oroneo.form.type.config.mapping.product:
-        class: '%synolia.oroneo.form.config.mapping.product.class%'
+        parent: synolia.oroneo.form.type.mapping.collection
+        calls:
+            - [setName, ['%synolia.oroneo.form.product_mapping.name%']]
+            - [setType, ['%synolia.oroneo.form.product_mapping.type%']]
         tags:
             - { name: form.type, alias: synolia_oroneo_product_mapping }
+
+    synolia.oroneo.form.type.config.mapping.attribute:
+        parent: synolia.oroneo.form.type.mapping.collection
+        calls:
+            - [setName, ['%synolia.oroneo.form.attribute_mapping.name%']]
+            - [setType, ['%synolia.oroneo.form.attribute_mapping.type%']]
+        tags:
+            - { name: form.type, alias: synolia_oroneo_attribute_mapping }
+
+    synolia.oroneo.form.type.config.mapping.option:
+        parent: synolia.oroneo.form.type.mapping.collection
+        calls:
+            - [setName, ['%synolia.oroneo.form.option_mapping.name%']]
+            - [setType, ['%synolia.oroneo.form.option_mapping.type%']]
+        tags:
+            - { name: form.type, alias: synolia_oroneo_option_mapping }
 
     synolia.oroneo.form.type.config.mapping.localization:
         class: '%synolia.oroneo.form.type.localization.config.class%'
@@ -47,18 +89,36 @@ services:
 
     # Types
     synolia.oroneo.form.type.mapping.category:
-        class: '%synolia.oroneo.form.type.mapping.category.class%'
-        arguments:
-            - '@synolia.oroneo.oro_field_select'
+        parent: synolia.oroneo.form.type.mapping
+        calls:
+            - [setName, ['%synolia.oroneo.form.category_mapping.type%']]
+            - [setClassName, ['%oro.category.class%']]
         tags:
             - { name: form.type, alias: synolia_oroneo_category_mapping_type }
 
     synolia.oroneo.form.type.mapping.product:
-        class: '%synolia.oroneo.form.type.mapping.product.class%'
-        arguments:
-            - '@synolia.oroneo.oro_field_select'
+        parent: synolia.oroneo.form.type.mapping
+        calls:
+            - [setName, ['%synolia.oroneo.form.product_mapping.type%']]
+            - [setClassName, ['%oro.product.class%']]
         tags:
             - { name: form.type, alias: synolia_oroneo_product_mapping_type }
+
+    synolia.oroneo.form.type.mapping.attribute:
+        parent: synolia.oroneo.form.type.mapping
+        calls:
+            - [setName, ['%synolia.oroneo.form.attribute_mapping.type%']]
+            - [setClassName, ['%oro.field_config_model.class%']]
+        tags:
+            - { name: form.type, alias: synolia_oroneo_attribute_mapping_type }
+
+    synolia.oroneo.form.type.mapping.option:
+        parent: synolia.oroneo.form.type.mapping
+        calls:
+            - [setName, ['%synolia.oroneo.form.option_mapping.type%']]
+            - [setClassName, ['%oro.abstract_enum_value.class%']]
+        tags:
+            - { name: form.type, alias: synolia_oroneo_option_mapping_type }
 
     synolia.oroneo.form.type.mapping.localization:
         class: '%synolia.oroneo.form.type.localization.class%'

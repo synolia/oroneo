@@ -39,12 +39,10 @@ services:
 
     # DataConverter
     synolia.oroneo.import.data_converter.category:
-        parent: oro_locale.importexport.data_converter.localized_fallback_value_aware
         class: '%synolia.oroneo.import.data_converter.category.class%'
+        parent: oro_locale.importexport.data_converter.localized_fallback_value_aware
         calls:
-            - [setManagerRegistry, ['@doctrine']]
-            - [setClassName, ['category']]
-            - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.category']]
 
     synolia.oroneo.import.data_converter.attribute:
         class: '%synolia.oroneo.import.data_converter.attribute.class%'
@@ -53,24 +51,19 @@ services:
             - '@oro_entity_config.config_manager'
             - '%synolia.oroneo.attribute_types_mapping%'
         calls:
-            - [setManagerRegistry, ['@doctrine']]
-            - [setClassName, ['attribute']]
-            - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.attribute']]
 
     synolia.oroneo.import.data_converter.option:
         class: '%synolia.oroneo.import.data_converter.option.class%'
         calls:
-            - [setManagerRegistry, ['@doctrine']]
-            - [setClassName, ['option']]
-            - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.option']]
 
     synolia.oroneo.import.data_converter.product:
         class: '%synolia.oroneo.import.data_converter.product.class%'
         parent: oro_product.importexport.data_converter.product
         calls:
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.product']]
             - [setConfigManager, ['@oro_entity_config.config_manager']]
-            - [setManagerRegistry, ['@doctrine']]
-            - [setClassName, ['product']]
             - [setGlobalConfigManager, ['@oro_config.global']]
 
     # Strategy
@@ -87,6 +80,8 @@ services:
         calls:
             - [setEntityConfigManager, ['@oro_entity_config.config_manager']]
             - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setValidator, ['@validator']]
+            - [setProductMappingManager, ['@synolia.oroneo.mapping.manager.product']]
 
     synolia.oroneo.import.strategy.option:
         class: '%synolia.oroneo.import.strategy.option.class%'

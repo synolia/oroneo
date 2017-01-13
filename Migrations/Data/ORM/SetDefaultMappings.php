@@ -16,6 +16,7 @@ use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
  */
 class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterface
 {
+    const MASTER_CATEGORY_ID = 1;
     /**
      * @var ContainerInterface
      */
@@ -37,6 +38,8 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
     public function load(ObjectManager $manager)
     {
         $configManager = $this->container->get('oro_config.global');
+
+        $configManager->set('synolia_oroneo.master_category', ['masterCategory' => self::MASTER_CATEGORY_ID]);
         $configManager->set(
             'synolia_oroneo.category_mapping',
             [
@@ -46,29 +49,29 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             ]
         );
 
-        $configManager->set('synolia_oroneo.master_category', ['masterCategory' => 1]);
-
-        $configManager->set(
-            'synolia_oroneo.option_mapping',
-            [
-                new MappingConfig('code', 'id', '', true, false),
-                new MappingConfig('label-fr_FR', 'name', '', true, false),
-                new MappingConfig('sort_order', 'priority', '', true, false),
-                new MappingConfig('attribute', 'attribute', '', true, false),
-            ]
-        );
         $configManager->set(
             'synolia_oroneo.attribute_mapping',
             [
                 new MappingConfig('code', 'fieldName', '', true, false),
                 new MappingConfig('type', 'type', '', true, false),
-                new MappingConfig('label-fr_FR', 'entity.label', '', true, false),
-                new MappingConfig('useable_as_grid_filter', 'datagrid.show_filter', '', true, false),
-                new MappingConfig('sort_order', 'view.priority', '', false, false),
-                new MappingConfig('max_characters', 'extend.length', '', false, false),
-                new MappingConfig('max_file_size', 'attachment.maxsize', '', false, false),
+                new MappingConfig('label-en_US', '', 'entity.label', true, false),
+                new MappingConfig('useable_as_grid_filter', '', 'datagrid.show_filter', true, false),
+                new MappingConfig('sort_order', '', 'view.priority', false, false),
+                new MappingConfig('max_characters', '', 'extend.length', false, false),
+                new MappingConfig('max_file_size', '', 'attachment.maxsize', false, false),
             ]
         );
+
+        $configManager->set(
+            'synolia_oroneo.option_mapping',
+            [
+                new MappingConfig('code', 'id', '', true, false),
+                new MappingConfig('label-en_US', 'name', '', true, false),
+                new MappingConfig('sort_order', 'priority', '', true, false),
+                new MappingConfig('attribute', 'oroneo', 'attribute', true, false),
+            ]
+        );
+
         $configManager->set('synolia_oroneo.product_channel', 'ecommerce');
         $configManager->set(
             'synolia_oroneo.product_mapping',
