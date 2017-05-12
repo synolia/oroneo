@@ -2,6 +2,7 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Writer;
 
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Writer\EntityFieldWriter;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\ProductBundle\Entity\Product;
@@ -42,12 +43,15 @@ class AttributeWriter extends EntityFieldWriter
     /**
      * {@inheritdoc}
      */
-    protected function setExtendData($className, $fieldName, $state)
+    protected function setExtendData(FieldConfigModel $configModel, $state)
     {
         $provider = $this->configManager->getProvider('extend');
         if (!$provider) {
             return;
         }
+
+        $className = $configModel->getEntity()->getClassName();
+        $fieldName = $configModel->getFieldName();
 
         $config = $provider->getConfig($className, $fieldName);
 
@@ -62,9 +66,10 @@ class AttributeWriter extends EntityFieldWriter
             $this->finalStatus = ExtendScope::STATE_UPDATE;
         }
 
-        parent::setExtendData($className, $fieldName, $state);
-
-        $config->set('origin', 'Akeneo');
+        if ($config->get('owner') != ExtendScope::OWNER_SYSTEM) {
+            parent::setExtendData($configModel, $state);
+            $config->set('origin', 'Akeneo');
+        }
 
         $this->configManager->persist($config);
     }

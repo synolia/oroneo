@@ -1,0 +1,191 @@
+<div class="widget-content" id="import-validation">
+    <style type="text/css">
+        #import-validation {
+            padding-bottom: 1px;
+        }
+        .import-errors ol {
+            height: 198px;
+            overflow: auto;
+            padding-left: 25px;
+        }
+        .import-errors {
+            display: none;
+        }
+        .errors-visible .validation-info {
+            display: none;
+        }
+        .errors-visible .import-errors {
+            display: block;
+        }
+        .errors-visible .error-toggle-head {
+            display: block;
+            padding: 2px;
+            width: 100%;
+            margin: 0 0 5px 0;
+            background-color: #fafafa;
+            border-bottom: 1px solid #e5e5e5;
+        }
+    </style>
+
+    <div class="validation-info">
+        <strong>{{ 'synolia.oroneo.import_page.validation.result'|trans }}</strong>
+        {% if fileTooBig is not defined or fileTooBig == false %}
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <div class="pull-right">
+                                {{ 'synolia.oroneo.import_page.validation.items_nb'|trans }}
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ 'synolia.oroneo.import_page.validation.record_nb'|trans }}</td>
+                    <td>
+                        <div class="pull-right">
+                            {{ counts.read|default(0) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'synolia.oroneo.import_page.validation.record_add'|trans }}</td>
+                    <td>
+                        <div class="pull-right">
+                            {{ counts.add|default(0) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'synolia.oroneo.import_page.validation.record_replace'|trans }}</td>
+                    <td>
+                        <div class="pull-right">
+                            {{ counts.replace|default(0) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'synolia.oroneo.import_page.validation.record_update'|trans }}</td>
+                    <td>
+                        <div class="pull-right">
+                            {{ counts.update|default(0) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'synolia.oroneo.import_page.validation.record_delete'|trans }}</td>
+                    <td>
+                        <div class="pull-right">
+                            {{ counts.delete|default(0) }}
+                        </div>
+                    </td>
+                </tr>
+
+                {% if counts is not empty %}
+                    <tr {% if counts.error_entries %}class="error"{% endif %}>
+                        <td>
+                            {% if counts.error_entries > 0 %}
+                            <a href="javascript: void(0)" class="error-toggle">
+                                {{ 'synolia.oroneo.import_page.validation.record_error'|trans }}
+                            </a>
+                            {% else %}
+                                {{ 'synolia.oroneo.import_page.validation.record_error'|trans }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                {{ counts.error_entries|default(0) }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="clearfix">
+                <p>{{ 'synolia.oroneo.import_page.file_too_big.message'|trans|raw }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if errors|length > 0 %}
+        <a href="javascript: void(0)" class="error-toggle error-toggle-head"><i class="fa-chevron-right"></i>{{ 'oro.importexport.import.errors_found'|trans({'%errors%': errors|length}) }}</a>
+        <div class="import-errors">
+            <ol>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ol>
+            <div class="clearfix">
+                <div class="pull-right">
+                    <a href="javascript:void(0);" class="error-toggle">{{ 'synolia.oroneo.hide.btn'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    {% elseif counts is not empty and counts.error_entries > 0 %}
+        <div>
+            {{ 'synolia.oroneo.import_page.validation.default_error'|trans }}
+            <div class="import-errors clearfix">
+                <div class="pull-right">
+                    <a href="javascript:void(0);" class="error-toggle">{{ 'synolia.oroneo.hide.btn'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script type="text/javascript">
+        require(['jquery', 'orotranslation/js/translator', 'oroui/js/widget-manager', 'oroui/js/messenger'],
+        function($, __, WidgetManager, Messenger) {
+            var container = $('#import-validation');
+            var toggleErrors = function(e) {
+                e.preventDefault();
+                container.toggleClass('errors-visible');
+                var icon = container.find('.error-toggle-head').find('i');
+                if (icon.hasClass('fa-chevron-right')) {
+                    icon.removeClass('fa-chevron-right');
+                    icon.addClass('fa-chevron-down');
+                } else {
+                    icon.removeClass('fa-chevron-down');
+                    icon.addClass('fa-chevron-right');
+                }
+            };
+            container.find('.error-toggle').on('click', toggleErrors);
+            WidgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                var backAction = $('<button type="button" class="btn">{{ 'synolia.oroneo.back.btn'|trans }}</button>');
+                backAction.on('click', function(e) {
+                    widget.setUrl({{ path('oro_importexport_import_form', {entity: entityName, importJob: importJob, options: options})|json_encode|raw }});
+                    widget.loadContent();
+                });
+                widget.addAction('back', 'adopted', backAction);
+                var importAction = $('<button type="button" class="btn btn-primary">{{ 'synolia.oroneo.import.btn'|trans }}</button>');
+                importAction.on('click', function(e) {
+                    Messenger.notificationFlashMessage(
+                        'info',
+                        {{ 'synolia.oroneo.import_page.validation.import_started'|trans|json_encode|raw }}
+                    );
+                    widget.trigger('beforeContentLoad', widget);
+                    $.getJSON({{ path('oro_importexport_import_process', {processorAlias: processorAlias, importJob: importJob, options: options})|json_encode|raw }}, function(data) {
+                        widget.trigger('contentLoad', '', widget);
+                        widget.trigger('importComplete', data);
+                        var message = data.message;
+                        if (!data.success && data.errorsUrl) {
+                            var link = '<a href="' + data.errorsUrl + '" class="no-hash" target="_blank">' + __('Download error log') + '</a>';
+                            message += ' ' + link;
+                        }
+                        Messenger.notificationFlashMessage(data.success ? 'success' : 'error', message);
+                        if (data.importInfo !== undefined && data.importInfo) {
+                            Messenger.notificationMessage('info', data.importInfo);
+                        }
+                        widget.remove();
+                    }).fail(function() {
+                        Messenger.notificationFlashMessage('error', {{ 'synolia.oroneo.import_page.validation.import_failed'|trans|json_encode|raw }});
+                        widget.trigger('contentLoad', '', widget);
+                    });
+                });
+                widget.addAction('import', 'adopted', importAction);
+            });
+        });
+    </script>
+</div>

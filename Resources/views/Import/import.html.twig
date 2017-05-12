@@ -18,22 +18,24 @@
     {% endset %}
 
     {% set validation %}
-        {% if result is iterable and result is not empty and success == true %}
-            {% include 'OroImportExportBundle:ImportExport/widget:importValidate.html.twig' ignore missing with result %}
-            <a href="{{ path('synolia_oroneo_import_process', {'processorAlias': result.processorAlias}) }}"
-               type="button"
-               class="btn import-btn icons-holder-text no-hash pull-right">
-               <i class="icon-download-alt hide-text">{{ 'synolia.oroneo.import.btn'|trans }}</i>{{ 'synolia.oroneo.import.btn'|trans }}
-            </a>
-            <script type="text/javascript">
-                require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager',
-                            'oroui/js/messenger', 'oroui/js/mediator'],
-                    function(_, __, widgetManager, messenger, mediator) {
-                        $('.import-btn').click(function(){
-                            mediator.execute('showLoading');
+        {% if result is iterable and result is not empty %}
+            {% include 'SynoliaOroneoBundle:Import:importValidate.html.twig' ignore missing with result %}
+            {% if result.errors|length == 0 %}
+                <a href="{{ path('synolia_oroneo_import_process', {'processorAlias': result.processorAlias}) }}"
+                   type="button"
+                   class="btn import-btn icons-holder-text no-hash pull-right">
+                   <i class="fa-download hide-text">{{ 'synolia.oroneo.import.btn'|trans }}</i>{{ 'synolia.oroneo.import.btn'|trans }}
+                </a>
+                <script type="text/javascript">
+                    require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager',
+                                'oroui/js/messenger', 'oroui/js/mediator'],
+                        function(_, __, widgetManager, messenger, mediator) {
+                            $('.import-btn').click(function(){
+                                mediator.execute('showLoading');
+                            });
                         });
-                    });
-            </script>
+                </script>
+            {% endif %}
         {% endif %}
     {% endset %}
 

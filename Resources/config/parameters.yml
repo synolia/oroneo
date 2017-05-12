@@ -11,3 +11,4 @@ parameters:
         pim_catalog_date: date
         pim_catalog_image: image
         pim_catalog_file: file
+        pim_assets_collection: image

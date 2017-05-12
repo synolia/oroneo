@@ -150,30 +150,6 @@ class SftpHelper
     }
 
     /**
-     * @return bool|SftpHelper
-     * @throws \Exception
-     */
-    protected function getHandler()
-    {
-        if (is_null($this->handler)) {
-            $this->handler = clone $this;
-            try {
-                $this->handler->open($this->parameters);
-                if ($this->parameters['path']) {
-                    if (!$this->handler->cd($this->parameters['path'])) {
-                        throw new \Exception('Can\'t open sftp folder : '.$this->parameters['path'], 4);
-                    }
-                }
-            } catch (\Exception $e) {
-                throw new \Exception('Can\'t open sftp connection', 1, $e);
-            }
-            $this->opened = true;
-        }
-
-        return $this->handler;
-    }
-
-    /**
      * Open a SFTP connection to a remote site.
      *
      * @param array $args Connection arguments
@@ -287,5 +263,29 @@ class SftpHelper
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool|SftpHelper
+     * @throws \Exception
+     */
+    protected function getHandler()
+    {
+        if (is_null($this->handler)) {
+            $this->handler = clone $this;
+            try {
+                $this->handler->open($this->parameters);
+                if ($this->parameters['path']) {
+                    if (!$this->handler->cd($this->parameters['path'])) {
+                        throw new \Exception('Can\'t open sftp folder : '.$this->parameters['path'], 4);
+                    }
+                }
+            } catch (\Exception $e) {
+                throw new \Exception('Can\'t open sftp connection', 1, $e);
+            }
+            $this->opened = true;
+        }
+
+        return $this->handler;
     }
 }

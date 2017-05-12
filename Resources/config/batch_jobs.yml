@@ -28,6 +28,28 @@ connector:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_importexport.writer.doctrine_clear
+        synolia_oroneo_attribute_group_import_from_csv:
+            title: "Attribute Group Import from CSV"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.oroneo.import.reader.attribute_group
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity
+        synolia_oroneo_attribute_group_import_validation_from_csv:
+            title: "Attribute Group Import validation from CSV"
+            type: import_validation
+            steps:
+                import:
+                    title:     import_validation
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.oroneo.import.reader.attribute_group
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
         synolia_oroneo_product_file_import_from_zip:
             title: "Product Files Import from ZIP"
             type: import

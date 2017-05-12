@@ -252,7 +252,7 @@ class FtpHelper
     public function read($filename, $dest = null)
     {
         if ($dest) {
-            return ftp_get($this->connection, $filename, $dest, FTP_BINARY);
+            return ftp_get($this->getHandler()->connection, $filename, $dest, FTP_BINARY);
         }
 
         $sockets = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);

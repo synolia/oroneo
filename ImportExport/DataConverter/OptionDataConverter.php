@@ -53,7 +53,21 @@ class OptionDataConverter extends AbstractTableDataConverter implements ContextA
      */
     protected function getHeaderConversionRules()
     {
-        return $this->mappingManager->getMappings();
+        $mappings = $this->mappingManager->getMappings();
+
+        $defaultLocalization = $this->mappingManager->getDefaultLocalization();
+
+        $labelKey = array_search('name', $mappings);
+
+        if ($labelKey === false) {
+            throw new \Exception('Name field is not in mappings');
+        }
+
+        unset($mappings[$labelKey]);
+
+        $mappings[$labelKey.'-'.$defaultLocalization->getAkeneoLocalization()] = 'name';
+
+        return $mappings;
     }
 
     /**

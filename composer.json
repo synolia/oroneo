@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "oro/commerce": "1.0.0-beta.5",
+        "oro/commerce": "1.1.*",
         "phpseclib/phpseclib": "~2.0"
     },
     "require-dev": {
@@ -36,7 +36,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2.x-dev"
+            "dev-master": "0.*"
         }
     }
 }

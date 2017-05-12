@@ -3,12 +3,15 @@
 namespace Synolia\Bundle\OroneoBundle\Manager;
 
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Synolia\Bundle\OroneoBundle\Helper\FtpHelper;
 use Synolia\Bundle\OroneoBundle\Helper\SftpHelper;
 
 /**
  * Class DistantConnectionManager
- * @package Synolia\Bundle\OroneoBundle\Manager
+ * @package   Synolia\Bundle\OroneoBundle\Manager
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class DistantConnectionManager
 {
@@ -57,12 +60,16 @@ class DistantConnectionManager
         );
 
         try {
-            // Retrieve distant files & folders.
+            // load distant content.
             $connection->getFolderContent();
+            if (!$connection->readFile($filename)) {
+                return null;
+            }
+            // Create local dir if doesn't exist.
             $this->checkLocalDir();
 
             // Retrieve filename config depending on the processorAlias.
-            $isFile = $connection->isImportedFile($filename, self::UPLOAD_DIR.$filename);
+            $isFile = $connection->read(self::UPLOAD_DIR.$filename, $filename);
 
             if (!$isFile) {
                 return null;
@@ -70,7 +77,7 @@ class DistantConnectionManager
 
             $mimeType = $this->getMimeType($filename);
 
-            return new File(self::UPLOAD_DIR.$filename, $filename, $mimeType);
+            return new UploadedFile(self::UPLOAD_DIR.$filename, $filename, $mimeType);
         } catch (\Exception $exception) {
             throw new \Exception('Error with FTP connection: '.$exception->getMessage());
         }
@@ -99,8 +106,12 @@ class DistantConnectionManager
         );
 
         try {
-            // Retrieve distant files & folders.
+            // load distant content.
             $connection->getFolderContent();
+            if (!$connection->readFile($filename)) {
+                return null;
+            }
+            // Create local dir if doesn't exist.
             $this->checkLocalDir();
 
             // Retrieve filename config depending on the processorAlias.
@@ -112,7 +123,7 @@ class DistantConnectionManager
 
             $mimeType = $this->getMimeType($filename);
 
-            return new File(self::UPLOAD_DIR.$filename, $filename, $mimeType);
+            return new UploadedFile(self::UPLOAD_DIR.$filename, $filename, $mimeType);
         } catch (\Exception $exception) {
             throw new \Exception('Error with SFTP connection: '.$exception->getMessage());
         }

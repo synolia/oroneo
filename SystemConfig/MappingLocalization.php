@@ -2,11 +2,11 @@
 
 namespace Synolia\Bundle\OroneoBundle\SystemConfig;
 
-use Oro\Bundle\LocaleBundle\Entity\Localization;
-
 /**
  * Class MappingLocalization
- * @package Synolia\Bundle\OroneoBundle\SystemConfig
+ * @package   Synolia\Bundle\OroneoBundle\SystemConfig
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class MappingLocalization
 {
@@ -23,8 +23,8 @@ class MappingLocalization
     /**
      * MappingLocalization constructor.
      *
-     * @param string|null       $akeneoLocalization
-     * @param Localization|null $oroLocalization
+     * @param string|null $akeneoLocalization
+     * @param string|null $oroLocalization
      */
     public function __construct($akeneoLocalization = null, $oroLocalization = null)
     {
@@ -53,7 +53,7 @@ class MappingLocalization
     }
 
     /**
-     * @return Localization
+     * @return string
      */
     public function getOroLocalization()
     {
@@ -61,7 +61,7 @@ class MappingLocalization
     }
 
     /**
-     * @param Localization $oroLocalization
+     * @param string $oroLocalization
      *
      * @return $this
      */

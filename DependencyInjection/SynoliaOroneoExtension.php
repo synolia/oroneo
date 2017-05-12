@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class SynoliaOroneoExtension extends Extension
 {
+    const ALIAS = 'synolia_oroneo';
+
     /**
      * {@inheritdoc}
      */

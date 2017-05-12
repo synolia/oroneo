@@ -1,0 +1,14 @@
+entity_config:
+    akeneo:
+        field:
+            items:
+                attribute_group:
+                    options:
+                        auditable:  false
+                        value_type: string
+                    form:
+                        type: text
+                        options:
+                            block: other
+                            subblock: akeneo
+                            label: synolia.oroneo.entity_config.akeneo.field.items.attribute_group.label

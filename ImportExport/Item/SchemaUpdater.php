@@ -8,6 +8,7 @@ use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Extend\EntityProcessor;
+use Oro\Bundle\PlatformBundle\Maintenance\Mode;
 use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
@@ -25,6 +26,9 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
     /** @var  StepExecution */
     protected $stepExecution;
 
+    /** @var  Mode */
+    protected $maintenanceMode;
+
     /**
      * @param EntityProcessor $entityProcessor
      */
@@ -39,6 +43,14 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
     public function setEntityFieldManager(ConfigManager $entityFieldManager)
     {
         $this->entityFieldManager = $entityFieldManager;
+    }
+
+    /**
+     * @param Mode $maintenanceMode
+     */
+    public function setMaintenanceMode(Mode $maintenanceMode)
+    {
+        $this->maintenanceMode = $maintenanceMode;
     }
 
 
@@ -70,10 +82,14 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
         $config  = $product->toArray('extend');
 
         if ($config['state'] == ExtendScope::STATE_UPDATE) {
-            $this->entityProcessor->updateDatabase();
+            $this->entityProcessor->updateDatabase(true, false, true);
             $this->stepExecution->addSummaryInfo('synolia.oroneo.step.schema_updater.title', 'synolia.oroneo.step.schema_updater.done');
         } else {
             $this->stepExecution->addSummaryInfo('synolia.oroneo.step.schema_updater.title', 'synolia.oroneo.step.schema_updater.skipped');
+        }
+
+        if ($this->maintenanceMode->isOn()) {
+            $this->maintenanceMode->off();
         }
     }
 }

@@ -2,20 +2,18 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository;
 use Oro\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
 use Oro\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\ProductBundle\Entity\ProductUnitPrecision;
 use Oro\Bundle\ProductBundle\Entity\Repository\ProductUnitRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Doctrine\ORM\UnitOfWork;
-use Doctrine\Common\Util\ClassUtils;
 use \Oro\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy as Strategy;
+use Symfony\Bridge\Monolog\Logger;
 
 /**
  * Class ProductStrategy
@@ -37,6 +35,9 @@ class ProductStrategy extends Strategy
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var Logger */
+    protected $logger;
+
     /**
      * @param DoctrineHelper $doctrineHelper
      */
@@ -55,6 +56,14 @@ class ProductStrategy extends Strategy
     public function setConfigManager(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -90,8 +99,67 @@ class ProductStrategy extends Strategy
             }
         }
 
-        $currentCategory = $this->categoryRepo->findOneByProductSku($entity->getSku());
-        $categoryCode    = $this->context->getValue('itemData')['categories'];
+        if (($entity = $this->setProductFamily($entity)) === null) {
+            return null;
+        }
+
+        if (($entity = $this->setProductCategory($entity)) === null) {
+            return null;
+        }
+
+        return parent::afterProcessEntity($entity);
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return Product|null
+     */
+    protected function setProductFamily($product)
+    {
+        $oldFamily    = $product->getAttributeFamily();
+        $newFamily = $this->context->getValue('itemData')['family'];
+        if (!$oldFamily || $oldFamily->getCode() != $newFamily) {
+            $attributeFamily = $this->doctrineHelper->getEntityRepositoryForClass(AttributeFamily::class)->findOneBy(['code' => $newFamily]);
+
+            if (!$attributeFamily) {
+                $this->context->incrementErrorEntriesCount();
+                $this->strategyHelper->addValidationErrors(
+                    [
+                        $this->translator->trans('synolia.oroneo.import.product.error.family_not_found', [
+                            '{{ family }}' => $newFamily,
+                        ]),
+                    ],
+                    $this->context
+                );
+
+                return null;
+            }
+            $product->setAttributeFamily($attributeFamily);
+        }
+
+        return $product;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return Product|null
+     */
+    protected function setProductCategory($product)
+    {
+        $currentCategory = $this->categoryRepo->findOneByProductSku($product->getSku());
+        $categoryCodes   = explode(',', $this->context->getValue('itemData')['categories']);
+        $categoryCode    = $categoryCodes[0];
+
+        if (count($categoryCodes) > 1) {
+            $this->logger->addWarning(
+                $this->translator->trans('synolia.oroneo.import.product.error.multiple_category', [
+                    '{{ productSku }}' => $product->getSku(),
+                    '{{ category }}'   => $categoryCode,
+                ])
+            );
+        }
 
         if (!$currentCategory || $currentCategory->getAkeneoCategoryCode() != $categoryCode) {
             $category = $this->categoryRepo->findOneBy(['akeneoCategoryCode' => $categoryCode]);
@@ -100,7 +168,9 @@ class ProductStrategy extends Strategy
                 $this->context->incrementErrorEntriesCount();
                 $this->strategyHelper->addValidationErrors(
                     [
-                        $this->translator->trans('synolia.oroneo.import.product.error.category_not_found'),
+                        $this->translator->trans('synolia.oroneo.import.product.error.category_not_found', [
+                            '{{ category }}' => $categoryCode,
+                        ]),
                     ],
                     $this->context
                 );
@@ -108,71 +178,36 @@ class ProductStrategy extends Strategy
                 return null;
             }
 
-            $category->addProduct($entity);
+            if ($currentCategory) {
+                $currentCategory->removeProduct($product);
+                $this->doctrineHelper->getEntityManagerForClass(get_class($currentCategory))->persist($currentCategory);
+            }
+
+            $category->addProduct($product);
             $this->doctrineHelper->getEntityManagerForClass(get_class($category))->persist($category);
         }
 
-        $metadata  = $this->doctrineHelper->getEntityMetadata($this->localizedFallbackValueClass);
-        $localValueRelations = [];
-        foreach ($metadata->getAssociationMappings() as $name => $mapping) {
-            if ($metadata->isAssociationInverseSide($name) && $metadata->isCollectionValuedAssociation($name)) {
-                $localValueRelations[] = $name;
-            }
-        }
-
-        $entityFields = $this->fieldHelper->getRelations($this->entityName);
-        foreach ($entityFields as $field) {
-            if ($this->isLocalizedFallbackValue($field)) {
-                $this->removeNotInitializedEntities($entity, $field, $localValueRelations);
-            }
-        }
-
-        return parent::afterProcessEntity($entity);
+        return $product;
     }
 
     /**
-     * Clear not initialized entities that might remain in localized entity because of recursive relations
-     *
-     * @param $entity
-     * @param array $field
-     * @param array $relations
-     */
-    protected function removeNotInitializedEntities($entity, array $field, array $relations)
-    {
-        /** @var Collection|LocalizedFallbackValue[] $localizedFallbackValues */
-        $localizedFallbackValues = $this->fieldHelper->getObjectValue($entity, $field['name']);
-        foreach ($localizedFallbackValues as $value) {
-            foreach ($relations as $relation) {
-                /** @var Collection $collection */
-                $collection = $this->fieldHelper->getObjectValue($value, $relation);
-                if ($collection) {
-                    foreach ($collection as $key => $element) {
-                        $uow = $this->doctrineHelper->getEntityManager($element)->getUnitOfWork();
-                        if ($uow->getEntityState($element, UnitOfWork::STATE_DETACHED) === UnitOfWork::STATE_DETACHED) {
-                            $collection->remove($key);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param $field
      * {@inheritdoc}
      */
-    protected function importExistingEntity($entity, $existingEntity, $itemData = null, array $excludedFields = [])
+    protected function findExistingEntity($entity, array $searchContext = [])
     {
-        if (ClassUtils::getClass($entity) === $this->localizedFallbackValueClass) {
-            $metadata = $this->doctrineHelper->getEntityMetadata($this->localizedFallbackValueClass);
-            foreach ($metadata->getAssociationMappings() as $name => $mapping) {
-                if ($metadata->isAssociationInverseSide($name) && $metadata->isCollectionValuedAssociation($name)) {
-                    // exclude all *-to-many relations from import
-                    $excludedFields[] = $name;
-                }
-            }
+        $entityName = ClassUtils::getClass($entity);
+        $identifier = $this->databaseHelper->getIdentifier($entity);
+        $existingEntity = null;
+
+        // find by identifier
+        if ($identifier || (is_string($identifier) && strlen($identifier) != 0)) {
+            $existingEntity = $this->databaseHelper->find($entityName, $identifier);
         }
 
-        parent::importExistingEntity($entity, $existingEntity, $itemData, $excludedFields);
+        if ($existingEntity) {
+            return $existingEntity;
+        }
+
+        return parent::findExistingEntity($entity, $searchContext);
     }
 }

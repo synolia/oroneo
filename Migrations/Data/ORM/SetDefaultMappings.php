@@ -55,6 +55,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('code', 'fieldName', '', true, false),
                 new MappingConfig('type', 'type', '', true, false),
                 new MappingConfig('label-en_US', '', 'entity.label', true, false),
+                new MappingConfig('group', '', 'akeneo.attribute_group', true, false),
                 new MappingConfig('useable_as_grid_filter', '', 'datagrid.show_filter', true, false),
                 new MappingConfig('sort_order', '', 'view.priority', false, false),
                 new MappingConfig('max_characters', '', 'extend.length', false, false),
@@ -66,7 +67,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             'synolia_oroneo.option_mapping',
             [
                 new MappingConfig('code', 'id', '', true, false),
-                new MappingConfig('label-en_US', 'name', '', true, false),
+                new MappingConfig('label', 'name', '', true, false),
                 new MappingConfig('sort_order', 'priority', '', true, false),
                 new MappingConfig('attribute', 'oroneo', 'attribute', true, false),
             ]
@@ -82,6 +83,24 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('shortDescription', 'shortDescriptions', 'string', false, true),
             ]
         );
+
+        $configManager->set(
+            'synolia_oroneo.family_mapping',
+            [
+                new MappingConfig('code', 'code', '', true, false),
+                new MappingConfig('label', 'labels', 'string', true, true),
+                new MappingConfig('attributes', 'oroneo', 'attributes', true, false),
+            ]
+        );
+
+        $configManager->set(
+            'synolia_oroneo.attribute_group_mapping',
+            [
+                new MappingConfig('code', 'code', '', true, false),
+                new MappingConfig('label', 'labels', 'string', true, true),
+            ]
+        );
+
         $configManager->flush();
     }
 }

@@ -1,13 +1,16 @@
-# 0.3. (2017-01-13) 
-**Fix:**
-- Issue [#9](https://github.com/synolia/oroneo/issues/9) : Revert Mapping Migrations to the default locale at the install.
-- Issue [#11](https://github.com/synolia/oroneo/issues/11) : Fix multi-enum import.
-- Added some unit tests (still in progress for functional tests).
-- Rework on PR [#7](https://github.com/synolia/oroneo/pull/7) to fix attribute import.
+# 1.0.0 (2017-05-12)
+**Upgrade to support OroCommerce v1.1**
 
-**Implemented enhancements:**
-- Added the possibility to import directly from an FTP or SFTP connection.
-- Added a CLI command to import all CSV files at once.
+# 0.3.0 (2017-01-13)  
+**Fix:** 
+- Issue [#9](https://github.com/synolia/oroneo/issues/9) : Revert Mapping Migrations to the default locale at the install. 
+- Issue [#11](https://github.com/synolia/oroneo/issues/11) : Fix multi-enum import. 
+- Added some unit tests (still in progress for functional tests). 
+- Rework on PR [#7](https://github.com/synolia/oroneo/pull/7) to fix attribute import. 
+ 
+**Implemented enhancements:** 
+- Added the possibility to import directly from an FTP or SFTP connection. 
+- Added a CLI command to import all CSV files at once. 
 
 # 0.2.2 (2016-12-14) 
 **Fix:**

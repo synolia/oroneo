@@ -8,9 +8,9 @@ use Oro\Bundle\LocaleBundle\ImportExport\DataConverter\LocalizedFallbackValueAwa
 use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
- * Class CategoryDataConverter
+ * Class EntityDataConverter
  */
-class CategoryDataConverter extends LocalizedFallbackValueAwareDataConverter implements ContextAwareInterface
+class EntityDataConverter extends LocalizedFallbackValueAwareDataConverter implements ContextAwareInterface
 {
     /** @var MappingManager */
     protected $mappingManager;

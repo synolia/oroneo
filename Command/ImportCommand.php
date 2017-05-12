@@ -7,6 +7,7 @@ use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\ImportExportBundle\Command\ImportCommand as OroImportCommand;
@@ -15,12 +16,16 @@ use Symfony\Component\Process\Process;
 use Synolia\Bundle\OroneoBundle\Manager\ImportManager;
 
 /**
- * Class ImportOptionCommand
+ * Class ImportCommand
+ * @package   Synolia\Bundle\OroneoBundle\Command
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ImportCommand extends OroImportCommand
 {
-    const COMMAND_NAME  = 'synolia:akeneo-pim:import';
-    const ARGUMENT_TYPE = 'import-type';
+    const COMMAND_NAME   = 'synolia:akeneo-pim:import';
+    const ARGUMENT_TYPE  = 'import-type';
+    const FILE_PATH      = 'file';
 
     /**
      * {@inheritdoc}
@@ -33,7 +38,36 @@ class ImportCommand extends OroImportCommand
             ->addArgument(
                 self::ARGUMENT_TYPE,
                 InputArgument::OPTIONAL,
-                'Type import to be executed. All imports are executed if missing'
+                'Type import to be executed. All imports are executed if missing.'
+            )
+            ->addArgument(
+                self::FILE_PATH,
+                InputArgument::OPTIONAL,
+                'Optional: filepath of the CSV to import for one import at a time.'
+            )
+            ->addOption(
+                'email',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Email to send the log after the import is completed'
+            )
+            ->addOption(
+                'processor',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Name of the import processor.'
+            )
+            ->addOption(
+                'jobName',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Name of Import Job.'
+            )
+            ->addOption(
+                'validation',
+                null,
+                InputOption::VALUE_NONE,
+                'If adding this option then validation will be performed instead of import'
             );
     }
 
@@ -43,150 +77,70 @@ class ImportCommand extends OroImportCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $importType = $input->getArgument(self::ARGUMENT_TYPE);
+        $config = $this->getConfig();
 
-        if (is_null($importType)) {
-            return $this->importAll($output, $input->getOption('no-interaction'));
-        } else {
-            return $this->import($output, $importType, $input->getOption('no-interaction'));
+        if (!isset($config[$importType]) && null !== $importType && 'import_all' !== $importType) {
+            throw new \InvalidArgumentException('Import type '.$importType.' does not exist');
         }
+
+        if (null === $importType) {
+            throw new \InvalidArgumentException('Import type argument is missing.');
+        }
+
+        if ($importType == 'import_all') {
+            return $this->importAll($input, $output);
+        }
+        $input = $this->inputDefinition($input);
+
+        return parent::execute($input, $output);
     }
 
     /**
-     * @param OutputInterface $output
-     * @param bool            $noInteraction
+     * @param InputInterface $input
      *
-     * @return int
+     * @return InputInterface
      */
-    protected function importAll(OutputInterface $output, $noInteraction)
+    protected function inputDefinition(InputInterface $input)
     {
-        $consolePath = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'console';
-        $baseCommand = $this->getPhpPath().' '.$consolePath.' '.self::COMMAND_NAME.' ';
+        $config = $this->getConfig();
 
-        if ($noInteraction) {
-            $baseCommand .= '--no-interaction ';
+        $fileArg = $input->getArgument(self::FILE_PATH);
+
+        $importConfig = $config[$input->getArgument(self::ARGUMENT_TYPE)];
+        $jobName = isset($importConfig['batch_job']) ? $importConfig['batch_job'] : JobExecutor::JOB_IMPORT_FROM_CSV;
+        $importPath = $importConfig['import_file'];
+        if ($fileArg) {
+            $importPath = $fileArg;
         }
 
+        $input->setArgument('file', $importPath);
+        $input->setOption('jobName', $jobName);
+        $input->setOption('processor', $importConfig['processor']);
+
+        return $input;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function importAll(InputInterface $input, OutputInterface $output)
+    {
         $config = $this->getConfig();
 
         foreach ($config as $type => $parameters) {
             $output->writeln('<info>Importing '.$type.'</info>');
-
-            $process = new Process($baseCommand.$type);
-            $result = $process->run();
-
-            $output->writeln($process->getOutput());
-
-            $errors = $process->getErrorOutput();
-            if (!empty($errors)) {
-                $output->writeln('<error>'.$errors.'</error>');
-            }
-
-            if ($result != self::STATUS_SUCCESS) {
-                return $result;
-            }
-        }
-
-        return self::STATUS_SUCCESS;
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @param string          $importType
-     * @param bool            $noInteraction
-     *
-     * @return int
-     */
-    protected function import(OutputInterface $output, $importType, $noInteraction)
-    {
-        $config = $this->getConfig();
-
-        if (!isset($config[$importType])) {
-            throw new \InvalidArgumentException('Import type '.$importType.' does not exist');
-        }
-
-        $importConfig = $config[$importType];
-
-        $this->getImportHandler()->setImportingFileName($importConfig['import_file']);
-
-        $batchJob    = isset($importConfig['batch_job']) ? $importConfig['batch_job'] : JobExecutor::JOB_IMPORT_FROM_CSV;
-        $inputFormat = isset($importConfig['input_format']) ? $importConfig['input_format'] : 'csv';
-
-        $importInfo = $this->getImportHandler()->handleImport(
-            $batchJob,
-            $importConfig['processor'],
-            $inputFormat,
-            null,
-            [
-                'delimiter' => ';',
-            ]
-        );
-
-        if (!$noInteraction) {
-            $this->renderResult($importInfo, $output);
-        }
-
-        if ($importConfig['processor'] == ImportManager::ATTRIBUTE_PROCESSOR) {
-            $this->updateDatabase($output);
-        }
-
-        $output->writeln('<info>'.$importInfo['message'].'</info>');
-
-        return self::STATUS_SUCCESS;
-    }
-
-    /**
-     * Updates the database to add newly created attributes
-     *
-     * @param OutputInterface $output
-     */
-    protected function updateDatabase(OutputInterface $output)
-    {
-        $entityFieldManager = $this->getContainer()->get('oro_entity_config.config_manager');
-
-        $product = $entityFieldManager->getConfigEntityModel(Product::class);
-        $config  = $product->toArray('extend');
-
-        if ($config['state'] == ExtendScope::STATE_UPDATE) {
-            $output->writeln('<info>Updating schema</info>');
-            $entityProcessor = $this->getContainer()->get('oro_entity_extend.extend.entity_processor');
-            $entityProcessor->updateDatabase(true, true);
-            $output->writeln('<info>Schema updated</info>');
-        }
-    }
-
-    /**
-     * @return false|string
-     * @throws \Exception
-     */
-    protected function getPhpPath()
-    {
-        $phpFinder     = new PhpExecutableFinder();
-        $phpExecutable = $phpFinder->find();
-
-        if (!$phpExecutable) {
-            throw new \Exception('Can\'t find PHP executable');
-        }
-
-        return $phpExecutable;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderResult(array $result, OutputInterface $output)
-    {
-        if ($output instanceof ConsoleOutputInterface && !empty($result['errors'])) {
-            $errors           = $result['errors'];
-            $result['errors'] = [];
-        }
-
-        parent::renderResult($result, $output);
-
-        if (isset($errors)) {
-            $errorOutput = $output->getErrorOutput();
-
-            foreach ($errors as $errorMessage) {
-                $errorOutput->writeln('<error>'.$errorMessage.'</error>');
+            if (!is_file($parameters['import_file'])) {
+                $output->writeln('<error>Missing '.$type.' file.</error>');
+            } else {
+                $input->setArgument('file', $parameters['import_file']);
+                $jobName = JobExecutor::JOB_IMPORT_FROM_CSV;
+                if (isset($parameters['batch_job'])) {
+                    $jobName = $parameters['batch_job'];
+                }
+                $input->setOption('jobName', $jobName);
+                $input->setOption('processor', $parameters['processor']);
+                parent::execute($input, $output);
             }
         }
     }

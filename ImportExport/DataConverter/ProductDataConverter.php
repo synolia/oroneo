@@ -83,10 +83,10 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
             }
         }
 
-        $record = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $record = parent::convertToImportFormat($importedRecord, true);
 
         foreach ($this->multiSelectFields as $multiSelectField) {
-            if (isset($record[$multiSelectField->getFieldName()])) {
+            if (array_key_exists($multiSelectField->getFieldName(), $record)) {
                 $fieldName = $multiSelectField->getFieldName();
                 $values    = explode(',', $record[$fieldName]);
 

@@ -3,16 +3,19 @@
 namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Oro\Bundle\ImportExportBundle\Form\Type\ImportType as BaseImportType;
+use Synolia\Bundle\OroneoBundle\Form\Model\ImportData;
 
 /**
  * Class ImportType
+ * @package   Synolia\Bundle\OroneoBundle\Form\Type
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ImportType extends BaseImportType
 {
@@ -49,14 +52,6 @@ class ImportType extends BaseImportType
             FileType::class,
             [
                 'required'    => false,
-                'constraints' => [
-                    new File(
-                        [
-                            'mimeTypes' => ['text/plain', 'text/csv', 'application/zip'],
-                            'mimeTypesMessage' => 'This file type is not allowed.',
-                        ]
-                    ),
-                ],
             ]
         );
 
@@ -87,7 +82,7 @@ class ImportType extends BaseImportType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Oro\Bundle\ImportExportBundle\Form\Model\ImportData',
+                'data_class' => ImportData::class,
             ]
         );
         $resolver->setRequired(['processorsChoices']);
