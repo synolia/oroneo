@@ -54,7 +54,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             [
                 new MappingConfig('code', 'fieldName', '', true, false),
                 new MappingConfig('type', 'type', '', true, false),
-                new MappingConfig('label-en_US', '', 'entity.label', true, false),
+                new MappingConfig('label', '', 'entity.label', true, true),
                 new MappingConfig('group', '', 'akeneo.attribute_group', true, false),
                 new MappingConfig('useable_as_grid_filter', '', 'datagrid.show_filter', true, false),
                 new MappingConfig('sort_order', '', 'view.priority', false, false),
@@ -67,13 +67,18 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             'synolia_oroneo.option_mapping',
             [
                 new MappingConfig('code', 'id', '', true, false),
-                new MappingConfig('label', 'name', '', true, false),
+                new MappingConfig('label', 'oroneo', 'name', true, false),
                 new MappingConfig('sort_order', 'priority', '', true, false),
                 new MappingConfig('attribute', 'oroneo', 'attribute', true, false),
             ]
         );
 
         $configManager->set('synolia_oroneo.product_channel', 'ecommerce');
+        $configManager->set('synolia_oroneo.product_image_main', '');
+        $configManager->set('synolia_oroneo.product_image_listing', '');
+        $configManager->set('synolia_oroneo.product_image_additional', '');
+        $configManager->set('synolia_oroneo.product_attachment', '');
+
         $configManager->set(
             'synolia_oroneo.product_mapping',
             [

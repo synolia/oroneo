@@ -73,6 +73,7 @@ services:
         arguments:
             - '@synolia.oroneo.helper.ftp'
             - '@synolia.oroneo.helper.sftp'
+            - '%kernel.root_dir%/../web/uploads/oroneo_import_files/'
 
     # Helpers.
     synolia.oroneo.helper.ftp:

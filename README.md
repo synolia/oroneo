@@ -8,7 +8,7 @@ Oroneo reads standard CSV files from the Akeneo exports in order to import data 
 * **Attributes, attributes' groups & attributes' options**
 * **Families**
 * **Products**
-* **_Media_** _(Images, PDF files...)_ (not yet functional)
+* **Media** _(Images, PDF files...)_
 
 ## Requirements & Notes
 ### Requirements
@@ -20,12 +20,13 @@ If you're working with Akeneo PIM < 1.6, **Synolia** recommends to work with the
 There is some limitations that you have to take care of:
 * If you plan to import a lot amount of data you may want to use PostgreSQL instead of MySQL. You will encounter some limitation with MySQL and you will have to recompile your MySQL to increase those limitations. So we recommand to use PostgreSQL if you have more than 40 attributes and/or about 1M products.
 * ATM, due to a glitch in OroPlatform, we can only support the comma (`,`) delimiter so see to export your akeneo files with this delimiter.
-* Product Files & Images import is not yet available. We are currently working on it and it might be available soon. 
-* OroCommerce Products doesn't support multiple categories associations. Only the first assigned category will be taken.
- 
+* OroCommerce Products doesn't support multiple categories associations. Only the first category assigned will be taken.
+* **Products without families won't be imported !**
+* **Products' attributes that are not included in their family won't be imported.**
 
 ## How to install
 Oroneo's installation is rather simple ! You only need to use composer:
+
 Add those lines to the repositories array in `composer.json` :
 ```json
 "repositories": [
@@ -39,6 +40,7 @@ And add this line in the `require` array:
 ```json
 "synolia/oroneo": "dev-master"
 ```
+Then,
 ```cli
 composer require synolia/oroneo
 ```
@@ -83,24 +85,24 @@ Read the documentation to see how to handle this command and which arguments and
 It is possible to load CSV files directly with the import form.
 The import process is devided in two steps : a file validation and the import itself which is sent to the Message Queue Consumer.
 
-Note: if your file is larger than 500kb, the UI validation won't run. But you can still send the import anyway.
-The import itself will check the CSV file you sent and if there is any issue with it, you will receive an email with a link to the log.
+Note: if your file is larger than 500kb, the UI validation won't run. But you can still send the message import anyway.
+The import itself will check the CSV file you sent and you will receive an email with a link to the log and a summary of the process.
 
 #### FTP/SFTP import (via UI only)
-If you leave the checkbox `Manual import` empty, the process will try to connect and remotly download the file from the server specified in the Remote configuration panel.
+If you leave the checkbox `Manual import` empty, the process will try to connect and remotely download the file from the server specified in the Remote configuration panel.
 
 #### CLI import
 ```cli
 php app/console synolia:akeneo-pim:import importType filePath 
 ```
-Replace **type** by one of this values:
+Replace **importType** by one of this values:
 * category
 * attribute
 * attribute_groupe
 * family
 * option
 * product
-* _product-file_ (not yet functional)
+* product-file
 
 Replace **filePath** by the current path of your CSV file. If you leave this argument, the command will search in this folder: `app/import_export/`
 The default mapping can be found [here](https://github.com/synolia/oroneo/blob/master/DependencyInjection/Configuration.php#L56-L89).
@@ -110,11 +112,34 @@ It is also possible to make a mass import with the same command but without any 
 php app/console synolia:akeneo-pim:import
 ```
 
-It is possible to define an email to be notified and get the import result
+It is possible to define an email to be notified and get the import results
 ```cli
 php app/console synolia:akeneo-pim:import --email=test@exemple.com
 php app/console synolia:akeneo-pim:import category app/import_export/export_category.csv --email=test@exemple.com
 ```
+
+#### Notes
+**_Attributes Import_**
+
+- This is the list of all Akeneo's attribute types supported by this bundle:
+  * pim_catalog_identifier
+  * pim_catalog_text
+  * pim_catalog_textarea
+  * pim_catalog_metric
+  * pim_catalog_boolean
+  * pim_catalog_simpleselect
+  * pim_catalog_number
+  * pim_catalog_multiselect
+  * pim_catalog_date
+  * pim_catalog_image
+  * pim_catalog_file
+
+- It is necessary to update the Translations to have the correct attributes' labels diplayed in the UI for newly created attributes.
+
+  To do this you can update the cache with the button in this page _"System > Localization > Translations"_ or by a classic _cache:clear_ :
+  ```cli
+  php app/console cache:clear --env=prod
+  ```
 
 ## About Synolia
 

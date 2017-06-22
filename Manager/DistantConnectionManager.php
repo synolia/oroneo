@@ -15,7 +15,6 @@ use Synolia\Bundle\OroneoBundle\Helper\SftpHelper;
  */
 class DistantConnectionManager
 {
-    const UPLOAD_DIR   = 'uploads/oroneo_import_files/';
     const ZIP_MIMETYPE = 'application/zip';
     const CSV_MIMETYPE = 'text/csv';
 
@@ -25,16 +24,21 @@ class DistantConnectionManager
     /** @var  SftpHelper $sftpHelper */
     protected $sftpHelper;
 
+    /** @var  string $uploadDir */
+    protected $uploadDir;
+
     /**
      * DistantConnectionManager constructor.
      *
      * @param FtpHelper  $ftpHelper
      * @param SftpHelper $sftpHelper
+     * @param string     $uploadDir
      */
-    public function __construct(FtpHelper $ftpHelper, SftpHelper $sftpHelper)
+    public function __construct(FtpHelper $ftpHelper, SftpHelper $sftpHelper, $uploadDir)
     {
         $this->ftpHelper  = $ftpHelper;
         $this->sftpHelper = $sftpHelper;
+        $this->uploadDir  = $uploadDir;
     }
 
     /**
@@ -62,14 +66,12 @@ class DistantConnectionManager
         try {
             // load distant content.
             $connection->getFolderContent();
-            if (!$connection->readFile($filename)) {
-                return null;
-            }
+
             // Create local dir if doesn't exist.
             $this->checkLocalDir();
 
             // Retrieve filename config depending on the processorAlias.
-            $isFile = $connection->read(self::UPLOAD_DIR.$filename, $filename);
+            $isFile = $connection->read($filename, $this->uploadDir.$filename);
 
             if (!$isFile) {
                 return null;
@@ -77,7 +79,7 @@ class DistantConnectionManager
 
             $mimeType = $this->getMimeType($filename);
 
-            return new UploadedFile(self::UPLOAD_DIR.$filename, $filename, $mimeType);
+            return new UploadedFile($this->uploadDir.$filename, $filename, $mimeType);
         } catch (\Exception $exception) {
             throw new \Exception('Error with FTP connection: '.$exception->getMessage());
         }
@@ -108,14 +110,12 @@ class DistantConnectionManager
         try {
             // load distant content.
             $connection->getFolderContent();
-            if (!$connection->readFile($filename)) {
-                return null;
-            }
+
             // Create local dir if doesn't exist.
             $this->checkLocalDir();
 
             // Retrieve filename config depending on the processorAlias.
-            $isFile = $connection->isImportedFile($filename, self::UPLOAD_DIR.$filename);
+            $isFile = $connection->isImportedFile($filename, $this->uploadDir.$filename);
 
             if (!$isFile) {
                 throw new \Exception('File "'.$filename.'" not found on the remote server.');
@@ -123,7 +123,7 @@ class DistantConnectionManager
 
             $mimeType = $this->getMimeType($filename);
 
-            return new UploadedFile(self::UPLOAD_DIR.$filename, $filename, $mimeType);
+            return new UploadedFile($this->uploadDir.$filename, $filename, $mimeType);
         } catch (\Exception $exception) {
             throw new \Exception('Error with SFTP connection: '.$exception->getMessage());
         }
@@ -154,8 +154,8 @@ class DistantConnectionManager
      */
     protected function checkLocalDir()
     {
-        if (!is_dir(self::UPLOAD_DIR)) {
-            mkdir(self::UPLOAD_DIR);
+        if (!is_dir($this->uploadDir)) {
+            mkdir($this->uploadDir);
         }
     }
 }

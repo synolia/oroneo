@@ -71,9 +71,18 @@ class ProductStrategy extends Strategy
      */
     public function afterProcessEntity($entity)
     {
+        $itemData = $this->context->getValue('itemData');
+
+        if (isset($itemData['status'])) {
+            $entity->setStatus($itemData['status'] ? Product::STATUS_ENABLED : Product::STATUS_DISABLED);
+        }
+
         if (!$entity->getId()) {
             //Only for new products, we set some mandatory parameters
-            $entity->setStatus('enabled');
+
+            if (!isset($itemData['status'])) {
+                $entity->setStatus(Product::STATUS_ENABLED);
+            }
 
             if (!$entity->getOwner()) {
                 $owner = $this->businessUnitRepo->find(1);

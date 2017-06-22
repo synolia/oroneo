@@ -44,6 +44,9 @@ class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
     /** @var UserRepository */
     protected $userRepository;
 
+    /** @var string */
+    protected $imageGroup;
+
     /**
      * @param MappingManager $productMappingManager
      */
@@ -75,6 +78,14 @@ class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
     public function setConfigManager(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
+    }
+
+    /**
+     * @param string $group
+     */
+    public function setImageGroup($group)
+    {
+        $this->imageGroup = $group;
     }
 
     /**
@@ -195,7 +206,11 @@ class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
             $akeneoOptions = $attribute->toArray('akeneo');
 
             if (!isset($akeneoOptions['attribute_group'])) {
-                $akeneoOptions['attribute_group'] = self::DEFAULT_GROUP;
+                if ($attribute->getFieldName() == 'images') {
+                    $akeneoOptions['attribute_group'] = $this->imageGroup;
+                } else {
+                    $akeneoOptions['attribute_group'] = self::DEFAULT_GROUP;
+                }
             }
 
             if (!isset($groups[$akeneoOptions['attribute_group']])) {

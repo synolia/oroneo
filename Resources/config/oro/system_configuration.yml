@@ -132,6 +132,34 @@ system_configuration:
             options:
                 label: 'synolia.oroneo.configuration_page.product.channel'
                 resettable: false
+        synolia_oroneo.product_image_main:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_main.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_main.tooltip'
+                resettable: false
+        synolia_oroneo.product_image_listing:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_listing.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_listing.tooltip'
+                resettable: false
+        synolia_oroneo.product_image_additional:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_additional.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_additional.tooltip'
+                resettable: false
+        synolia_oroneo.product_attachment:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.attachment.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.attachment.tooltip'
+                resettable: false
         synolia_oroneo.attribute_mapping:
             data_type: array
             type: synolia_oroneo_attribute_mapping
@@ -285,4 +313,8 @@ system_configuration:
                                     oroneo_config_product_settings:
                                         children:
                                             - synolia_oroneo.product_channel
+                                            - synolia_oroneo.product_image_main
+                                            - synolia_oroneo.product_image_listing
+                                            - synolia_oroneo.product_image_additional
+                                            - synolia_oroneo.product_attachment
                                             - synolia_oroneo.product_mapping

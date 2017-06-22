@@ -2,18 +2,44 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Writer;
 
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Writer\EntityFieldWriter;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\TranslationBundle\Entity\Translation;
+use Oro\Bundle\TranslationBundle\Manager\TranslationManager;
 
 /**
  * Class AttributeWriter
  * @package Synolia\Bundle\OroneoBundle\ImportExport\Writer
  */
-class AttributeWriter extends EntityFieldWriter
+class AttributeWriter extends EntityFieldWriter implements StepExecutionAwareInterface
 {
+    /** @var StepExecution */
+    protected $stepExecution;
+
+    /** @var TranslationManager */
+    protected $translationManager;
+
     protected $finalStatus;
+
+    /**
+     * @param StepExecution $stepExecution
+     */
+    public function setStepExecution(StepExecution $stepExecution)
+    {
+        $this->stepExecution = $stepExecution;
+    }
+
+    /**
+     * @param TranslationManager $translationManager
+     */
+    public function setTranslationManager($translationManager)
+    {
+        $this->translationManager = $translationManager;
+    }
 
     /**
      * {@inheritdoc}
@@ -29,15 +55,40 @@ class AttributeWriter extends EntityFieldWriter
         $this->finalStatus = $entityConfig->get('state');
         $translations      = [];
 
+        $preparedTranslations = $this->stepExecution->getExecutionContext()->get('labelTranslations');
+
+        $updatedLocales = [];
         foreach ($items as $item) {
             $translations = array_merge($translations, $this->writeItem($item));
+
+            if (isset($preparedTranslations[$item->getFieldName()])) {
+                $config = $this->configManager->getProvider('entity')->getConfig($item->getEntity()->getClassName(), $item->getFieldName());
+                $labelKey = $config->get('label');
+                foreach ($preparedTranslations[$item->getFieldName()] as $locale => $value) {
+                    $this->translationManager->saveTranslation(
+                        $labelKey,
+                        $value,
+                        $locale,
+                        TranslationManager::DEFAULT_DOMAIN,
+                        Translation::SCOPE_UI
+                    );
+                    if (!isset($updatedLocales[$locale])) {
+                        $updatedLocales[$locale] = $locale;
+                        $this->translationManager->invalidateCache($locale);
+                    }
+                }
+            }
         }
 
         $this->setEntityFinalState();
 
         $this->configManager->flush();
 
+        $this->translationManager->flush();
+
         $this->translationHelper->saveTranslations($translations);
+
+        $this->stepExecution->getExecutionContext()->remove('labelTranslations');
     }
 
     /**

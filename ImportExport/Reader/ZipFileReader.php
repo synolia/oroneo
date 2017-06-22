@@ -10,6 +10,8 @@ use Oro\Bundle\ImportExportBundle\Reader\CsvFileReader;
  */
 class ZipFileReader extends CsvFileReader
 {
+    const EXTRACT_FOLDER_NAME = 'product_file_import';
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class ZipFileReader extends CsvFileReader
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
 
         if ($finfo->file($this->fileInfo->getPathname()) == 'application/zip') {
-            $zipPath     = substr($this->fileInfo->getRealPath(), 0, -4);
+            $zipPath     = $this->fileInfo->getPath().DIRECTORY_SEPARATOR.self::EXTRACT_FOLDER_NAME;
             $isExtracted = $this->unzip($this->fileInfo->getPathName(), $zipPath);
 
             if (!$isExtracted) {

@@ -51,6 +51,7 @@ class ImportType extends BaseImportType
             'file',
             FileType::class,
             [
+                'label'    => 'oro.importexport.import.file',
                 'required'    => false,
             ]
         );

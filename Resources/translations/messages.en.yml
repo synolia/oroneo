@@ -112,6 +112,18 @@ synolia:
                 settings: Product Configuration
                 mapping: Product Mapping
                 channel: Default Channel
+                image_main:
+                    label: Main image
+                    tooltip: The code of the attribute that will be used to populate the main image in the gallery
+                image_listing:
+                    label:  Listing image
+                    tooltip:  The code of the attribute that will be used to populate the listing image in the gallery
+                image_additional:
+                    label: Additional images
+                    tooltip: Coma separated list of attributes that will be used as additional image in the gallery
+                attachment:
+                    label: Attachments
+                    tooltip: Coma separated list of attributes that will be used as attachments for the product
             description: Akeneo configuration page description
             distant:
                 title: Remote Settings

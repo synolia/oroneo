@@ -37,6 +37,10 @@ class Configuration implements ConfigurationInterface
                 'family_mapping'                   => ['type' => 'array', 'value' => []],
                 'attribute_group_mapping'          => ['type' => 'array', 'value' => []],
                 'product_channel'                  => ['value' => 'ecommerce'],
+                'product_image_main'               => ['value' => ''],
+                'product_image_listing'            => ['value' => ''],
+                'product_image_additional'         => ['value' => ''],
+                'product_attachment'               => ['value' => ''],
                 'product_mapping'                  => ['type' => 'array', 'value' => []],
                 'attribute_file_max_size'          => ['value' => 1024],
                 'attribute_image_width'            => ['value' => 50],
@@ -75,6 +79,7 @@ class Configuration implements ConfigurationInterface
                         ],
                         'attribute_group'  => [
                             'import_file' => 'app/import_export/attribute_group.csv',
+                            'batch_job'   => ImportManager::ATTRIBUTE_GROUP_JOB,
                             'processor'   => ImportManager::ATTRIBUTE_GROUP_PROCESSOR,
                         ],
                         'product'   => [

@@ -98,6 +98,14 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     protected function getHeaderConversionRules()
     {
-        return $this->mappingManager->getMappings();
+        $mappings = $this->mappingManager->getMappings();
+
+        $labelKey = array_search('entity.label', $mappings);
+
+        if ($labelKey !== false) {
+            $mappings[$labelKey.'-'.$this->mappingManager->getDefaultLocalization()->getAkeneoLocalization()] = 'entity.label';
+        }
+
+        return $mappings;
     }
 }

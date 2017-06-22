@@ -225,7 +225,7 @@ class FtpHelper
      */
     public function pwd()
     {
-        return ftp_pwd($this->connection).'/';
+        return ftp_pwd($this->getHandler()->connection).'/';
     }
 
     /**
@@ -246,38 +246,12 @@ class FtpHelper
      * @param string $filename
      * @param string $dest
      *
-     * @return string|boolean
+     * @return boolean
      * @throws \Exception
      */
-    public function read($filename, $dest = null)
+    public function read($filename, $dest)
     {
-        if ($dest) {
-            return ftp_get($this->getHandler()->connection, $filename, $dest, FTP_BINARY);
-        }
-
-        $sockets = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
-        if ($sockets === false) {
-            throw new \Exception('Unable to create socket pair');
-        }
-
-        list($socket, $socketData) = $sockets;
-        stream_set_write_buffer($socket, 0);
-        stream_set_timeout($socketData, 0);
-
-        $this->startReading($socket, $filename);
-
-        $content = '';
-        while (!$this->isReadFinished()) {
-            $currentContent = stream_get_contents($socketData);
-            if ($currentContent !== false) {
-                $content .= $currentContent;
-            }
-            $this->continueReading();
-        }
-
-        $content .= stream_get_contents($socketData);
-
-        return $content;
+        return ftp_get($this->getHandler()->connection, $dest, $filename, FTP_BINARY);
     }
 
     /**

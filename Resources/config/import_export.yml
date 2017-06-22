@@ -98,10 +98,10 @@ services:
         class: '%synolia.oroneo.import.strategy.attribute.class%'
         parent: oro_entity_config.importexport.strategy.entity_field.add_or_replace
         calls:
-            - [setEntityConfigManager, ['@oro_entity_config.config_manager']]
-            - [setGlobalConfigManager, ['@oro_config.global']]
             - [setValidator, ['@validator']]
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.attribute']]
             - [setProductMappingManager, ['@synolia.oroneo.mapping.manager.product']]
+            - [setLocalizationRepository, ['@oro_locale.repository.localization']]
 
     synolia.oroneo.import.strategy.option:
         class: '%synolia.oroneo.import.strategy.option.class%'
@@ -118,12 +118,13 @@ services:
             - [setEntityClass, ['%oro_product.entity.product.class%']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setConfigManager, ['@oro_config.global']]
+            - [setImageGroup, ['images']]
 
     synolia.oroneo.import.strategy.attribute_group:
         class: '%synolia.oroneo.import.strategy.attribute_group.class%'
         parent: oro_locale.importexport.strategy.localized_fallback_value_aware
         calls:
-            - [setClassName, ['%oro.attribute_group.class%']]
+            - [setClassName, ['%oro_entity_config.attribute.entity.attribute_group.class%']]
 
     synolia.oroneo.import.strategy.product:
         class: '%synolia.oroneo.import.strategy.product.class%'
@@ -136,6 +137,13 @@ services:
     synolia.oroneo.import.strategy.product_file:
         class: '%synolia.oroneo.import.strategy.product_file.class%'
         parent: synolia.oroneo.import.strategy.product
+        calls:
+            - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setAttachmentProvider, ['@oro_attachment.provider.attachment']]
+            - [setFileManager, ['@oro_attachment.file_manager']]
+            - [addImageType, ['main']]
+            - [addImageType, ['listing']]
+            - [addImageType, ['additional', true]]
 
     # Processor
     synolia.oroneo.import.processor.category:
@@ -207,6 +215,8 @@ services:
     synolia.oroneo.import.writer.attribute:
         class: '%synolia.oroneo.import.writer.attribute.class%'
         parent: oro_entity_config.importexport.writer.entity_field
+        calls:
+            - [setTranslationManager, ['@oro_translation.manager.translation']]
 
     # Reader
     synolia.oroneo.import.reader.attribute_group:
@@ -214,4 +224,4 @@ services:
         parent: oro_importexport.reader.csv
         calls:
             - [setManagerRegistry, ['@doctrine']]
-            - [setClassName, ['%oro.family.class%']]
+            - [setClassName, ['%synolia.oro.family.class%']]
