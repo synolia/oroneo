@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "oro/commerce": "1.1.*",
+        "oro/commerce": "1.2.*",
         "phpseclib/phpseclib": "~2.0"
     },
     "require-dev": {
