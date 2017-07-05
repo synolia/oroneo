@@ -140,6 +140,10 @@ php app/console synolia:akeneo-pim:import category app/import_export/export_cate
   ```cli
   php app/console cache:clear --env=prod
   ```
+  
+**_Product files Import_**
+Take care of your ZIP file's size when you try to upload it with the form.
+We suggest to use this import with the CLI.
 
 ## About Synolia
 

@@ -61,15 +61,6 @@ synolia:
                     delimiter: Delimiter
                     enclosure: Enclosure
                     localization_mapping: Locale Mapping
-                    attribute_file_max_size:
-                        label: File size
-                        tooltip: Max allowed file size to upload in MB.
-                    attribute_image_width:
-                        label: Thumbnail width
-                        tooltip: Thumbnail width in pixels.
-                    attribute_image_height:
-                        label: Thumbnail height
-                        tooltip: Thumbnail height in pixels.
             mapping:
                 title: Field mapping
                 settings: Field mapping

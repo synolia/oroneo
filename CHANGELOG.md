@@ -1,3 +1,33 @@
+# 0.3.1 (2017-06-27) 
+**Fix:**
+- Shorten job alias to be compatible with PostgreSQL.
+- Update README with more informations.
+- Fix attribute labels handling and import.
+- Fix attribute groups names.
+- Fix error with the multi-select attribute pages.
+- Fix re-import of deleted attribute. Attributs were disabled.
+- Fix product import error with PostgreSQL. It was impossible to store values grater than 1.
+- Fix FTP import.
+- Added a translatable label in the import form.
+- Fix the product import for the "enable" status.
+- Fix some typos.
+- Fix some CSS.
+
+**Implemented enhancements:**
+- PostgreSQL compatibility
+- It is now possible to import product files such as images and attachments.
+
+# 0.3.0 (2017-01-13) 
+**Fix:**
+- Issue [#9](https://github.com/synolia/oroneo/issues/9) : Revert Mapping Migrations to the default locale at the install.
+- Issue [#11](https://github.com/synolia/oroneo/issues/11) : Fix multi-enum import.
+- Added some unit tests (still in progress for functional tests).
+- Rework on PR [#7](https://github.com/synolia/oroneo/pull/7) to fix attribute import.
+
+**Implemented enhancements:**
+- Added the possibility to import directly from an FTP or SFTP connection.
+- Added a CLI command to import all CSV files at once.
+
 # 0.2.2 (2016-12-14) 
 **Fix:**
 - PR [#3](https://github.com/synolia/oroneo/pull/3) : Fixed a fatal error when the default localization isn't set up.

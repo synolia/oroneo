@@ -20,16 +20,18 @@ class ZipFileReader extends CsvFileReader
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
 
         if ($finfo->file($this->fileInfo->getPathname()) == 'application/zip') {
+            $isExtracted = false;
             $zipPath     = $this->fileInfo->getPath().DIRECTORY_SEPARATOR.self::EXTRACT_FOLDER_NAME;
-            $isExtracted = $this->unzip($this->fileInfo->getPathName(), $zipPath);
+            if (null === $this->stepExecution) {
+                $isExtracted = $this->unzip($this->fileInfo->getPathName(), $zipPath);
+            }
 
-            if (!$isExtracted) {
+            if (!$isExtracted && null === $this->stepExecution) {
                 throw new \RuntimeException(sprintf('Archive %s can\'t be extracted', $this->fileInfo->getFilename()));
             }
 
-            $this->fileInfo = new \SplFileInfo($zipPath.'/product.csv');
-        } elseif ($this->fileInfo->getExtension() == 'csv' && !$this->file instanceof \SplFileObject) {
-            $this->fileInfo = new \SplFileInfo($this->fileInfo->getRealPath().'/product.csv');
+            $filename = $this->getCsvFilename($zipPath);
+            $this->fileInfo = new \SplFileInfo($zipPath.'/'.$filename);
         }
 
         return parent::getFile();
@@ -74,5 +76,25 @@ class ZipFileReader extends CsvFileReader
         }
 
         return true;
+    }
+
+    /**
+     * Retrieve the CSV file name from the folder.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getCsvFilename($path)
+    {
+        $files = scandir($path);
+        foreach ($files as $file) {
+            $fileInfo = pathinfo($path.$file);
+            if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'csv') {
+                return $file;
+            }
+        }
+
+        return '';
     }
 }
