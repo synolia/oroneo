@@ -10,7 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Class LocalizationMappingType
- * @package Synolia\Bundle\OroneoBundle\Form\Type
+ * @package   Synolia\Bundle\OroneoBundle\Form\Type
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class LocalizationMappingType extends AbstractType
 {

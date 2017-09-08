@@ -2,6 +2,7 @@
 
 namespace Synolia\Bundle\OroneoBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -63,6 +64,17 @@ class ImportType extends BaseImportType
                 'label' => 'synolia.oroneo.import_page.validation.btn',
                 'attr' => [
                     'class' => 'btn btn-success main-group pull-right',
+                ],
+            ]
+        );
+
+        $builder->add(
+            'testConnectionBtn',
+            ButtonType::class,
+            [
+                'label' => 'synolia.oroneo.import_page.test_connection.btn',
+                'attr' => [
+                    'class' => 'btn main-group',
                 ],
             ]
         );

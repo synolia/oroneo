@@ -16,6 +16,9 @@ use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class ProductDataConverter
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ProductDataConverter extends DataConverter implements ContextAwareInterface
 {

@@ -18,6 +18,9 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 /**
  * Class FamilyStrategy
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Strategy
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
 {

@@ -4,7 +4,7 @@ namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository;
 use Oro\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
@@ -14,14 +14,18 @@ use Oro\Bundle\ProductBundle\Entity\Repository\ProductUnitRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use \Oro\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy as Strategy;
 use Symfony\Bridge\Monolog\Logger;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 /**
  * Class ProductStrategy
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Strategy
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ProductStrategy extends Strategy
 {
-    /** @var ConfigManager */
-    protected $configManager;
+    /** @var EntityConfigManager */
+    protected $entityConfigManager;
 
     /** @var BusinessUnitRepository */
     protected $businessUnitRepo;
@@ -38,16 +42,15 @@ class ProductStrategy extends Strategy
     /** @var Logger */
     protected $logger;
 
+    /** @var ConfigManager $configManager */
+    protected $configManager;
+
     /**
      * @param DoctrineHelper $doctrineHelper
      */
     public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
-
-        $this->businessUnitRepo = $doctrineHelper->getEntityRepositoryForClass('OroOrganizationBundle:BusinessUnit');
-        $this->productUnitRepo  = $doctrineHelper->getEntityRepositoryForClass('OroProductBundle:ProductUnit');
-        $this->categoryRepo     = $doctrineHelper->getEntityRepositoryForClass('OroCatalogBundle:Category');
     }
 
     /**
@@ -56,6 +59,14 @@ class ProductStrategy extends Strategy
     public function setConfigManager(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
+    }
+
+    /**
+     * @param EntityConfigManager $entityConfigManager
+     */
+    public function setEntityConfigManager(EntityConfigManager $entityConfigManager)
+    {
+        $this->entityConfigManager = $entityConfigManager;
     }
 
     /**
@@ -85,12 +96,14 @@ class ProductStrategy extends Strategy
             }
 
             if (!$entity->getOwner()) {
-                $owner = $this->businessUnitRepo->find(1);
+                $defaultBusinessUnit = $this->configManager->get('synolia_oroneo.default_business_unit');
+                $owner = $this->getBusinessUnitRepository()->find($defaultBusinessUnit);
                 $entity->setOwner($owner);
             }
 
             if (!$entity->getPrimaryUnitPrecision()) {
-                $unit = $this->productUnitRepo->find('item');
+                $defaultProductUnit = $this->configManager->get('oro_product.default_unit');
+                $unit = $this->getProductUnitRepository()->find($defaultProductUnit);
                 $precision = new ProductUnitPrecision();
                 $precision->setUnit($unit);
                 $precision->setPrecision(1);
@@ -99,7 +112,7 @@ class ProductStrategy extends Strategy
             }
 
             if (!$entity->getInventoryStatus()) {
-                $provider = $this->configManager->getProvider('enum');
+                $provider = $this->entityConfigManager->getProvider('enum');
                 $config = $provider->getConfig(Product::class, 'inventory_status');
                 $class  = ExtendHelper::buildEnumValueClassName($config->get('enum_code'));
 
@@ -157,7 +170,7 @@ class ProductStrategy extends Strategy
      */
     protected function setProductCategory($product)
     {
-        $currentCategory = $this->categoryRepo->findOneByProductSku($product->getSku());
+        $currentCategory = $this->getCategoryRepository()->findOneByProductSku($product->getSku());
         $categoryCodes   = explode(',', $this->context->getValue('itemData')['categories']);
         $categoryCode    = $categoryCodes[0];
 
@@ -171,7 +184,7 @@ class ProductStrategy extends Strategy
         }
 
         if (!$currentCategory || $currentCategory->getAkeneoCategoryCode() != $categoryCode) {
-            $category = $this->categoryRepo->findOneBy(['akeneoCategoryCode' => $categoryCode]);
+            $category = $this->getCategoryRepository()->findOneBy(['akeneoCategoryCode' => $categoryCode]);
 
             if (!$category) {
                 $this->context->incrementErrorEntriesCount();
@@ -202,7 +215,7 @@ class ProductStrategy extends Strategy
     /**
      * {@inheritdoc}
      */
-    protected function findExistingEntity($entity, array $searchContext = [])
+    public function findExistingEntity($entity, array $searchContext = [])
     {
         $entityName = ClassUtils::getClass($entity);
         $identifier = $this->databaseHelper->getIdentifier($entity);
@@ -218,5 +231,41 @@ class ProductStrategy extends Strategy
         }
 
         return parent::findExistingEntity($entity, $searchContext);
+    }
+
+    /**
+     * @return BusinessUnitRepository
+     */
+    protected function getBusinessUnitRepository()
+    {
+        if (!$this->businessUnitRepo) {
+            $this->businessUnitRepo = $this->doctrineHelper->getEntityRepositoryForClass('OroOrganizationBundle:BusinessUnit');
+        }
+
+        return $this->businessUnitRepo;
+    }
+
+    /**
+     * @return ProductUnitRepository
+     */
+    protected function getProductUnitRepository()
+    {
+        if (!$this->productUnitRepo) {
+            $this->productUnitRepo = $this->doctrineHelper->getEntityRepositoryForClass('OroProductBundle:ProductUnit');
+        }
+
+        return $this->productUnitRepo;
+    }
+
+    /**
+     * @return CategoryRepository
+     */
+    protected function getCategoryRepository()
+    {
+        if (!$this->categoryRepo) {
+            $this->categoryRepo = $this->doctrineHelper->getEntityRepositoryForClass('OroCatalogBundle:Category');
+        }
+
+        return $this->categoryRepo;
     }
 }

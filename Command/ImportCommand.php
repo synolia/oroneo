@@ -2,18 +2,12 @@
 
 namespace Synolia\Bundle\OroneoBundle\Command;
 
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
-use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\ImportExportBundle\Command\ImportCommand as OroImportCommand;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
-use Synolia\Bundle\OroneoBundle\Manager\ImportManager;
 
 /**
  * Class ImportCommand
@@ -37,8 +31,9 @@ class ImportCommand extends OroImportCommand
             ->setDescription('Akeneo import')
             ->addArgument(
                 self::ARGUMENT_TYPE,
-                InputArgument::OPTIONAL,
-                'Type import to be executed. All imports are executed if missing.'
+                InputArgument::REQUIRED,
+                'Type import to be executed. All imports are executed if missing.',
+                'import_all'
             )
             ->addArgument(
                 self::FILE_PATH,

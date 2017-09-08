@@ -11,7 +11,9 @@ use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class OptionSerializer
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Serializer
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Serializer
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class OptionSerializer extends Serializer
 {

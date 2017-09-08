@@ -8,9 +8,10 @@ use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 use Synolia\Bundle\OroneoBundle\Manager\ImportManager;
 
 /**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ * Class Configuration
+ * @package   Synolia\Bundle\OroneoBundle\DependencyInjection
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class Configuration implements ConfigurationInterface
 {
@@ -27,6 +28,7 @@ class Configuration implements ConfigurationInterface
             [
                 'default_owner'                    => ['type' => 'string', 'value' => 1],
                 'default_organization'             => ['type' => 'string', 'value' => 1],
+                'default_business_unit'            => ['type' => 'string', 'value' => 1],
                 'delimiter'                        => ['value' => ','],
                 'enclosure'                        => ['value' => '"'],
                 'localization_mapping'             => ['type' => 'array', 'value' => []],
@@ -47,6 +49,7 @@ class Configuration implements ConfigurationInterface
                 'distant_username'                 => ['value' => ''],
                 'distant_password'                 => ['value' => ''],
                 'distant_port'                     => ['value' => 21],
+                'distant_passive'                  => ['type' => 'bool', 'value' => false],
                 'distant_filepath_category'        => ['value' => ''],
                 'distant_filepath_attribute'       => ['value' => ''],
                 'distant_filepath_option'          => ['value' => ''],
@@ -93,10 +96,6 @@ class Configuration implements ConfigurationInterface
                 ],
             ]
         );
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
 
         return $treeBuilder;
     }

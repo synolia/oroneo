@@ -1,6 +1,6 @@
 # ORONEO by Synolia
 
-**Oroneo** is a **OroCommerce addon** allowing to import catalogs and product data, from the **Akeneo** standard CSV files.
+**Oroneo** is a **OroCommerce addon/plugin** allowing to import catalogs and product data, from the **Akeneo** standard CSV files.
 
 ## How it works
 Oroneo reads standard CSV files from the Akeneo exports in order to import data into your OroCommerce database. These data exchanges allow to import:
@@ -13,6 +13,7 @@ Oroneo reads standard CSV files from the Akeneo exports in order to import data 
 ## Requirements & Notes
 ### Requirements
 ATM **Oroneo** is designed to work on **OroCommerce v1.1** and based on generated CSV files from **Akeneo 1.3+**
+No support for Akeneo Enterprise Edition yet.
 
 If you're working with Akeneo PIM < 1.6, **Synolia** recommends to work with the **[Akeneo Enhanced Connector Bundle](https://github.com/akeneo-labs/EnhancedConnectorBundle)** in order to be more efficient in your interfaces. This bundle allows you to go further to select the right data to export.
 
@@ -23,6 +24,7 @@ There is some limitations that you have to take care of:
 * OroCommerce Products doesn't support multiple categories associations. Only the first category assigned will be taken.
 * **Products without families won't be imported !**
 * **Products' attributes that are not included in their family won't be imported.**
+* Products without a proper label won't be seen on the Product datagrid.
 
 ## How to install
 Oroneo's installation is rather simple ! You only need to use composer:
@@ -38,7 +40,7 @@ Add those lines to the repositories array in `composer.json` :
 ```
 And add this line in the `require` array:
 ```json
-"synolia/oroneo": "dev-master"
+"synolia/oroneo": "1.0.0"
 ```
 Then,
 ```cli
@@ -59,7 +61,6 @@ Useful to define your own delimiter (but currently we support only the comma), e
 There is also the possibility to define your FTP or SFTP connection informations. That will permit to direcly download your CSV files from a remote server.
 #### Field mapping
 It is possible to map custom fields in those panels. 
-ATM, it is necessary to map the correct label's attribute column with the locale suffix because we do not set this column to a translatable one yet.
 
 ### Usage
 The import process is available in the UI but also with the CLI.
@@ -81,6 +82,16 @@ php app/console oro:message-queue:consume
 ```
 Read the documentation to see how to handle this command and which arguments and options you can pass.
 
+### Import order
+The imports should be done in the following order :
+ * Category
+ * Product Attribute
+ * Product Attribute Option
+ * Product Family
+ * Product Attribute group
+ * Product
+ * Product Files & Images
+
 #### UI import
 It is possible to load CSV files directly with the import form.
 The import process is devided in two steps : a file validation and the import itself which is sent to the Message Queue Consumer.
@@ -98,7 +109,7 @@ php app/console synolia:akeneo-pim:import importType filePath
 Replace **importType** by one of this values:
 * category
 * attribute
-* attribute_groupe
+* attribute_group
 * family
 * option
 * product
@@ -141,9 +152,27 @@ php app/console synolia:akeneo-pim:import category app/import_export/export_cate
   php app/console cache:clear --env=prod
   ```
   
+  In OroCommerce, attributes have to be in the product family to be displayed. This means that, though you can use any attributes in any of your products in Akeneo, every attribute that is not in the product family will no be rendered in OroCommerce.
+
+**_Products Import_**
+
+The product label is mandatory.
+Again, no label results to no product shown in the datagrid.
+
 **_Product files Import_**
+
 Take care of your ZIP file's size when you try to upload it with the form.
 We suggest to use this import with the CLI.
+
+**_Attributes Options Import_**
+
+Note that it is not possible to import 2 options with the same label for one attribute even if they do have a different code.
+
+## Contribute
+Feel free to open issues and every PR is welcome as any suggestions you might have.
+
+As any project of this kind, you may encounter some untested situations or uncovered behaviors. So any relevant informations may help to make this project better and stronger ;)
+
 
 ## About Synolia
 

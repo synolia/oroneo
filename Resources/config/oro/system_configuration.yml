@@ -2,7 +2,7 @@ system_configuration:
     groups:
         oroneo:
             title: 'synolia.oroneo.label'
-            icon: icon-exchange
+            icon: fa-exchange
         oroneo_global_config:
             title: 'synolia.oroneo.configuration_page.global_configuration.title'
         oroneo_mapping_config:
@@ -56,6 +56,12 @@ system_configuration:
             options:
                 label:   'synolia.oroneo.configuration_page.global_configuration.fields.default_organization.label'
                 tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.default_organization.tooltip'
+        synolia_oroneo.default_business_unit:
+            data_type: string
+            type: oro_business_unit_select
+            options:
+                label:   'synolia.oroneo.configuration_page.global_configuration.fields.default_business_unit.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.default_business_unit.tooltip'
         synolia_oroneo.delimiter:
             data_type: string
             type: text
@@ -182,6 +188,15 @@ system_configuration:
             type: integer
             options:
                 label: 'synolia.oroneo.configuration_page.distant.port.label'
+        synolia_oroneo.distant_passive:
+            data_type: boolean
+            type: choice
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.passive.label'
+                tooltip: 'synolia.oroneo.configuration_page.distant.passive.tooltip'
+                choices:
+                    false: 'synolia.oroneo.configuration_page.distant.passive.no'
+                    true: 'synolia.oroneo.configuration_page.distant.passive.yes'
         synolia_oroneo.distant_filepath_category:
             data_type: string
             type: text
@@ -230,6 +245,7 @@ system_configuration:
                                         children:
                                             - synolia_oroneo.default_owner
                                             - synolia_oroneo.default_organization
+                                            - synolia_oroneo.default_business_unit
                                             - synolia_oroneo.delimiter
                                             - synolia_oroneo.enclosure
                             oroneo_global_config_localization:
@@ -246,6 +262,7 @@ system_configuration:
                                             - synolia_oroneo.distant_username
                                             - synolia_oroneo.distant_password
                                             - synolia_oroneo.distant_port
+                                            - synolia_oroneo.distant_passive
                                     oroneo_config_distant_filepath:
                                         children:
                                             - synolia_oroneo.distant_filepath_category

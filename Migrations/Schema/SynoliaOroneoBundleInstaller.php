@@ -9,6 +9,9 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 /**
  * Class SynoliaOroneoBundleInstaller
+ * @package   Synolia\Bundle\OroneoBundle\Migrations\Schema
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SynoliaOroneoBundleInstaller implements Installation
 {

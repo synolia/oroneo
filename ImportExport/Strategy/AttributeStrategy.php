@@ -2,8 +2,6 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
-use Oro\Bundle\ConfigBundle\Config\ConfigManager as GlobalConfigManager;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Strategy\EntityFieldImportStrategy;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -16,6 +14,9 @@ use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class AttributeStrategy
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Strategy
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class AttributeStrategy extends EntityFieldImportStrategy
 {
@@ -177,7 +178,7 @@ class AttributeStrategy extends EntityFieldImportStrategy
     public function process($entity)
     {
         /** @var FieldConfigModel $entity */
-        $now = new \DateTime('now');
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $entity->setCreated($now);
         $entity->setUpdated($now);
 

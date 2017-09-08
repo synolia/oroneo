@@ -13,7 +13,9 @@ use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class SchemaUpdater
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Item
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Item
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecutionAwareInterface
 {

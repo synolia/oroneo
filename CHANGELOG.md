@@ -1,3 +1,21 @@
+# 1.0.0 (2017-09-08) 
+**Fix:**
+- Code Refactoring.
+- Added notification to clear cache after attribute import.
+- Use UTC datetime.
+- Removed hardcoded values.
+- Todos fixed and removed.
+- Removed unused dependencies.
+- Default value set at 'import_all' for the CLI import command.
+- Added error notification for FTP/SFTP issues.
+- Added a test connection button for FTP/SFTP configuration form.
+- Zip extension is now mandatory to install this package.
+- Removed services calls from constuct functions.
+- And other things...
+
+**Implemented enhancements:**
+- Usage of Gaufrette to handle FTP and SFTP connections.
+
 # 0.3.1 (2017-06-27) 
 **Fix:**
 - Shorten job alias to be compatible with PostgreSQL.

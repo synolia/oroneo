@@ -8,6 +8,9 @@ use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 
 /**
  * Class AttributeGroupReader
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Reader
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class AttributeGroupReader extends CsvFileAndIteratorReader
 {

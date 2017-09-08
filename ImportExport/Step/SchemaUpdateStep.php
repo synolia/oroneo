@@ -8,8 +8,10 @@ use Akeneo\Bundle\BatchBundle\Step\AbstractStep;
 use Synolia\Bundle\OroneoBundle\ImportExport\Item\SchemaUpdater;
 
 /**
- * Class UpdateSchemaStep
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Step
+ * Class SchemaUpdateStep
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Step
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SchemaUpdateStep extends AbstractStep
 {

@@ -1,5 +1,4 @@
 parameters:
-#TODO : refactor : some parameters for entities are doubled in form_types.yml
     oro.abstract_enum_value:                                  Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue
     oro_entity_config.attribute.entity.family.class:          Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily
     oro_entity_config.attribute.entity.attribute_group.class: Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeGroup
@@ -130,7 +129,8 @@ services:
         class: '%synolia.oroneo.import.strategy.product.class%'
         parent: oro_product.importexport.strategy.product
         calls:
-            - [setConfigManager, ['@oro_entity_config.config_manager']]
+            - [setConfigManager, ['@oro_config.global']]
+            - [setEntityConfigManager, ['@oro_entity_config.config_manager']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setLogger, ['@logger']]
 

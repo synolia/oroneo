@@ -3,9 +3,6 @@ parameters:
     synolia.oroneo.import.manager.class:             Synolia\Bundle\OroneoBundle\Manager\ImportManager
     synolia.oroneo.oro_field_select.class:           Synolia\Bundle\OroneoBundle\Manager\OroFieldSelectManager
     synolia.oroneo.distant_connection.manager.class: Synolia\Bundle\OroneoBundle\Manager\DistantConnectionManager
-    synolia.oroneo.helper.ftp.class:                 Synolia\Bundle\OroneoBundle\Helper\FtpHelper
-    synolia.oroneo.helper.sftp.class:                Synolia\Bundle\OroneoBundle\Helper\SftpHelper
-
 
 services:
     synolia_oroneo.category.repository:
@@ -21,8 +18,6 @@ services:
             - '@oro_importexport.processor.registry'
             - '@oro_config.global'
             - '@synolia.oroneo.distant_connection.manager'
-            - '@oro_importexport.handler.import.cli'
-            - '@oro_importexport.file.file_system_operator'
 
     synolia.oroneo.oro_field_select:
         class: '%synolia.oroneo.oro_field_select.class%'
@@ -71,16 +66,8 @@ services:
     synolia.oroneo.distant_connection.manager:
         class: '%synolia.oroneo.distant_connection.manager.class%'
         arguments:
-            - '@synolia.oroneo.helper.ftp'
-            - '@synolia.oroneo.helper.sftp'
+            - '@oro_config.global'
             - '%kernel.root_dir%/../web/uploads/oroneo_import_files/'
-
-    # Helpers.
-    synolia.oroneo.helper.ftp:
-        class: '%synolia.oroneo.helper.ftp.class%'
-
-    synolia.oroneo.helper.sftp:
-        class: '%synolia.oroneo.helper.sftp.class%'
 
     # Listeners.
     synolia.oroneo.event_listener.system_config:
@@ -89,6 +76,7 @@ services:
             - "@doctrine"
             - '%oro_user.entity.class%'
             - '%oro_organization.organization.entity.class%'
+            - '%oro_organization.business_unit.entity.class%'
         tags:
             - { name: kernel.event_listener, event: oro_config.settings_form_preset, method: onFormPreSetData }
             - { name: kernel.event_listener, event: oro_config.settings_before_save, method: onSettingsSaveBefore }

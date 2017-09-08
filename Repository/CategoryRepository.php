@@ -6,8 +6,11 @@ use Oro\Bundle\CatalogBundle\Entity\Category;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 /**
- * Class CategoryRepository.
+ * Class CategoryRepository
  * Repository with useful function to basically retrieve parentCategories and such.
+ * @package   Synolia\Bundle\OroneoBundle\Repository
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class CategoryRepository
 {

@@ -13,7 +13,9 @@ use Oro\Bundle\TranslationBundle\Manager\TranslationManager;
 
 /**
  * Class AttributeWriter
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Writer
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Writer
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class AttributeWriter extends EntityFieldWriter implements StepExecutionAwareInterface
 {

@@ -3,13 +3,11 @@
 namespace Synolia\Bundle\OroneoBundle\Manager;
 
 use Oro\Bundle\ImportExportBundle\Handler\HttpImportHandler;
-use Oro\Bundle\ImportExportBundle\Handler\CliImportHandler;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Symfony\Component\Translation\TranslatorInterface;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Symfony\Component\HttpFoundation\File\File;
-use Oro\Bundle\ImportExportBundle\File\FileSystemOperator;
 use Synolia\Bundle\OroneoBundle\Form\Model\ImportData;
 
 /**
@@ -39,8 +37,6 @@ class ImportManager
     const CLI_IMPORT                     = 'cli-import';
     const CSV_FORMAT                     = 'csv';
     const ZIP_FORMAT                     = 'zip';
-    const SFTP_CONNECTION                = 'SFTP';
-    const FTP_CONNECTION                 = 'FTP';
     const FILE_PREFIX                    = 'oroneo_import';
     const MAX_VALIDATION_FILESIZE        = 500000; // 500kb.
 
@@ -59,12 +55,6 @@ class ImportManager
     /** @var DistantConnectionManager $connectionManager*/
     protected $connectionManager;
 
-    /** @var CliImportHandler $cliImportHandler */
-    protected $cliImportHandler;
-
-    /** @var FileSystemOperator $fileSystemOperator */
-    private $fileSystemOperator;
-
     /**
      * ImportManager constructor.
      *
@@ -73,25 +63,19 @@ class ImportManager
      * @param ProcessorRegistry        $processorRegistry
      * @param ConfigManager            $configManager
      * @param DistantConnectionManager $connectionManager
-     * @param CliImportHandler         $cliImportHandler
-     * @param FileSystemOperator       $fileSystemOperator
      */
     public function __construct(
         TranslatorInterface $translator,
         HttpImportHandler $httpImportHandler,
         ProcessorRegistry $processorRegistry,
         ConfigManager $configManager,
-        DistantConnectionManager $connectionManager,
-        CliImportHandler $cliImportHandler,
-        FileSystemOperator $fileSystemOperator
+        DistantConnectionManager $connectionManager
     ) {
         $this->translator          = $translator;
         $this->httpImportHandler   = $httpImportHandler;
         $this->processorRegistry   = $processorRegistry;
         $this->configManager       = $configManager;
         $this->connectionManager   = $connectionManager;
-        $this->cliImportHandler    = $cliImportHandler;
-        $this->fileSystemOperator  = $fileSystemOperator;
     }
 
     /**
@@ -170,43 +154,10 @@ class ImportManager
     public function getDistantFile($processorAlias)
     {
         // Retrieve user's config values.
-        $connectionInfo = [
-            'username'       => $this->configManager->get('synolia_oroneo.distant_username'),
-            'password'       => $this->configManager->get('synolia_oroneo.distant_password'),
-            'host'           => $this->configManager->get('synolia_oroneo.distant_host'),
-            'port'           => $this->configManager->get('synolia_oroneo.distant_port'),
-            'connectionType' => $this->configManager->get('synolia_oroneo.distant_connection_type'),
-            'filename'       => $this->getDistantFilenameByImportType($processorAlias),
-        ];
+        $filePath = $this->getDistantFilenameByImportType($processorAlias);
+        $file     = $this->connectionManager->downloadFile($filePath);
 
-        // If missing at least one param then return an empty array to trigger an error.
-        if (count($connectionInfo) != count(array_diff($connectionInfo, ['']))) {
-            return null;
-        }
-
-        // Depending on the connection type.
-        switch ($connectionInfo['connectionType']) {
-            case self::FTP_CONNECTION:
-                return $this->connectionManager->ftpImport(
-                    $connectionInfo['username'],
-                    $connectionInfo['password'],
-                    $connectionInfo['host'],
-                    $connectionInfo['port'],
-                    $connectionInfo['filename']
-                );
-                break;
-            case self::SFTP_CONNECTION:
-                return $this->connectionManager->sftpImport(
-                    $connectionInfo['username'],
-                    $connectionInfo['password'],
-                    $connectionInfo['host'],
-                    $connectionInfo['port'],
-                    $connectionInfo['filename']
-                );
-                break;
-            default:
-                return null;
-        }
+        return $file;
     }
 
     /**

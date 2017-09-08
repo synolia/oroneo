@@ -4,7 +4,7 @@
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container' }) %}
     {% set id = id ~ '_collection' %}
-    <div class="oroneo-list" data-page-component-module="synoliaoroneo/js/app/components/price-lists-errors-handler">
+    <div class="oroneo-list" data-page-component-module="synoliaoroneo/js/app/components/oroneo-lists-errors-handler">
         <div class="row-oro">
             {% set prototype_name = form.vars.prototype_name %}
             <div {{ block('widget_container_attributes') }}>

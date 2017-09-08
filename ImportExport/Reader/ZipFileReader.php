@@ -6,7 +6,9 @@ use Oro\Bundle\ImportExportBundle\Reader\CsvFileReader;
 
 /**
  * Class ZipFileReader
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Reader
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Reader
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ZipFileReader extends CsvFileReader
 {

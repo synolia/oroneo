@@ -3,6 +3,7 @@
     "description": "OroCommerce Akeneo connector",
     "homepage": "https://github.com/synolia/oroneo",
     "license": "OSL-3.0",
+    "version": "1.0.0",
     "authors": [{
         "name": "Synolia",
         "homepage": "http://www.synolia.com"
@@ -14,7 +15,9 @@
     },
     "require": {
         "oro/commerce": "1.1.*",
-        "phpseclib/phpseclib": "~2.0"
+        "gaufrette/ftp-adapter": "0.4.*",
+        "gaufrette/phpseclib-sftp-adapter": "0.4.*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.11",
@@ -36,7 +39,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.*"
+            "dev-master": "1.*"
         }
     }
 }

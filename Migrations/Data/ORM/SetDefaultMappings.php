@@ -12,7 +12,9 @@ use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
 
 /**
  * Class SetDefaultMappings
- * @package Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
+ * @package   Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterface
 {

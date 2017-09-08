@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -65,7 +66,12 @@ class ImportController extends Controller
                 );
             } elseif ($form->get('isManualImport')->getData() === false && null !== $form->getData()->getProcessorAlias()) {
                 // FTP/SFTP import : file downloaded from a remote server.
-                $file = $this->container->get('synolia.oroneo.import.manager')->getDistantFile($form->getData()->getProcessorAlias());
+                $file = null;
+                try {
+                    $file = $this->container->get('synolia.oroneo.import.manager')->getDistantFile($form->getData()->getProcessorAlias());
+                } catch (\Exception $e) {
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                }
                 $form->getData()->setFile($file);
                 if (null === $file) {
                     // Flash an error if the distant import failed.
@@ -151,27 +157,43 @@ class ImportController extends Controller
             $this->get('translator')->trans('synolia.oroneo.import_page.success.message')
         );
 
+        if ($processorAlias == ImportManager::ATTRIBUTE_PROCESSOR) {
+            $message = $this->get('translator')->trans(
+                'oro.translation.translation.rebuild_cache_required',
+                [
+                    '%path%' => $this->generateUrl('oro_translation_translation_index'),
+                ]
+            );
+            $this->get('session')->getFlashBag()->add('warning', $message);
+        }
+
         return $this->redirectToRoute('synolia_oroneo_import');
     }
 
     /**
-     * Action to redirect a link to the configuration page.
+     * Tests the remote connection
      *
-     * @todo Find a way to remove this action and create a direct link to the configuration page in the navigation menu. ATM can't find a way to create such link with params in it.
+     * @Route("/testConnection", name="synolia_oroneo_test_configuration", options={"expose"=true})
      *
-     * @Route("/configuration", name="synolia_oroneo_configuration")
-     *
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function configurationAction()
+    public function testConnectionAction()
     {
-        return $this->redirectToRoute(
-            'oro_config_configuration_system',
-            [
-                'activeGroup' => 'oroneo',
-                'activeSubGroup' => 'oroneo_global_config_settings',
-            ]
-        );
+        $connectionManager = $this->get('synolia.oroneo.distant_connection.manager');
+
+        try {
+            $connectionManager->testConnection();
+            $type = 'success';
+            $message = $this->get('translator')->trans('synolia.oroneo.import_page.test_connection.success');
+        } catch (\Exception $e) {
+            $type = 'error';
+            $message = $e->getMessage();
+        }
+
+        return new JsonResponse([
+            'type' => $type,
+            'message' => $message,
+        ]);
     }
 
     /**
