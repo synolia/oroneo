@@ -11,12 +11,17 @@ use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class OptionSerializer
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Serializer
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Serializer
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class OptionSerializer extends Serializer
 {
     /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider  */
     protected $provider;
+
+    /** @var \ReflectionProperty */
+    protected $reflectionProperty;
 
     /**
      * OptionSerializer constructor.
@@ -28,6 +33,12 @@ class OptionSerializer extends Serializer
     public function __construct(array $normalizers, array $encoders, ConfigManager $configManager)
     {
         $this->provider = $configManager->getProvider('enum');
+
+        $reflectionClass = new \ReflectionClass(AbstractEnumValue::class);
+        $property        = $reflectionClass->getProperty('id');
+        $property->setAccessible(true);
+
+        $this->reflectionProperty = $property;
 
         parent::__construct($normalizers, $encoders);
     }
@@ -46,6 +57,12 @@ class OptionSerializer extends Serializer
             $type   = ExtendHelper::buildEnumValueClassName($config->get('enum_code'));
         }
 
-        return parent::denormalize($data, $type, $format, $context);
+        $entity = parent::denormalize($data, $type, $format, $context);
+
+        if ($entity instanceof AbstractEnumValue && $entity->getId() === null && $data['id'] == '0') {
+            $this->reflectionProperty->setValue($entity, $data['id']);
+        }
+
+        return $entity;
     }
 }

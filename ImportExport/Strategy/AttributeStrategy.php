@@ -2,51 +2,41 @@
 
 namespace Synolia\Bundle\OroneoBundle\ImportExport\Strategy;
 
-use Oro\Bundle\ConfigBundle\Config\ConfigManager as GlobalConfigManager;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\Strategy\EntityFieldImportStrategy;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\LocaleBundle\Entity\Repository\LocalizationRepository;
 use Oro\Bundle\ProductBundle\Entity\Product;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class AttributeStrategy
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Strategy
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class AttributeStrategy extends EntityFieldImportStrategy
 {
-    /** @var EntityConfigManager $entityFieldManager */
-    protected $entityFieldManager;
-
-    /** @var GlobalConfigManager $globalConfigManager */
-    protected $globalConfigManager;
-
     /** @var ValidatorInterface $validator */
     protected $validator;
 
     /** @var MappingManager */
+    protected $mappingManager;
+
+    /** @var MappingManager */
     protected $productMappingManager;
+
+    /** @var LocalizationRepository */
+    protected $localizationRepository;
 
     /** @var array */
     protected $productMappings = null;
 
-    /**
-     * @param EntityConfigManager $entityFieldManager
-     */
-    public function setEntityConfigManager(EntityConfigManager $entityFieldManager)
-    {
-        $this->entityFieldManager = $entityFieldManager;
-    }
-
-    /**
-     * @param GlobalConfigManager $globalConfigManager
-     */
-    public function setGlobalConfigManager(GlobalConfigManager $globalConfigManager)
-    {
-        $this->globalConfigManager = $globalConfigManager;
-    }
+    /** @var array */
+    protected $locales = null;
 
     /**
      * @param ValidatorInterface $validator
@@ -57,6 +47,14 @@ class AttributeStrategy extends EntityFieldImportStrategy
     }
 
     /**
+     * @param MappingManager $mappingManager
+     */
+    public function setMappingManager($mappingManager)
+    {
+        $this->mappingManager = $mappingManager;
+    }
+
+    /**
      * @param MappingManager $productMappingManager
      */
     public function setProductMappingManager(MappingManager $productMappingManager)
@@ -64,11 +62,31 @@ class AttributeStrategy extends EntityFieldImportStrategy
         $this->productMappingManager = $productMappingManager;
     }
 
+    /**
+     * @param LocalizationRepository $localizationRepository
+     */
+    public function setLocalizationRepository($localizationRepository)
+    {
+        $this->localizationRepository = $localizationRepository;
+    }
+
      /**
      * {@inheritdoc}
      */
     public function beforeProcessEntity($entity)
     {
+        if ($entity->getType() == 'image' || $entity->getType() == 'file') {
+            return null; //Image and file attributes should not be created
+        }
+
+        $productMappings = $this->getProductMappings();
+
+        if (isset($productMappings[$entity->getFieldName()])) {
+            $entity->setFieldName($productMappings[$entity->getFieldName()]);
+
+            return $entity;
+        }
+
         /** @var FieldConfigModel $entity */
         if ($this->context->getValue('itemData')['localizable']) {
             $target = $entity->getType() == 'string' ? 'string' : 'text';
@@ -114,17 +132,89 @@ class AttributeStrategy extends EntityFieldImportStrategy
     /**
      * {@inheritdoc}
      */
+    public function afterProcessEntity($entity)
+    {
+        /** @var FieldConfigModel $entity */
+        if ($entity != null) {
+            if (!$this->isExistingEntity) {
+                if (!in_array($entity->getType(), array_merge($this->fieldTypeProvider->getSupportedRelationTypes(), ['text', 'image', 'file']))) {
+                    //Hiding the fields from the datagrid by default
+                    $entity->fromArray('datagrid', ['is_visible' => 0, 'show_filter' => 0], []);
+                }
+                $extendOptions = $entity->toArray('extend');
+                $extendOptions['owner'] = ExtendScope::OWNER_CUSTOM;
+
+                $entity->fromArray('extend', $extendOptions);
+
+                $entity->fromArray(
+                    'attribute',
+                    [
+                        'is_attribute' => 1,
+                    ]
+                );
+            } else {
+                $existingEntity = $this->findExistingEntity($entity);
+                $extendOptions  = $existingEntity->toArray('extend');
+
+                if (isset($extendOptions['state']) && $extendOptions['state'] == ExtendScope::STATE_DELETE) {
+                    $extendOptions['state'] = ExtendScope::STATE_RESTORE;
+                    $entity->fromArray('extend', $extendOptions);
+                }
+            }
+        }
+
+        $entity = parent::afterProcessEntity($entity);
+
+        if ($entity) {
+            $this->prepareTranslations($entity);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function process($entity)
+    {
+        /** @var FieldConfigModel $entity */
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $entity->setCreated($now);
+        $entity->setUpdated($now);
+
+        $this->assertEnvironment($entity);
+
+        /** @var FieldConfigModel $entity */
+        if (!$entity = $this->beforeProcessEntity($entity)) {
+            return null;
+        }
+
+        if (!$entity = $this->processEntity($entity)) {
+            return null;
+        }
+
+        if (!$entity = $this->afterProcessEntity($entity)) {
+            return null;
+        }
+
+        if ($entity) {
+            $entity = $this->validateAndUpdateContext($entity);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function processEntity(FieldConfigModel $entity)
     {
         $supportedTypes     = $this->fieldTypeProvider->getSupportedFieldTypes();
         $supportedRelations = $this->fieldTypeProvider->getSupportedRelationTypes();
-        $productMappings    = $this->getProductMappings();
 
         if ((string) $entity->getFieldName() === '') {
             $this->addErrors($this->translator->trans('oro.entity_config.import.message.invalid_field_name'));
 
-            return null;
-        } elseif (in_array($entity->getFieldName(), $productMappings)) {
             return null;
         }
 
@@ -137,12 +227,13 @@ class AttributeStrategy extends EntityFieldImportStrategy
         $existingEntity = $this->findExistingEntity($entity);
         $this->isExistingEntity = (bool) $existingEntity;
         if ($this->isExistingEntity) {
+            if ($this->isSystemField($existingEntity)) {
+                $entity->setType($existingEntity->getType());
+            }
+
             if ($entity->getType() !== $existingEntity->getType()) {
                 $this->addErrors($this->translator->trans('oro.entity_config.import.message.change_type_not_allowed'));
 
-                return null;
-            }
-            if ($this->isSystemField($existingEntity)) {
                 return null;
             }
         } else {
@@ -161,50 +252,8 @@ class AttributeStrategy extends EntityFieldImportStrategy
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function afterProcessEntity($entity)
-    {
-        /** @var FieldConfigModel $entity */
-        if ($entity != null) {
-            if ($entity->getType() == 'image' || $entity->getType() == 'file') {
-                $attachments = $entity->toArray('attachment');
-
-                if (!isset($attachments['maxsize'])) {
-                    $attachments['maxsize'] = $this->globalConfigManager->get('synolia_oroneo.attribute_file_max_size');
-                }
-
-                if ($entity->getType() == 'image') {
-                    $attachments['width']  = $this->globalConfigManager->get('synolia_oroneo.attribute_image_width');
-                    $attachments['height'] = $this->globalConfigManager->get('synolia_oroneo.attribute_image_height');
-                }
-
-                $entity->fromArray('attachment', $attachments, []);
-            }
-
-            if (!$entity->getId() && !in_array($entity->getType(), array_merge($this->fieldTypeProvider->getSupportedRelationTypes(), ['text', 'image', 'file']))) {
-                //Hiding the fields from the datagrid by default
-                $entity->fromArray('datagrid', ['is_visible' => 3, 'show_filter' => 0], []);
-            }
-        }
-
-        return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function process($entity)
-    {
-        /** @var FieldConfigModel $entity */
-        $now = new \DateTime('now');
-        $entity->setCreated($now);
-        $entity->setUpdated($now);
-
-        return parent::process($entity);
-    }
-
-    /**
+     * Get product mappings that correspond to system attributes
+     *
      * @return array
      */
     protected function getProductMappings()
@@ -213,10 +262,72 @@ class AttributeStrategy extends EntityFieldImportStrategy
             $mappings = $this->productMappingManager->getFieldMappings();
 
             foreach ($mappings as $mapping) {
-                $this->productMappings[] = $mapping->getAkeneoField();
+                if (!in_array($mapping->getOroField(), ['', 'oroneo'])) {
+                    $this->productMappings[$mapping->getAkeneoField()] = $mapping->getOroField();
+                }
             }
         }
 
         return $this->productMappings;
+    }
+
+    /**
+     * Gets an arrays containing all locales used in mappings
+     *
+     * @return array
+     */
+    protected function getLocales()
+    {
+        if ($this->locales === null) {
+            $localizationMappings = $this->mappingManager->getLocalizationMappings();
+
+            $this->locales = [];
+
+            foreach ($localizationMappings as $localizationMapping) {
+                if ($localizationMapping->getOroLocalization() == 'default') {
+                    continue;
+                }
+
+                $locale = $this->localizationRepository->findOneByName($localizationMapping->getOroLocalization());
+
+                $this->locales[$localizationMapping->getAkeneoLocalization()] = $locale->getFormattingCode();
+            }
+        }
+
+        return $this->locales;
+    }
+
+    /**
+     * Prepares the label translations
+     *
+     * @param FieldConfigModel $entity
+     */
+    protected function prepareTranslations(FieldConfigModel $entity)
+    {
+        $locales  = $this->getLocales();
+        $labelKey = array_search('entity.label', $this->mappingManager->getMappings());
+        $itemData = $this->context->getValue('itemData');
+
+        $attributeTranslations = [];
+        foreach ($locales as $akeneoLocale => $oroCode) {
+            $translationKey = $labelKey.'-'.$akeneoLocale;
+
+            if (!isset($itemData[$translationKey])) {
+                continue;
+            }
+            $attributeTranslations[$oroCode] = $itemData[$translationKey];
+        }
+
+        if (!empty($attributeTranslations)) {
+            $labelTranslations = $this->context->getValue('labelTranslations');
+
+            if ($labelTranslations === null) {
+                $labelTranslations = [];
+            }
+
+            $labelTranslations[$entity->getFieldName()] = $attributeTranslations;
+
+            $this->context->setValue('labelTranslations', $labelTranslations);
+        }
     }
 }

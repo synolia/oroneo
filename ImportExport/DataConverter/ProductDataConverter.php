@@ -16,6 +16,9 @@ use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class ProductDataConverter
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class ProductDataConverter extends DataConverter implements ContextAwareInterface
 {
@@ -83,10 +86,10 @@ class ProductDataConverter extends DataConverter implements ContextAwareInterfac
             }
         }
 
-        $record = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $record = parent::convertToImportFormat($importedRecord, true);
 
         foreach ($this->multiSelectFields as $multiSelectField) {
-            if (isset($record[$multiSelectField->getFieldName()])) {
+            if (array_key_exists($multiSelectField->getFieldName(), $record)) {
                 $fieldName = $multiSelectField->getFieldName();
                 $values    = explode(',', $record[$fieldName]);
 

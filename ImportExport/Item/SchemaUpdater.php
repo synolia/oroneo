@@ -8,11 +8,14 @@ use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Extend\EntityProcessor;
+use Oro\Bundle\PlatformBundle\Maintenance\Mode;
 use Oro\Bundle\ProductBundle\Entity\Product;
 
 /**
  * Class SchemaUpdater
- * @package Synolia\Bundle\OroneoBundle\ImportExport\Item
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Item
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecutionAwareInterface
 {
@@ -24,6 +27,9 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
 
     /** @var  StepExecution */
     protected $stepExecution;
+
+    /** @var  Mode */
+    protected $maintenanceMode;
 
     /**
      * @param EntityProcessor $entityProcessor
@@ -39,6 +45,14 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
     public function setEntityFieldManager(ConfigManager $entityFieldManager)
     {
         $this->entityFieldManager = $entityFieldManager;
+    }
+
+    /**
+     * @param Mode $maintenanceMode
+     */
+    public function setMaintenanceMode(Mode $maintenanceMode)
+    {
+        $this->maintenanceMode = $maintenanceMode;
     }
 
 
@@ -70,10 +84,14 @@ class SchemaUpdater extends AbstractConfigurableStepElement implements StepExecu
         $config  = $product->toArray('extend');
 
         if ($config['state'] == ExtendScope::STATE_UPDATE) {
-            $this->entityProcessor->updateDatabase();
+            $this->entityProcessor->updateDatabase(true, false, true);
             $this->stepExecution->addSummaryInfo('synolia.oroneo.step.schema_updater.title', 'synolia.oroneo.step.schema_updater.done');
         } else {
             $this->stepExecution->addSummaryInfo('synolia.oroneo.step.schema_updater.title', 'synolia.oroneo.step.schema_updater.skipped');
+        }
+
+        if ($this->maintenanceMode->isOn()) {
+            $this->maintenanceMode->off();
         }
     }
 }

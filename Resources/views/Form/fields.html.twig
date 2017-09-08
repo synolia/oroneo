@@ -4,7 +4,7 @@
     {% endif %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container' }) %}
     {% set id = id ~ '_collection' %}
-    <div class="pricing-price-list" data-page-component-module="oropricing/js/app/components/price-lists-errors-handler">
+    <div class="oroneo-list" data-page-component-module="synoliaoroneo/js/app/components/oroneo-lists-errors-handler">
         <div class="row-oro">
             {% set prototype_name = form.vars.prototype_name %}
             <div {{ block('widget_container_attributes') }}>
@@ -30,7 +30,7 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
+            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="fa-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
         </div>
     </div>
 {% endblock %}
@@ -48,6 +48,12 @@
 {% endblock %}
 {% block synolia_oroneo_master_category_type_widget %}
     {{ form_widget(form.masterCategory) }}{{ form_errors(form.masterCategory) }}
+{% endblock %}
+{% block synolia_oroneo_family_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
+{% endblock %}
+{% block synolia_oroneo_attribute_group_mapping_type_widget %}
+    {{ block('synolia_oroneo_mapping_widget') }}
 {% endblock %}
 {% block synolia_oroneo_product_mapping_type_widget %}
     {{ block('synolia_oroneo_mapping_widget') }}
@@ -68,10 +74,10 @@
         {% set name = widget.vars.full_name %}
     {% endif %}
     <tr data-content="{{ name }}" data-validation-optional-group {{ block('widget_container_attributes') }}
-        class="pricing-price-list pricing-price-list-item sy_akeneo_mapping">
+        class="oroneo-list oroneo-list-item sy_akeneo_mapping">
         {{ form_widget(form) }}
-        <td class="pricing-price-list-remove">
-            <button type="button" class="removeRow btn icons-holder"><i class="icon-remove"></i></button>
+        <td class="oroneo-list-remove">
+            <button type="button" class="removeRow btn icons-holder remove-list-item"><i class="fa-close"></i></button>
         </td>
     </tr>
 {% endmacro %}
@@ -84,9 +90,9 @@
     {% if prototype is defined %}
         {% set prototype_html = _self.synolia_oroneo_localization_mapping_prototype(form) %}
     {% endif %}
-    {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container price-list-grid-form' }) %}
+    {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'oro-item-collection grid-container oroneo-list-grid-form' }) %}
     {% set id = id ~ '_collection' %}
-    <div class="pricing-price-list" data-page-component-module="oropricing/js/app/components/price-lists-errors-handler">
+    <div class="oroneo-list" data-page-component-module="synoliaoroneo/js/app/components/price-lists-errors-handler">
         <div class="row-oro">
             {% set prototype_name = form.vars.prototype_name %}
             <div {{ block('widget_container_attributes') }}>
@@ -98,7 +104,7 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody class="pricing-price-list-items" data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
+                    <tbody class="oroneo-list-items" data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %} data-content>
                     {% if form.children|length %}
                         {% for child in form.children %}
                             {{ _self.synolia_oroneo_localization_mapping_prototype(child) }}
@@ -109,7 +115,7 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
+            <a class="btn add-list-item" data-container=".oro-item-collection tbody" href="javascript: void(0);"><i class="fa-plus"></i>{{ 'synolia.oroneo.configuration_page.mapping.table.add_mapping.label'|trans }}</a>
         </div>
     </div>
 {% endblock %}
@@ -128,10 +134,10 @@
         {% set name = widget.vars.full_name %}
     {% endif %}
     <tr data-content="{{ name }}" data-validation-optional-group {{ block('widget_container_attributes') }}
-        class="pricing-price-list pricing-price-list-item sy_akeneo_mapping">
+        class="oroneo-list oroneo-list-item sy_akeneo_mapping">
         {{ form_widget(form) }}
-        <td class="pricing-price-list-remove">
-            <button type="button" class="removeRow btn icons-holder"><i class="icon-remove"></i></button>
+        <td class="oroneo-list-remove">
+            <button type="button" class="removeRow btn icons-holder remove-list-item"><i class="fa-close"></i></button>
         </td>
     </tr>
 {% endmacro %}

@@ -7,12 +7,14 @@ use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Oro\Bundle\EntityConfigBundle\ImportExport\DataConverter\EntityFieldDataConverter;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Exception\RuntimeException;
 use Oro\Bundle\ProductBundle\Entity\Product;
 use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class AttributeDataConverter
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class AttributeDataConverter extends EntityFieldDataConverter implements ContextAwareInterface
 {
@@ -28,7 +30,7 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
     protected $entityConfigManager;
 
     /** @var null|EntityConfigModel */
-    protected $productConfigModel;
+    protected $productConfigModel = null;
 
     /** @var MappingManager */
     protected $mappingManager;
@@ -45,7 +47,6 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
     public function __construct(ConfigManager $entityConfigManager, array $attributeMapping)
     {
         $this->entityConfigManager = $entityConfigManager;
-        $this->productConfigModel  = $entityConfigManager->getConfigEntityModel(Product::class);
         $this->attributeMapping    = $attributeMapping;
     }
 
@@ -73,7 +74,7 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
         $this->mappingManager->checkMissingFields($importedRecord, $this->context);
 
         // Define ProductEntity's ID from 'oro_entity_config' table.
-        $importedRecord['entity:id'] = $this->productConfigModel->getId();
+        $importedRecord['entity:id'] = $this->getProductConfigModel()->getId();
 
         // Manage Akeneo field type. It is always under the form 'pim_catalog_TYPE'.
         if (isset($importedRecord['type'])) {
@@ -98,6 +99,26 @@ class AttributeDataConverter extends EntityFieldDataConverter implements Context
      */
     protected function getHeaderConversionRules()
     {
-        return $this->mappingManager->getMappings();
+        $mappings = $this->mappingManager->getMappings();
+
+        $labelKey = array_search('entity.label', $mappings);
+
+        if ($labelKey !== false) {
+            $mappings[$labelKey.'-'.$this->mappingManager->getDefaultLocalization()->getAkeneoLocalization()] = 'entity.label';
+        }
+
+        return $mappings;
+    }
+
+    /**
+     * @return EntityConfigModel
+     */
+    protected function getProductConfigModel()
+    {
+        if ($this->productConfigModel === null) {
+            $this->productConfigModel = $this->entityConfigManager->getConfigEntityModel(Product::class);
+        }
+
+        return $this->productConfigModel;
     }
 }

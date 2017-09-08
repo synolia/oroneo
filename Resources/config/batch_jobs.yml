@@ -1,7 +1,7 @@
 connector:
     name: oro_importexport
     jobs:
-        synolia_oroneo_attribute_import_from_csv:
+        oroneo_attribute_import_csv:
             title: "Attribute Import from CSV"
             type: import
             steps:
@@ -17,7 +17,7 @@ connector:
                     class:     '%synolia.oroneo.import.step.schema_update.class%'
                     services:
                         updater: synolia.oroneo.import.step_element.schema_updater
-        synolia_oroneo_attribute_import_validation_from_csv:
+        oroneo_attribute_import_validation_csv:
             title: "Attribute Import validation from CSV"
             type: import_validation
             steps:
@@ -28,7 +28,29 @@ connector:
                         reader:    oro_importexport.reader.csv
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_importexport.writer.doctrine_clear
-        synolia_oroneo_product_file_import_from_zip:
+        oroneo_attribute_group_import_csv:
+            title: "Attribute Group Import from CSV"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.oroneo.import.reader.attribute_group
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity
+        oroneo_attribute_group_import_validation_csv:
+            title: "Attribute Group Import validation from CSV"
+            type: import_validation
+            steps:
+                import:
+                    title:     import_validation
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    synolia.oroneo.import.reader.attribute_group
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
+        oroneo_product_file_import_zip:
             title: "Product Files Import from ZIP"
             type: import
             steps:
@@ -39,7 +61,7 @@ connector:
                         reader:    synolia.oroneo.import.reader.zip
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_importexport.writer.entity
-        synolia_oroneo_product_file_import_validation_from_zip:
+        oroneo_product_file_import_validation_zip:
             title: "Product Files Import validation from ZIP"
             type: import_validation
             steps:

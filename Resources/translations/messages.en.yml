@@ -3,25 +3,50 @@ synolia:
         title: Akeneo
         label: Akeneo Connector
         category.label: Category
-        attribute.label: Attribute
-        option.label: Option
+        attribute.label: Product Attribute
+        option.label: Product Attribute Option
+        family.label: Product Family
+        attribute_group.label: Product Attribute group
         product.label: Product
         product_file.label: Product Files & Images
         import.btn: IMPORT
+        hide.btn: Hide
+        back.btn: Back
         import_page:
             label: Import
             title: Import Akeneo
             description: Akeneo import description
             processor.choice: Import Type
             validation.btn: Check and validate file
+            test_connection:
+                btn: Test Connection
+                success: The (S)FTP connection is working properly.
             import_type.checkbox: Manual import
+            success.message: Import started successfully. You will receive email notification upon completion.
+            file_too_big.message: Your file is too big to be validate on the fly. You can import it anyway.<br/>You will receive an email notification upon completion with the result of the import.
             error:
-                mapping: No mapping set in configuration panel. Define locale mapping first <a href="%url%">here.</a>
-                distant.missing_config: Import error. Something's wrong with the connection. Check it <a href="%url%">here.</a>.
+                mapping: No mapping set in configuration panel. Define locale mapping first <a href="%url%">here</a>.
+                distant.missing_config: Import error. Check your connection configuration and file mapping <a href="%url%">here</a>.
+                default_message: An error occured during the file validation.
+            validation:
+                strategy:  Import validation results with strategy "%strategy%"
+                result:    Import validation results
+                items_nb:  Number of items
+                record_nb: Total number of records
+                record_add: Records to add
+                record_replace: Records to replace
+                record_update: Records to update
+                record_delete: Records to delete
+                record_error: Records with errors
+                import_started: Import started, please wait...
+                import_failed: Import process failed
+                default_error: An error occured. Something probably wrong with your imported file.
         import:
             product:
                 error:
-                    category_not_found: Category not found
+                    category_not_found: Category "{{ category }}" not found
+                    multiple_category: "Multiple category found for product with SKU : {{ productSku }} . Only the first one ({{ category }}) will be kept."
+                    family_not_found: Family "{{ family }}" not found
         configuration_page:
             label: Configuration
             global_configuration:
@@ -30,18 +55,18 @@ synolia:
                 attribute.title: Attribute settings
                 localization.title: Locale settings
                 fields:
+                    default_owner:
+                        label: Default Owner
+                        tooltip: User to be assigned as owner for imported entities.
+                    default_organization:
+                        label: Default Organization
+                        tooltip: Organization to be assigned as default organization for imported entities.
+                    default_business_unit:
+                        label: Default Business Unit
+                        tooltip: Business Unit to be assigned as default for imported entities.
                     delimiter: Delimiter
                     enclosure: Enclosure
                     localization_mapping: Locale Mapping
-                    attribute_file_max_size:
-                        label: File size
-                        tooltip: Max allowed file size to upload in MB.
-                    attribute_image_width:
-                        label: Thumbnail width
-                        tooltip: Thumbnail width in pixels.
-                    attribute_image_height:
-                        label: Thumbnail height
-                        tooltip: Thumbnail height in pixels.
             mapping:
                 title: Field mapping
                 settings: Field mapping
@@ -71,11 +96,31 @@ synolia:
                 title: Option
                 settings: Option Configuration
                 mapping: Option Mapping
+            family:
+                title: Family
+                settings: Family Configuration
+                mapping: Family Mapping
+            attribute_group:
+                title: Attribute group
+                settings: Attribute group Configuration
+                mapping: Attribute group Mapping
             product:
                 title: Product
                 settings: Product Configuration
                 mapping: Product Mapping
                 channel: Default Channel
+                image_main:
+                    label: Main image
+                    tooltip: The code of the attribute that will be used to populate the main image in the gallery
+                image_listing:
+                    label:  Listing image
+                    tooltip:  The code of the attribute that will be used to populate the listing image in the gallery
+                image_additional:
+                    label: Additional images
+                    tooltip: Coma separated list of attributes that will be used as additional image in the gallery
+                attachment:
+                    label: Attachments
+                    tooltip: Coma separated list of attributes that will be used as attachments for the product
             description: Akeneo configuration page description
             distant:
                 title: Remote Settings
@@ -83,6 +128,11 @@ synolia:
                 username.label: Username
                 password.label: Password
                 port.label: Port
+                passive:
+                    label: Passive FTP
+                    tooltip: Used only for FTP connection
+                    yes: Yes
+                    no: No
                 connection_type:
                     label: Connection Type
                     ftp: FTP
@@ -92,8 +142,15 @@ synolia:
                     category.label: Category filepath
                     attribute.label: Attribute filepath
                     option.label: Option filepath
+                    family.label: Family filepath
+                    attribute_group.label: Attribute group filepath
                     product.label: Product filepath
                     product-file.label: Product-file filepath
+        entity_config:
+            akeneo:
+                field:
+                    items:
+                        attribute_group.label: Akeneo Attribute group code
 
         step:
             schema_updater:

@@ -1,4 +1,41 @@
-# 0.3. (2017-01-13) 
+# 1.0.0 (2017-09-08) 
+**Fix:**
+- Code Refactoring.
+- Added notification to clear cache after attribute import.
+- Use UTC datetime.
+- Removed hardcoded values.
+- Todos fixed and removed.
+- Removed unused dependencies.
+- Default value set at 'import_all' for the CLI import command.
+- Added error notification for FTP/SFTP issues.
+- Added a test connection button for FTP/SFTP configuration form.
+- Zip extension is now mandatory to install this package.
+- Removed services calls from constuct functions.
+- And other things...
+
+**Implemented enhancements:**
+- Usage of Gaufrette to handle FTP and SFTP connections.
+
+# 0.3.1 (2017-06-27) 
+**Fix:**
+- Shorten job alias to be compatible with PostgreSQL.
+- Update README with more informations.
+- Fix attribute labels handling and import.
+- Fix attribute groups names.
+- Fix error with the multi-select attribute pages.
+- Fix re-import of deleted attribute. Attributs were disabled.
+- Fix product import error with PostgreSQL. It was impossible to store values grater than 1.
+- Fix FTP import.
+- Added a translatable label in the import form.
+- Fix the product import for the "enable" status.
+- Fix some typos.
+- Fix some CSS.
+
+**Implemented enhancements:**
+- PostgreSQL compatibility
+- It is now possible to import product files such as images and attachments.
+
+# 0.3.0 (2017-01-13) 
 **Fix:**
 - Issue [#9](https://github.com/synolia/oroneo/issues/9) : Revert Mapping Migrations to the default locale at the install.
 - Issue [#11](https://github.com/synolia/oroneo/issues/11) : Fix multi-enum import.

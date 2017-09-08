@@ -14,10 +14,12 @@ navigation:
                     routes:      ['/^oroneo/']
             configuration_menu:
                 label:           'synolia.oroneo.configuration_page.label'
-                route:           'synolia_oroneo_configuration'
+                route:           'oro_config_configuration_system'
+                route_parameters:
+                    activeGroup: oroneo
+                    activeSubGroup: oroneo_global_config_settings
                 extras:
                     position:    20
-                    routes:      ['/^oroneo/']
         tree:
             application_menu:
                 children:
@@ -28,4 +30,3 @@ navigation:
 
     titles:
         synolia_oroneo_import:        'synolia.oroneo.import_page.title'
-        synolia_oroneo_configuration: 'synolia.oroneo.configuration_page.label'

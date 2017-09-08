@@ -9,7 +9,9 @@ use Synolia\Bundle\OroneoBundle\Manager\MappingManager;
 
 /**
  * Class OptionDataConverter
- * @package Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\DataConverter
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class OptionDataConverter extends AbstractTableDataConverter implements ContextAwareInterface
 {
@@ -53,7 +55,21 @@ class OptionDataConverter extends AbstractTableDataConverter implements ContextA
      */
     protected function getHeaderConversionRules()
     {
-        return $this->mappingManager->getMappings();
+        $mappings = $this->mappingManager->getMappings();
+
+        $defaultLocalization = $this->mappingManager->getDefaultLocalization();
+
+        $labelKey = array_search('name', $mappings);
+
+        if ($labelKey === false) {
+            throw new \Exception('Name field is not in mappings');
+        }
+
+        unset($mappings[$labelKey]);
+
+        $mappings[$labelKey.'-'.$defaultLocalization->getAkeneoLocalization()] = 'name';
+
+        return $mappings;
     }
 
     /**

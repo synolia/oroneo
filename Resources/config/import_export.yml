@@ -1,20 +1,26 @@
 parameters:
-    oro.abstract_enum_value:                                 Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue
-    synolia.oroneo.import.reader.zip.class:                  Synolia\Bundle\OroneoBundle\ImportExport\Reader\ZipFileReader
-    synolia.oroneo.import.serializer.option.class:           Synolia\Bundle\OroneoBundle\ImportExport\Serializer\OptionSerializer
-    synolia.oroneo.import.data_converter.category.class:     Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\CategoryDataConverter
-    synolia.oroneo.import.data_converter.attribute.class:    Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\AttributeDataConverter
-    synolia.oroneo.import.data_converter.option.class:       Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\OptionDataConverter
-    synolia.oroneo.import.data_converter.product.class:      Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\ProductDataConverter
-    synolia.oroneo.import.strategy.category.class:           Synolia\Bundle\OroneoBundle\ImportExport\Strategy\CategoryStrategy
-    synolia.oroneo.import.strategy.attribute.class:          Synolia\Bundle\OroneoBundle\ImportExport\Strategy\AttributeStrategy
-    synolia.oroneo.import.strategy.option.class:             Synolia\Bundle\OroneoBundle\ImportExport\Strategy\OptionStrategy
-    synolia.oroneo.import.strategy.product.class:            Synolia\Bundle\OroneoBundle\ImportExport\Strategy\ProductStrategy
-    synolia.oroneo.import.strategy.product_file.class:       Synolia\Bundle\OroneoBundle\ImportExport\Strategy\ProductFileStrategy
-    synolia.oroneo.import.writer.attribute.class:            Synolia\Bundle\OroneoBundle\ImportExport\Writer\AttributeWriter
+    oro.abstract_enum_value:                                  Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue
+    oro_entity_config.attribute.entity.family.class:          Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily
+    oro_entity_config.attribute.entity.attribute_group.class: Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeGroup
+    synolia.oroneo.import.reader.zip.class:                   Synolia\Bundle\OroneoBundle\ImportExport\Reader\ZipFileReader
+    synolia.oroneo.import.reader.attribute_group.class:       Synolia\Bundle\OroneoBundle\ImportExport\Reader\AttributeGroupReader
+    synolia.oroneo.import.serializer.option.class:            Synolia\Bundle\OroneoBundle\ImportExport\Serializer\OptionSerializer
+    synolia.oroneo.import.data_converter.entity.class:        Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\EntityDataConverter
+    synolia.oroneo.import.data_converter.attribute.class:     Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\AttributeDataConverter
+    synolia.oroneo.import.data_converter.option.class:        Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\OptionDataConverter
+    synolia.oroneo.import.data_converter.product.class:       Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\ProductDataConverter
+    synolia.oroneo.import.strategy.category.class:            Synolia\Bundle\OroneoBundle\ImportExport\Strategy\CategoryStrategy
+    synolia.oroneo.import.strategy.attribute.class:           Synolia\Bundle\OroneoBundle\ImportExport\Strategy\AttributeStrategy
+    synolia.oroneo.import.strategy.option.class:              Synolia\Bundle\OroneoBundle\ImportExport\Strategy\OptionStrategy
+    synolia.oroneo.import.strategy.family.class:              Synolia\Bundle\OroneoBundle\ImportExport\Strategy\FamilyStrategy
+    synolia.oroneo.import.strategy.attribute_group.class:     Synolia\Bundle\OroneoBundle\ImportExport\Strategy\AttributeGroupStrategy
+    synolia.oroneo.import.strategy.product.class:             Synolia\Bundle\OroneoBundle\ImportExport\Strategy\ProductStrategy
+    synolia.oroneo.import.strategy.product_file.class:        Synolia\Bundle\OroneoBundle\ImportExport\Strategy\ProductFileStrategy
+    synolia.oroneo.import.writer.attribute.class:             Synolia\Bundle\OroneoBundle\ImportExport\Writer\AttributeWriter
 
-    synolia.oroneo.import.step.schema_update.class:          Synolia\Bundle\OroneoBundle\ImportExport\Step\SchemaUpdateStep
-    synolia.oroneo.import.step_element.schema_updater.class: Synolia\Bundle\OroneoBundle\ImportExport\Item\SchemaUpdater
+
+    synolia.oroneo.import.step.schema_update.class:           Synolia\Bundle\OroneoBundle\ImportExport\Step\SchemaUpdateStep
+    synolia.oroneo.import.step_element.schema_updater.class:  Synolia\Bundle\OroneoBundle\ImportExport\Item\SchemaUpdater
 
 
 services:
@@ -23,6 +29,7 @@ services:
         calls:
             - [setEntityProcessor, ['@oro_entity_extend.extend.entity_processor']]
             - [setEntityFieldManager, ['@oro_entity_config.config_manager']]
+            - [setMaintenanceMode, ['@oro_platform.maintenance']]
 
     # Reader
     synolia.oroneo.import.reader.zip:
@@ -39,7 +46,7 @@ services:
 
     # DataConverter
     synolia.oroneo.import.data_converter.category:
-        class: '%synolia.oroneo.import.data_converter.category.class%'
+        class: '%synolia.oroneo.import.data_converter.entity.class%'
         parent: oro_locale.importexport.data_converter.localized_fallback_value_aware
         calls:
             - [setMappingManager, ['@synolia.oroneo.mapping.manager.category']]
@@ -57,6 +64,18 @@ services:
         class: '%synolia.oroneo.import.data_converter.option.class%'
         calls:
             - [setMappingManager, ['@synolia.oroneo.mapping.manager.option']]
+
+    synolia.oroneo.import.data_converter.family:
+        class: '%synolia.oroneo.import.data_converter.entity.class%'
+        parent: oro_locale.importexport.data_converter.localized_fallback_value_aware
+        calls:
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.family']]
+
+    synolia.oroneo.import.data_converter.attribute_group:
+        class: '%synolia.oroneo.import.data_converter.entity.class%'
+        parent: oro_locale.importexport.data_converter.localized_fallback_value_aware
+        calls:
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.attribute_group']]
 
     synolia.oroneo.import.data_converter.product:
         class: '%synolia.oroneo.import.data_converter.product.class%'
@@ -78,25 +97,53 @@ services:
         class: '%synolia.oroneo.import.strategy.attribute.class%'
         parent: oro_entity_config.importexport.strategy.entity_field.add_or_replace
         calls:
-            - [setEntityConfigManager, ['@oro_entity_config.config_manager']]
-            - [setGlobalConfigManager, ['@oro_config.global']]
             - [setValidator, ['@validator']]
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.attribute']]
             - [setProductMappingManager, ['@synolia.oroneo.mapping.manager.product']]
+            - [setLocalizationRepository, ['@oro_locale.repository.localization']]
 
     synolia.oroneo.import.strategy.option:
         class: '%synolia.oroneo.import.strategy.option.class%'
         parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+            - [setMappingManager, ['@synolia.oroneo.mapping.manager.option']]
+            - [setLocalizationRepository, ['@oro_locale.repository.localization']]
+
+    synolia.oroneo.import.strategy.family:
+        class: '%synolia.oroneo.import.strategy.family.class%'
+        parent: oro_locale.importexport.strategy.localized_fallback_value_aware
+        calls:
+            - [setProductMappingManager, ['@synolia.oroneo.mapping.manager.product']]
+            - [setEntityClass, ['%oro_product.entity.product.class%']]
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+            - [setConfigManager, ['@oro_config.global']]
+            - [setImageGroup, ['images']]
+
+    synolia.oroneo.import.strategy.attribute_group:
+        class: '%synolia.oroneo.import.strategy.attribute_group.class%'
+        parent: oro_locale.importexport.strategy.localized_fallback_value_aware
+        calls:
+            - [setClassName, ['%oro_entity_config.attribute.entity.attribute_group.class%']]
 
     synolia.oroneo.import.strategy.product:
         class: '%synolia.oroneo.import.strategy.product.class%'
         parent: oro_product.importexport.strategy.product
         calls:
-            - [setConfigManager, ['@oro_entity_config.config_manager']]
+            - [setConfigManager, ['@oro_config.global']]
+            - [setEntityConfigManager, ['@oro_entity_config.config_manager']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+            - [setLogger, ['@logger']]
 
     synolia.oroneo.import.strategy.product_file:
         class: '%synolia.oroneo.import.strategy.product_file.class%'
         parent: synolia.oroneo.import.strategy.product
+        calls:
+            - [setGlobalConfigManager, ['@oro_config.global']]
+            - [setAttachmentProvider, ['@oro_attachment.provider.attachment']]
+            - [setFileManager, ['@oro_attachment.file_manager']]
+            - [addImageType, ['main']]
+            - [addImageType, ['listing']]
+            - [addImageType, ['additional', true]]
 
     # Processor
     synolia.oroneo.import.processor.category:
@@ -127,9 +174,28 @@ services:
             - { name: oro_importexport.processor, type: import, entity: '%oro.abstract_enum_value%', alias: synolia.oroneo.import.processor.option}
             - { name: oro_importexport.processor, type: import_validation, entity: '%oro.abstract_enum_value%', alias: synolia.oroneo.import.processor.option }
 
+    synolia.oroneo.import.processor.family:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, ['@synolia.oroneo.import.data_converter.family']]
+            - [setStrategy, ['@synolia.oroneo.import.strategy.family']]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: '%oro_entity_config.attribute.entity.family.class%', alias: synolia.oroneo.import.processor.family }
+            - { name: oro_importexport.processor, type: import_validation, entity: '%oro_entity_config.attribute.entity.family.class%', alias: synolia.oroneo.import.processor.family }
+
+    synolia.oroneo.import.processor.attribute_group:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, ['@synolia.oroneo.import.data_converter.attribute_group']]
+            - [setStrategy, ['@synolia.oroneo.import.strategy.attribute_group']]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: '%oro_entity_config.attribute.entity.attribute_group.class%', alias: synolia.oroneo.import.processor.attribute_group }
+            - { name: oro_importexport.processor, type: import_validation, entity: '%oro_entity_config.attribute.entity.attribute_group.class%', alias: synolia.oroneo.import.processor.attribute_group }
+
     synolia.oroneo.import.processor.product:
         parent: oro_product.importexport.processor.import.product
         calls:
+            - [setSerializer, ['@synolia.oroneo.import.serializer.option']]
             - [setDataConverter, ['@synolia.oroneo.import.data_converter.product']]
             - [setStrategy, ['@synolia.oroneo.import.strategy.product']]
         tags:
@@ -149,3 +215,13 @@ services:
     synolia.oroneo.import.writer.attribute:
         class: '%synolia.oroneo.import.writer.attribute.class%'
         parent: oro_entity_config.importexport.writer.entity_field
+        calls:
+            - [setTranslationManager, ['@oro_translation.manager.translation']]
+
+    # Reader
+    synolia.oroneo.import.reader.attribute_group:
+        class: '%synolia.oroneo.import.reader.attribute_group.class%'
+        parent: oro_importexport.reader.csv
+        calls:
+            - [setManagerRegistry, ['@doctrine']]
+            - [setClassName, ['%synolia.oro.family.class%']]

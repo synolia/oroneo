@@ -2,120 +2,133 @@
 
 namespace Synolia\Bundle\OroneoBundle\Manager;
 
-use Symfony\Component\HttpFoundation\File\File;
-use Synolia\Bundle\OroneoBundle\Helper\FtpHelper;
-use Synolia\Bundle\OroneoBundle\Helper\SftpHelper;
+use Gaufrette\Adapter\Ftp;
+use Gaufrette\Adapter\Local;
+use Gaufrette\Adapter\PhpseclibSftp;
+use Gaufrette\Filesystem;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use phpseclib\Net\SFTP;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class DistantConnectionManager
- * @package Synolia\Bundle\OroneoBundle\Manager
+ * @package   Synolia\Bundle\OroneoBundle\Manager
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class DistantConnectionManager
 {
-    const UPLOAD_DIR   = 'uploads/oroneo_import_files/';
-    const ZIP_MIMETYPE = 'application/zip';
-    const CSV_MIMETYPE = 'text/csv';
+    const ZIP_MIMETYPE    = 'application/zip';
+    const CSV_MIMETYPE    = 'text/csv';
 
-    /** @var  FtpHelper $ftpHelper */
-    protected $ftpHelper;
+    const SFTP_CONNECTION = 'SFTP';
+    const FTP_CONNECTION  = 'FTP';
 
-    /** @var  SftpHelper $sftpHelper */
-    protected $sftpHelper;
+    /** @var  string $uploadDir */
+    protected $uploadDir;
+
+    /** @var ConfigManager */
+    protected $configManager;
 
     /**
      * DistantConnectionManager constructor.
      *
-     * @param FtpHelper  $ftpHelper
-     * @param SftpHelper $sftpHelper
+     * @param ConfigManager $configManager
+     * @param string        $uploadDir
      */
-    public function __construct(FtpHelper $ftpHelper, SftpHelper $sftpHelper)
+    public function __construct(ConfigManager $configManager, $uploadDir)
     {
-        $this->ftpHelper  = $ftpHelper;
-        $this->sftpHelper = $sftpHelper;
+        $this->configManager = $configManager;
+        $this->uploadDir     = $uploadDir;
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     * @param string $host
-     * @param string $port
-     * @param string $filename
-     *
-     * @return null|File
-     * @throws \Exception
+     * Tests the connection by trying to list the files in the root directory
      */
-    public function ftpImport($username, $password, $host, $port, $filename)
+    public function testConnection()
     {
-        $connection = $this->ftpHelper->setParameters(
-            $username,
-            $password,
-            $host,
-            $port,
-            '.',
-            null,
-            true
-        );
-
-        try {
-            // Retrieve distant files & folders.
-            $connection->getFolderContent();
-            $this->checkLocalDir();
-
-            // Retrieve filename config depending on the processorAlias.
-            $isFile = $connection->isImportedFile($filename, self::UPLOAD_DIR.$filename);
-
-            if (!$isFile) {
-                return null;
-            }
-
-            $mimeType = $this->getMimeType($filename);
-
-            return new File(self::UPLOAD_DIR.$filename, $filename, $mimeType);
-        } catch (\Exception $exception) {
-            throw new \Exception('Error with FTP connection: '.$exception->getMessage());
-        }
+        $fileSystem = $this->getDistantFileSystem();
+        $fileSystem->keys();
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     * @param string $host
-     * @param string $port
-     * @param string $filename
+     * @param string $fileName
      *
-     * @return null|File
+     * @return UploadedFile
+     */
+    public function downloadFile($fileName)
+    {
+        $distantFileSystem = $this->getDistantFileSystem();
+        $localFileSystem   = $this->getLocalFileSystem();
+
+        $distantFile = $distantFileSystem->read($fileName);
+        $localFileSystem->write($fileName, $distantFile, true);
+
+        $mimeType = $this->getMimeType($fileName);
+
+        return new UploadedFile($this->uploadDir.$fileName, $fileName, $mimeType);
+    }
+
+    /**
+     * @return Filesystem
+     */
+    protected function getLocalFileSystem()
+    {
+        $adapter = new Local($this->uploadDir, true, 0644);
+
+        return new Filesystem($adapter);
+    }
+
+    /**
+     * @return Filesystem
      * @throws \Exception
      */
-    public function sftpImport($username, $password, $host, $port, $filename)
+    protected function getDistantFileSystem()
     {
-        $connection = $this->sftpHelper->setParameters(
-            $username,
-            $password,
-            $host,
-            $port,
-            '.',
-            null,
-            false
-        );
+        $type = $this->configManager->get('synolia_oroneo.distant_connection_type');
 
-        try {
-            // Retrieve distant files & folders.
-            $connection->getFolderContent();
-            $this->checkLocalDir();
-
-            // Retrieve filename config depending on the processorAlias.
-            $isFile = $connection->isImportedFile($filename, self::UPLOAD_DIR.$filename);
-
-            if (!$isFile) {
-                throw new \Exception('File "'.$filename.'" not found on the remote server.');
-            }
-
-            $mimeType = $this->getMimeType($filename);
-
-            return new File(self::UPLOAD_DIR.$filename, $filename, $mimeType);
-        } catch (\Exception $exception) {
-            throw new \Exception('Error with SFTP connection: '.$exception->getMessage());
+        if ($type == self::FTP_CONNECTION) {
+            $adapter = $this->getFtpFileSystem();
+        } elseif ($type == self::SFTP_CONNECTION) {
+            $adapter = $this->getSftpFileSystem();
+        } else {
+            throw new \RuntimeException('No implementation for '.$type.' connection');
         }
+
+        return $adapter;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    protected function getFtpFileSystem()
+    {
+        $adapter = new Ftp('/', $this->configManager->get('synolia_oroneo.distant_host'), [
+            'username'       => $this->configManager->get('synolia_oroneo.distant_username'),
+            'password'       => $this->configManager->get('synolia_oroneo.distant_password'),
+            'port'           => $this->configManager->get('synolia_oroneo.distant_port'),
+            'passive'        => $this->configManager->get('synolia_oroneo.distant_passive'),
+        ]);
+
+        return new Filesystem($adapter);
+    }
+
+    /**
+     * @return Filesystem
+     */
+    protected function getSftpFileSystem()
+    {
+        $sftp = new SFTP($this->configManager->get('synolia_oroneo.distant_host'), $this->configManager->get('synolia_oroneo.distant_port'));
+
+        $isLogged = $sftp->login($this->configManager->get('synolia_oroneo.distant_username'), $this->configManager->get('synolia_oroneo.distant_password'));
+
+        if (!$isLogged) {
+            throw new \RuntimeException(sprintf('Could not login as %s.', $this->configManager->get('synolia_oroneo.distant_username')));
+        }
+
+        $adapter = new PhpseclibSftp($sftp);
+
+        return new Filesystem($adapter);
     }
 
     /**
@@ -135,16 +148,5 @@ class DistantConnectionManager
         }
 
         return self::CSV_MIMETYPE;
-    }
-
-    /**
-     * Check if Oroneo upload dir exists.
-     * If it does not, then create it.
-     */
-    protected function checkLocalDir()
-    {
-        if (!is_dir(self::UPLOAD_DIR)) {
-            mkdir(self::UPLOAD_DIR);
-        }
     }
 }

@@ -2,15 +2,13 @@ system_configuration:
     groups:
         oroneo:
             title: 'synolia.oroneo.label'
-            icon: icon-exchange
+            icon: fa-exchange
         oroneo_global_config:
             title: 'synolia.oroneo.configuration_page.global_configuration.title'
         oroneo_mapping_config:
             title: 'synolia.oroneo.configuration_page.mapping.title'
         oroneo_global_config_settings:
             title: 'synolia.oroneo.configuration_page.global_configuration.settings'
-        oroneo_attribute_settings:
-            title: 'synolia.oroneo.configuration_page.attribute.title'
         oroneo_global_config_localization:
             title: 'synolia.oroneo.configuration_page.global_configuration.localization.title'
         oroneo_mapping_settings:
@@ -21,6 +19,10 @@ system_configuration:
             title: 'synolia.oroneo.configuration_page.attribute.title'
         oroneo_config_option:
             title: 'synolia.oroneo.configuration_page.option.title'
+        oroneo_config_family:
+            title: 'synolia.oroneo.configuration_page.family.title'
+        oroneo_config_attribute_group:
+            title: 'synolia.oroneo.configuration_page.attribute_group.title'
         oroneo_config_product:
             title: 'synolia.oroneo.configuration_page.product.title'
         oroneo_config_category_settings:
@@ -29,6 +31,10 @@ system_configuration:
             title: 'synolia.oroneo.configuration_page.attribute.settings'
         oroneo_config_option_settings:
             title: 'synolia.oroneo.configuration_page.option.settings'
+        oroneo_config_family_settings:
+            title: 'synolia.oroneo.configuration_page.family.settings'
+        oroneo_config_attribute_group_settings:
+            title: 'synolia.oroneo.configuration_page.attribute_group.settings'
         oroneo_config_product_settings:
             title: 'synolia.oroneo.configuration_page.product.settings'
         oroneo_config_distant:
@@ -38,6 +44,24 @@ system_configuration:
 
     fields:
         # Global Configuration fields
+        synolia_oroneo.default_owner:
+            data_type: string
+            type: oro_user_select
+            options:
+                label:   'synolia.oroneo.configuration_page.global_configuration.fields.default_owner.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.default_owner.tooltip'
+        synolia_oroneo.default_organization:
+            data_type: string
+            type: oro_organization_select
+            options:
+                label:   'synolia.oroneo.configuration_page.global_configuration.fields.default_organization.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.default_organization.tooltip'
+        synolia_oroneo.default_business_unit:
+            data_type: string
+            type: oro_business_unit_select
+            options:
+                label:   'synolia.oroneo.configuration_page.global_configuration.fields.default_business_unit.label'
+                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.default_business_unit.tooltip'
         synolia_oroneo.delimiter:
             data_type: string
             type: text
@@ -48,24 +72,6 @@ system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.global_configuration.fields.enclosure'
-        synolia_oroneo.attribute_file_max_size:
-            data_type: integer
-            type: integer
-            options:
-                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_file_max_size.label'
-                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_file_max_size.tooltip'
-        synolia_oroneo.attribute_image_width:
-            data_type: integer
-            type: integer
-            options:
-                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_width.label'
-                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_width.tooltip'
-        synolia_oroneo.attribute_image_height:
-            data_type: integer
-            type: integer
-            options:
-                label: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_height.label'
-                tooltip: 'synolia.oroneo.configuration_page.global_configuration.fields.attribute_image_height.tooltip'
         synolia_oroneo.localization_mapping:
             data_type: array
             type: synolia_oroneo_localization_mapping
@@ -85,6 +91,20 @@ system_configuration:
             options:
                 label: 'synolia.oroneo.configuration_page.category.master_category.label'
                 tooltip: 'synolia.oroneo.configuration_page.category.master_category.tooltip'
+        # Family Mapping
+        synolia_oroneo.family_mapping:
+            data_type: array
+            type: synolia_oroneo_family_mapping
+            options:
+                label: 'synolia.oroneo.configuration_page.family.mapping'
+                resettable: false
+        # Attribute group Mapping
+        synolia_oroneo.attribute_group_mapping:
+            data_type: array
+            type: synolia_oroneo_attribute_group_mapping
+            options:
+                label: 'synolia.oroneo.configuration_page.attribute_group.mapping'
+                resettable: false
         # Product Mapping & channel
         synolia_oroneo.product_mapping:
             data_type: array
@@ -97,6 +117,34 @@ system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.product.channel'
+                resettable: false
+        synolia_oroneo.product_image_main:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_main.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_main.tooltip'
+                resettable: false
+        synolia_oroneo.product_image_listing:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_listing.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_listing.tooltip'
+                resettable: false
+        synolia_oroneo.product_image_additional:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.image_additional.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.image_additional.tooltip'
+                resettable: false
+        synolia_oroneo.product_attachment:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.product.attachment.label'
+                tooltip: 'synolia.oroneo.configuration_page.product.attachment.tooltip'
                 resettable: false
         synolia_oroneo.attribute_mapping:
             data_type: array
@@ -140,6 +188,15 @@ system_configuration:
             type: integer
             options:
                 label: 'synolia.oroneo.configuration_page.distant.port.label'
+        synolia_oroneo.distant_passive:
+            data_type: boolean
+            type: choice
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.passive.label'
+                tooltip: 'synolia.oroneo.configuration_page.distant.passive.tooltip'
+                choices:
+                    false: 'synolia.oroneo.configuration_page.distant.passive.no'
+                    true: 'synolia.oroneo.configuration_page.distant.passive.yes'
         synolia_oroneo.distant_filepath_category:
             data_type: string
             type: text
@@ -155,6 +212,16 @@ system_configuration:
             type: text
             options:
                 label: 'synolia.oroneo.configuration_page.distant.filepath.option.label'
+        synolia_oroneo.distant_filepath_family:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.family.label'
+        synolia_oroneo.distant_filepath_attribute_group:
+            data_type: string
+            type: text
+            options:
+                label: 'synolia.oroneo.configuration_page.distant.filepath.attribute_group.label'
         synolia_oroneo.distant_filepath_product:
             data_type: string
             type: text
@@ -176,13 +243,11 @@ system_configuration:
                                 children:
                                     oroneo_global_config_settings:
                                         children:
+                                            - synolia_oroneo.default_owner
+                                            - synolia_oroneo.default_organization
+                                            - synolia_oroneo.default_business_unit
                                             - synolia_oroneo.delimiter
                                             - synolia_oroneo.enclosure
-                                    oroneo_attribute_settings:
-                                        children:
-                                            - synolia_oroneo.attribute_file_max_size
-                                            - synolia_oroneo.attribute_image_width
-                                            - synolia_oroneo.attribute_image_height
                             oroneo_global_config_localization:
                                 children:
                                     oroneo_global_config_localization:
@@ -197,11 +262,14 @@ system_configuration:
                                             - synolia_oroneo.distant_username
                                             - synolia_oroneo.distant_password
                                             - synolia_oroneo.distant_port
+                                            - synolia_oroneo.distant_passive
                                     oroneo_config_distant_filepath:
                                         children:
                                             - synolia_oroneo.distant_filepath_category
                                             - synolia_oroneo.distant_filepath_attribute
                                             - synolia_oroneo.distant_filepath_option
+                                            - synolia_oroneo.distant_filepath_family
+                                            - synolia_oroneo.distant_filepath_attribute_group
                                             - synolia_oroneo.distant_filepath_product
                                             - synolia_oroneo.distant_filepath_product-file
                     oroneo_mapping_config:
@@ -222,9 +290,23 @@ system_configuration:
                                     oroneo_config_option_settings:
                                         children:
                                             - synolia_oroneo.option_mapping
+                            oroneo_config_family:
+                                children:
+                                    oroneo_config_family_settings:
+                                        children:
+                                            - synolia_oroneo.family_mapping
+                            oroneo_config_attribute_group:
+                                children:
+                                    oroneo_config_attribute_group_settings:
+                                        children:
+                                            - synolia_oroneo.attribute_group_mapping
                             oroneo_config_product:
                                 children:
                                     oroneo_config_product_settings:
                                         children:
                                             - synolia_oroneo.product_channel
+                                            - synolia_oroneo.product_image_main
+                                            - synolia_oroneo.product_image_listing
+                                            - synolia_oroneo.product_image_additional
+                                            - synolia_oroneo.product_attachment
                                             - synolia_oroneo.product_mapping

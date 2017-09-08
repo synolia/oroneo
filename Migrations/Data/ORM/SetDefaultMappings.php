@@ -12,7 +12,9 @@ use Synolia\Bundle\OroneoBundle\SystemConfig\MappingConfig;
 
 /**
  * Class SetDefaultMappings
- * @package Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
+ * @package   Synolia\Bundle\OroneoBundle\Migrations\Data\ORM
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterface
 {
@@ -54,7 +56,8 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             [
                 new MappingConfig('code', 'fieldName', '', true, false),
                 new MappingConfig('type', 'type', '', true, false),
-                new MappingConfig('label-en_US', '', 'entity.label', true, false),
+                new MappingConfig('label', '', 'entity.label', true, true),
+                new MappingConfig('group', '', 'akeneo.attribute_group', true, false),
                 new MappingConfig('useable_as_grid_filter', '', 'datagrid.show_filter', true, false),
                 new MappingConfig('sort_order', '', 'view.priority', false, false),
                 new MappingConfig('max_characters', '', 'extend.length', false, false),
@@ -66,13 +69,18 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
             'synolia_oroneo.option_mapping',
             [
                 new MappingConfig('code', 'id', '', true, false),
-                new MappingConfig('label-en_US', 'name', '', true, false),
+                new MappingConfig('label', 'oroneo', 'name', true, false),
                 new MappingConfig('sort_order', 'priority', '', true, false),
                 new MappingConfig('attribute', 'oroneo', 'attribute', true, false),
             ]
         );
 
         $configManager->set('synolia_oroneo.product_channel', 'ecommerce');
+        $configManager->set('synolia_oroneo.product_image_main', '');
+        $configManager->set('synolia_oroneo.product_image_listing', '');
+        $configManager->set('synolia_oroneo.product_image_additional', '');
+        $configManager->set('synolia_oroneo.product_attachment', '');
+
         $configManager->set(
             'synolia_oroneo.product_mapping',
             [
@@ -82,6 +90,24 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('shortDescription', 'shortDescriptions', 'string', false, true),
             ]
         );
+
+        $configManager->set(
+            'synolia_oroneo.family_mapping',
+            [
+                new MappingConfig('code', 'code', '', true, false),
+                new MappingConfig('label', 'labels', 'string', true, true),
+                new MappingConfig('attributes', 'oroneo', 'attributes', true, false),
+            ]
+        );
+
+        $configManager->set(
+            'synolia_oroneo.attribute_group_mapping',
+            [
+                new MappingConfig('code', 'code', '', true, false),
+                new MappingConfig('label', 'labels', 'string', true, true),
+            ]
+        );
+
         $configManager->flush();
     }
 }

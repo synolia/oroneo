@@ -2,6 +2,7 @@
 
 namespace Synolia\Bundle\OroneoBundle\Manager;
 
+use Oro\Bundle\CatalogBundle\Entity\Category;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 use Oro\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
@@ -10,7 +11,9 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
 /**
  * Class OroFieldSelectManager
- * @package Synolia\Bundle\OroneoBundle\Manager
+ * @package   Synolia\Bundle\OroneoBundle\Manager
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class OroFieldSelectManager
 {
@@ -69,8 +72,13 @@ class OroFieldSelectManager
             $fields   = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
             $choices  = array_combine($fields, $fields);
         } else {
+            $provider = $this->configManager->getProvider('extend');
+
             foreach ($configModel->getFields() as $field) {
-                $choices[$field->getFieldName()] = $field->getFieldName();
+                $config = $provider->getConfig($field->getEntity()->getClassName(), $field->getFieldName());
+                if ($config->get('origin') != 'Akeneo') {
+                    $choices[$field->getFieldName()] = $field->getFieldName();
+                }
             }
         }
 
@@ -110,9 +118,11 @@ class OroFieldSelectManager
         $select[$rootCategory->getId()] = $rootCategory->getDefaultTitle()->getString();
 
         foreach ($children as $child) {
-            $space = str_repeat('--', $child->getLevel());
-            $select[$child->getId()] = $space.' '.$child->getDefaultTitle()->getString();
-
+            /** @var Category $child */
+            if (null !== $child->getDefaultTitle()) {
+                $space = str_repeat('--', $child->getLevel());
+                $select[$child->getId()] = $space.' '.$child->getDefaultTitle()->getString();
+            }
         }
 
         return $select;

@@ -9,7 +9,7 @@
 }
 
 form[id^='oroneo_config_'] .system-configuration-container .controls.control-subgroup {
-  margin: 0 15px 0 -100px !important;
+  margin: 0 15px 0 -13% !important;
 }
 
 form[id^='oroneo_config_'] .form-horizontal-large .control-group div.control-label, .form-horizontal-large .control-group label.control-label {
@@ -24,4 +24,46 @@ span.sy_orofield input,
 
 button.sy_addorofield {
   margin-left: 5px;
+}
+
+.oroneo-list-grid-form {
+    min-width: 463px;
+}
+
+.oroneo-list {
+  .add-list-item {
+    margin-top: 10px;
+  }
+
+  table {
+    width: auto;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  td {
+    span {
+      &.validation-failed {
+        white-space: nowrap;
+        width: 50px;
+      }
+    }
+  }
+
+  .entity-select-btn {
+    display: inline-block;
+    float: none;
+  }
+
+  input {
+    &.priority {
+      width: 50px !important;
+    }
+  }
+
+  .controls {
+    margin-left: 10px !important;
+  }
 }

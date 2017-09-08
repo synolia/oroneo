@@ -10,10 +10,9 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 /**
  * Class CategoryStrategy
- * @todo Check is we need to set an owner (see to inject Oro\Bundle\SecurityBundle\SecurityFacade).
- * @todo do not forget to add the eventDispatcher when everything is stable.
- *
- * @see \Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy->importExistingEntity()
+ * @package   Synolia\Bundle\OroneoBundle\ImportExport\Strategy
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
 {
@@ -52,7 +51,7 @@ class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
         $parentCategoryId = $this->globalConfigManager->get('synolia_oroneo.master_category');
         $parentCategory = $this->categoryRepository->getCategoryById(current($parentCategoryId));
 
-        if (isset($itemData['parentCategory'])) {
+        if (!empty($itemData['parentCategory'])) {
             // Check parent category in context.
             $parentCategory = $this->context->getValue($itemData['parentCategory']['akeneoCategoryCode']);
         }
@@ -78,20 +77,16 @@ class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
             $this->context->setValue($entity->getAkeneoCategoryCode(), $entity);
         }
 
+        // Do not allow empty category titles. Add code if nothing in label column.
+        if (null === $entity->getDefaultTitle()) {
+            $newTitle = new LocalizedFallbackValue();
+            $newTitle->setString($entity->getAkeneoCategoryCode());
+            $entity->addTitle($newTitle);
+        }
+
         // Return the entity directly to avoid the use of the method setLocalizationKeys.
         // This method seems to remove relations between Categories and their LocalizedFallbackValue.
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param object $entity
-     * @param array $field
-     * @throws \Exception
-     */
-    protected function setLocalizationKeys($entity, array $field)
-    {
-        //Check with Oro what that method is for as it seems to create bugs
-        return;
     }
 
     /**

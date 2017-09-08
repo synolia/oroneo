@@ -10,7 +10,9 @@ use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 
 /**
  * Class MappingConfigType
- * @package Synolia\Bundle\OroneoBundle\Form\Type
+ * @package   Synolia\Bundle\OroneoBundle\Form\Type
+ * @author    Synolia <contact@synolia.com>
+ * @copyright Open Software License v. 3.0 (https://opensource.org/licenses/OSL-3.0)
  */
 class MappingConfigType extends AbstractType
 {

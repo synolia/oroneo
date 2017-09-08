@@ -1,4 +1,4 @@
-Oro\Bundle\ImportExportBundle\Form\Model\ImportData:
+Synolia\Bundle\OroneoBundle\Form\Type\ImportData:
     properties:
         file:
             - File: ~

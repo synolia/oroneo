@@ -2,6 +2,11 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery');
+    var messenger = require('oroui/js/messenger');
+    messenger.setup({
+        container: '#flash-messages .flash-messages-holder',
+        template: _.template($.trim($('#message-item-template').html()))
+    });
 
     return function(options) {
 
@@ -15,6 +20,13 @@ define(function(require) {
             } else {
                 $('.oroneo_file_upload').addClass('hide');
             }
+        });
+
+        //Tests the connection
+        $('#oro_importexport_import_testConnectionBtn').click(function() {
+            $.get(Routing.generate('synolia_oroneo_test_configuration'), function (data) {
+                messenger.notificationFlashMessage(data['type'], data['message']);
+            });
         });
     };
 });
