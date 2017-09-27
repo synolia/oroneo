@@ -23,7 +23,7 @@ synolia:
                 success: The (S)FTP connection is working properly.
             import_type.checkbox: Manual import
             success.message: Import started successfully. You will receive email notification upon completion.
-            file_too_big.message: Your file is too big to be validate on the fly. You can import it anyway.<br/>You will receive an email notification upon completion with the result of the import.
+            file_too_big.message: Your file is too big to be validate on the fly or it is not a CSV file. You can import it anyway.<br/>You will receive an email notification upon completion with the result of the import.
             error:
                 mapping: No mapping set in configuration panel. Define locale mapping first <a href="%url%">here</a>.
                 distant.missing_config: Import error. Check your connection configuration and file mapping <a href="%url%">here</a>.

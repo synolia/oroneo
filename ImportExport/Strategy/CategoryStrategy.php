@@ -140,4 +140,14 @@ class CategoryStrategy extends LocalizedFallbackValueAwareStrategy
 
         return parent::processEntity($entity, $isFullData, $isPersistNew, $itemData, $searchContext, $entityIsRelation);
     }
+
+    /**
+     * @param object $entity
+     * @param array $field
+     * @throws \Exception
+     */
+    protected function setLocalizationKeys($entity, array $field)
+    {
+        return;
+    }
 }

@@ -4,7 +4,7 @@ parameters:
     oro_entity_config.attribute.entity.attribute_group.class: Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeGroup
     synolia.oroneo.import.reader.zip.class:                   Synolia\Bundle\OroneoBundle\ImportExport\Reader\ZipFileReader
     synolia.oroneo.import.reader.attribute_group.class:       Synolia\Bundle\OroneoBundle\ImportExport\Reader\AttributeGroupReader
-    synolia.oroneo.import.serializer.option.class:            Synolia\Bundle\OroneoBundle\ImportExport\Serializer\OptionSerializer
+    synolia.oroneo.import.denormalizer.option.class:          Synolia\Bundle\OroneoBundle\ImportExport\Denormalizer\OptionDenormalizer
     synolia.oroneo.import.data_converter.entity.class:        Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\EntityDataConverter
     synolia.oroneo.import.data_converter.attribute.class:     Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\AttributeDataConverter
     synolia.oroneo.import.data_converter.option.class:        Synolia\Bundle\OroneoBundle\ImportExport\DataConverter\OptionDataConverter
@@ -38,11 +38,12 @@ services:
             - '@oro_importexport.context_registry'
 
     # Serializer
-    synolia.oroneo.import.serializer.option:
-        class: '%synolia.oroneo.import.serializer.option.class%'
-        parent: oro_importexport.serializer
+    synolia.oroneo.import.denormalizer.option:
+        class: '%synolia.oroneo.import.denormalizer.option.class%'
         arguments:
             - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_importexport.normalizer, priority: 50 }
 
     # DataConverter
     synolia.oroneo.import.data_converter.category:
@@ -167,7 +168,6 @@ services:
     synolia.oroneo.import.processor.option:
         parent: oro_importexport.processor.import_abstract
         calls:
-            - [setSerializer, ['@synolia.oroneo.import.serializer.option']]
             - [setDataConverter, ['@synolia.oroneo.import.data_converter.option']]
             - [setStrategy, ['@synolia.oroneo.import.strategy.option']]
         tags:
@@ -195,7 +195,6 @@ services:
     synolia.oroneo.import.processor.product:
         parent: oro_product.importexport.processor.import.product
         calls:
-            - [setSerializer, ['@synolia.oroneo.import.serializer.option']]
             - [setDataConverter, ['@synolia.oroneo.import.data_converter.product']]
             - [setStrategy, ['@synolia.oroneo.import.strategy.product']]
         tags:

@@ -24,6 +24,9 @@ class ZipFileReader extends CsvFileReader
         if ($finfo->file($this->fileInfo->getPathname()) == 'application/zip') {
             $isExtracted = false;
             $zipPath     = $this->fileInfo->getPath().DIRECTORY_SEPARATOR.self::EXTRACT_FOLDER_NAME;
+            if (!is_dir($zipPath)) {
+                @mkdir($zipPath);
+            }
             if (null === $this->stepExecution) {
                 $isExtracted = $this->unzip($this->fileInfo->getPathName(), $zipPath);
             }

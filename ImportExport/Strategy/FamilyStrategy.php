@@ -72,7 +72,6 @@ class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
     public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
-        $this->userRepository = $doctrineHelper->getEntityRepositoryForClass('OroUserBundle:User');
     }
 
     /**
@@ -106,7 +105,8 @@ class FamilyStrategy extends LocalizedFallbackValueAwareStrategy
 
         // Set owner if there is not.
         if (!$entity->getOwner()) {
-            $owner = $this->userRepository->findOneById($this->configManager->get('synolia_oroneo.default_owner'));
+            $owner = $this->doctrineHelper->getEntityRepositoryForClass('OroUserBundle:User')
+                ->findOneById($this->configManager->get('synolia_oroneo.default_owner'));
             $entity->setOwner($owner);
         }
 

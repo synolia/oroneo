@@ -31,7 +31,7 @@ class ImportCommand extends OroImportCommand
             ->setDescription('Akeneo import')
             ->addArgument(
                 self::ARGUMENT_TYPE,
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'Type import to be executed. All imports are executed if missing.',
                 'import_all'
             )

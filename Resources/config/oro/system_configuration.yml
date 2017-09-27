@@ -180,7 +180,7 @@ system_configuration:
                 label: 'synolia.oroneo.configuration_page.distant.username.label'
         synolia_oroneo.distant_password:
             data_type: string
-            type: text
+            type: password
             options:
                 label: 'synolia.oroneo.configuration_page.distant.password.label'
         synolia_oroneo.distant_port:

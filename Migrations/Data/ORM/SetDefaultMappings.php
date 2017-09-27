@@ -88,6 +88,7 @@ class SetDefaultMappings extends AbstractFixture implements ContainerAwareInterf
                 new MappingConfig('name', 'names', 'string', true, true),
                 new MappingConfig('description', 'descriptions', 'text', false, true),
                 new MappingConfig('shortDescription', 'shortDescriptions', 'string', false, true),
+                new MappingConfig('enabled', 'status', '', true, false),
             ]
         );
 

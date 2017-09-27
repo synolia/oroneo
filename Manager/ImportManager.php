@@ -116,7 +116,7 @@ class ImportManager
         ];
 
         // Avoid endless loading screen in case of huge file imported by the user.
-        if ($file->getSize() >= self::MAX_VALIDATION_FILESIZE) {
+        if ($file->getSize() >= self::MAX_VALIDATION_FILESIZE || $processorAlias === self::PRODUCT_FILE_PROCESSOR) {
             $entityName = $this->processorRegistry->getProcessorEntityName(
                 ProcessorRegistry::TYPE_IMPORT_VALIDATION,
                 $processorAlias

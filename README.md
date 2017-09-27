@@ -32,7 +32,7 @@ Oroneo's installation is rather simple ! You only need to use composer:
 Add those lines to the repositories array in `composer.json` :
 ```json
 "repositories": [
-  {
+  "oroneo": {
     "type": "vcs",
     "url":  "https://github.com/synolia/oroneo.git"
   }

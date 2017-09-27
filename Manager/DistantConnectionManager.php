@@ -48,7 +48,7 @@ class DistantConnectionManager
     public function testConnection()
     {
         $fileSystem = $this->getDistantFileSystem();
-        $fileSystem->keys();
+        $fileSystem->has('.');
     }
 
     /**
@@ -61,12 +61,13 @@ class DistantConnectionManager
         $distantFileSystem = $this->getDistantFileSystem();
         $localFileSystem   = $this->getLocalFileSystem();
 
+        $localFileName = basename($fileName);
         $distantFile = $distantFileSystem->read($fileName);
-        $localFileSystem->write($fileName, $distantFile, true);
+        $localFileSystem->write($localFileName, $distantFile, true);
 
         $mimeType = $this->getMimeType($fileName);
 
-        return new UploadedFile($this->uploadDir.$fileName, $fileName, $mimeType);
+        return new UploadedFile($this->uploadDir . $localFileName, $localFileName, $mimeType);
     }
 
     /**
@@ -74,7 +75,7 @@ class DistantConnectionManager
      */
     protected function getLocalFileSystem()
     {
-        $adapter = new Local($this->uploadDir, true, 0644);
+        $adapter = new Local($this->uploadDir, true);
 
         return new Filesystem($adapter);
     }
